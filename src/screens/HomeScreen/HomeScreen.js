@@ -35,6 +35,7 @@ const HomeScreen = () => {
                         source={require('images/kakao.png')}
                     />
                 </TouchableOpacity>
+                <Text>OOTT 둘러보기</Text>
             </View> 
     
         </View>
@@ -49,26 +50,26 @@ const styles = StyleSheet.create({
     },
 
     header :{
-        flex : 1.5,
-        backgroundColor: "rgb(73, 73, 223)"
+        flex : 1,
+        backgroundColor: "rgb(106, 96, 246)"
     },
 
     landing :{
         flex : 4,
-        backgroundColor: "rgb(73, 73, 223)",
+        backgroundColor: "rgb(106, 96, 246)",
         alignItems: "center"
     },
 
     kakaoLogin:{
         flex : 2,
-        backgroundColor : "rgb(73, 73, 223)",
+        backgroundColor : "rgb(106, 96, 246)",
         alignItems: "center"
     },
 
     tinyLogo:{
         resizeMode: "contain",
-        width: 200,
-        height: 200
+        width: 300,
+        height: 300
     },
 
     logoText:{

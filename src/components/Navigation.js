@@ -6,10 +6,12 @@ import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import MainScreen from '../screens/MainScreen/MainScreen';
 import { AuthContext } from '../utils/Auth';
 
+import BottomTabs from './BottomTabNavigation';
+
 const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
-    
+
     // Auth 에서 받은 userInfo 값
     const {userInfo} = useContext(AuthContext);
 
@@ -19,11 +21,18 @@ const Navigation = () => {
             <Stack.Navigator>
 
             { userInfo.id ? (
+                <>
+                <Stack.Screen
+                    name="bottomTab"
+                    component={ BottomTabs }
+                    options={{headerShown: false}}
+                />
                 <Stack.Screen
                     name="MainScreen"
                     component={ MainScreen }
                     options={{headerShown: false}}
                 />
+                </>
 
             ):(
                 <Stack.Screen 
@@ -31,9 +40,12 @@ const Navigation = () => {
                     component={ HomeScreen } 
                     options={{headerShown: false}}
                 />
+                
             )}
                 
             </Stack.Navigator>
+           
+            
         </NavigationContainer>
     );
 };

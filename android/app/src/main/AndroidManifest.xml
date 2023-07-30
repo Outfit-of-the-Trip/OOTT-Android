@@ -9,7 +9,7 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="true"
       android:theme="@style/AppTheme">
-      
+
       <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
       android:exported="true">
       <intent-filter>
@@ -18,7 +18,7 @@
         <category android:name="android.intent.category.BROWSABLE" />
         <data android:host="oauth" android:scheme="kakao47f74ef82f19d5e752f3270d66ff95b3" />
       </intent-filter>
-    </activity>
+      </activity>
 
       <activity
         android:name=".MainActivity"
