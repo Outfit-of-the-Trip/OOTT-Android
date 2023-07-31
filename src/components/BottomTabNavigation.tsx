@@ -1,5 +1,6 @@
 import React from 'react'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { Image } from 'react-native';
 
 import MainScreen from "../screens/MainScreen/MainScreen";
 import TravelScreen from "../screens/PhotozoneScreen/PhotozoneScreen"
@@ -14,13 +15,84 @@ const BottomTabs = (props: any) => {
         <Tab.Navigator
         screenOptions={{
             headerShown: false,
-            tabBarShowLabel: false,
+            tabBarShowLabel:false,
         }}>
-        <Tab.Screen name="Home" component={MainScreen} />
-        <Tab.Screen name="Photozone" component={TravelScreen} />
-        <Tab.Screen name="OOTT" component={OOTTScreen} />
-        <Tab.Screen name="Friend" component={FriendScreen} />
-        <Tab.Screen name="Mypage" component={MypageScreen} />
+        <Tab.Screen 
+        name="홈" 
+        component={MainScreen}
+        options={{
+            tabBarIcon: ({focused}) =>
+              !focused ? (
+                <Image
+                  source={require('../assets/images/home.png')}
+                />
+              ) : (
+                <Image
+                  source={require('../assets/images/home.png')}
+                />
+              ),
+          }} />
+        <Tab.Screen name="포토존"
+         component={TravelScreen}
+         options={{
+            tabBarIcon: ({focused}) =>
+              !focused ? (
+                <Image
+                  source={require('../assets/images/photozone.png')}
+                />
+              ) : (
+                <Image
+                  source={require('../assets/images/photozone.png')}
+                />
+              ),
+          }}
+          />
+        <Tab.Screen name="OOTT"
+         component={OOTTScreen} 
+         options={{
+            tabBarShowLabel:false,
+            tabBarIcon: ({focused}) =>
+              !focused ? (
+                <Image
+                  source={require('../assets/images/bottomtablogo.png')}
+                />
+              ) : (
+                <Image
+                  source={require('../assets/images/bottomtablogo.png')}
+                />
+              ),
+          }}
+         />
+        <Tab.Screen name="친구" 
+        component={FriendScreen} 
+        options={{
+            tabBarIcon: ({focused}) =>
+              !focused ? (
+                <Image
+                  source={require('../assets/images/friends.png')}
+                />
+              ) : (
+                <Image
+                  source={require('../assets/images/friends.png')}
+                />
+              ),
+          }}
+        />
+        <Tab.Screen name="마이페이지"
+         component={MypageScreen} 
+         options={{
+            tabBarIcon: ({focused}) =>
+              !focused ? (
+                <Image
+                  source={require('../assets/images/mypage.png')}
+                />
+              ) : (
+                <Image
+                  source={require('../assets/images/mypage.png')}
+                />
+              ),
+          }}
+         />
       </Tab.Navigator>
     )
 }
