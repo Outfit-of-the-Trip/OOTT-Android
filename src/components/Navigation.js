@@ -4,6 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import MainScreen from '../screens/MainScreen/MainScreen';
+import Recomend from '../screens/MainScreen/Recomend/Recomend';
 import { AuthContext } from '../utils/Auth';
 
 import BottomTabs from './BottomTabNavigation';
@@ -19,7 +20,6 @@ const Navigation = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator>
-
             { userInfo.id ? (
                 <>
                 <Stack.Screen
@@ -32,6 +32,10 @@ const Navigation = () => {
                     component={ MainScreen }
                     options={{headerShown: false}}
                 />
+                  <Stack.Screen
+                name='Recomend'
+                component={Recomend}
+                options={{headerShown: false}}/>
                 </>
 
             ):(
@@ -40,7 +44,6 @@ const Navigation = () => {
                     component={ HomeScreen } 
                     options={{headerShown: false}}
                 />
-                
             )}
                 
             </Stack.Navigator>

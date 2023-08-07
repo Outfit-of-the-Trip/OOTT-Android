@@ -1,21 +1,42 @@
 import React from 'react'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import { Image } from 'react-native';
+import { Image, StyleSheet, Touchable, TouchableOpacity } from 'react-native';
 
 import MainScreen from "../screens/MainScreen/MainScreen";
 import TravelScreen from "../screens/PhotozoneScreen/PhotozoneScreen"
 import OOTTScreen from '../screens/OOTTScreen/OOTTScreen';
 import FriendScreen from '../screens/FriendScreen/FriendScreen';
 import MypageScreen from '../screens/MypageScreen/MypageScreen';
+import { ScreenStackHeaderRightView } from 'react-native-screens';
+import Navigation from './Navigation';
 
 const Tab = createBottomTabNavigator();
 
+const mainLogo = () => {
+    return ( <Image
+        style={{width: 72, height: 54}}
+        source={require('../assets/images/toplogo.png')}/>
+)
+}
+const settingsLogo = () =>{
+  return( 
+        <TouchableOpacity>
+          <Image
+            style={{width: 40, height: 40, marginRight:5}}
+            source={require('../assets/images/Settings.png')}/>
+        </TouchableOpacity>
+
+  )
+}
 const BottomTabs = (props: any) => {
     return (
         <Tab.Navigator
         screenOptions={{
-            headerShown: false,
             tabBarShowLabel:false,
+            headerTitleAlign:'center',
+            headerTitle:mainLogo,
+            headerRight:settingsLogo
+
         }}>
         <Tab.Screen 
         name="홈" 
@@ -24,7 +45,7 @@ const BottomTabs = (props: any) => {
             tabBarIcon: ({focused}) =>
               !focused ? (
                 <Image
-                  source={require('../assets/images/home.png')}
+                  source={require('../assets/images/uhome.png')}
                 />
               ) : (
                 <Image
@@ -38,7 +59,7 @@ const BottomTabs = (props: any) => {
             tabBarIcon: ({focused}) =>
               !focused ? (
                 <Image
-                  source={require('../assets/images/photozone.png')}
+                  source={require('../assets/images/uphotozone.png')}
                 />
               ) : (
                 <Image
@@ -54,11 +75,11 @@ const BottomTabs = (props: any) => {
             tabBarIcon: ({focused}) =>
               !focused ? (
                 <Image
-                  source={require('../assets/images/bottomtablogo.png')}
+                  source={require('../assets/images/bottomlogo.png')}
                 />
               ) : (
                 <Image
-                  source={require('../assets/images/bottomtablogo.png')}
+                  source={require('../assets/images/bottomlogo.png')}
                 />
               ),
           }}
@@ -69,7 +90,7 @@ const BottomTabs = (props: any) => {
             tabBarIcon: ({focused}) =>
               !focused ? (
                 <Image
-                  source={require('../assets/images/friends.png')}
+                  source={require('../assets/images/ufriends.png')}
                 />
               ) : (
                 <Image
@@ -84,7 +105,7 @@ const BottomTabs = (props: any) => {
             tabBarIcon: ({focused}) =>
               !focused ? (
                 <Image
-                  source={require('../assets/images/mypage.png')}
+                  source={require('../assets/images/umypage.png')}
                 />
               ) : (
                 <Image
