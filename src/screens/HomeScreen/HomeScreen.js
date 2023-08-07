@@ -24,7 +24,7 @@ const HomeScreen = () => {
                 <Text style={styles.text}>Outfit Of Today Travel</Text>
                 <Image
                     style={styles.tinyLogo}
-                    source={require('images/logo.png')}
+                    source={require('../../assets/images/logo.png')}
                 />
             </View>
             
@@ -32,7 +32,7 @@ const HomeScreen = () => {
                 <TouchableOpacity onPress={() => login()}>
                     <Image
                         sytle={styles.KakaoLoginButton}
-                        source={require('images/kakao.png')}
+                        source={require('../../assets/images/kakao.png')}
                     />
                 </TouchableOpacity>
                 <Text>OOTT 둘러보기</Text>
