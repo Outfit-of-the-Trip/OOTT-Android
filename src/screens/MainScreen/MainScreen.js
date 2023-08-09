@@ -1,5 +1,12 @@
-import { useNavigation } from '@react-navigation/native';
-import React, {useContext} from 'react';
+import React, {useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+
+import profileImg from '../../assets/images/profileImg.png';
+import recomend1 from '../../assets/images/recomend1.png';
+import recomend2 from '../../assets/images/recomend2.png';
+import recomend3 from '../../assets/images/recomend3.png';
+import recomend4 from '../../assets/images/recomend4.png';
+import more from '../../assets/images/more.png';
 
 import {
   View,
@@ -8,235 +15,117 @@ import {
   SafeAreaView,
   ScrollView,
   Image,
-  Touchable,
+  Button,
   TouchableOpacity,
 } from 'react-native';
 
-const username = () => {
-  return <Text style={styles.blueText}>성욱</Text>;
-};
-
-const frinedsname = () => {
-  return <Text style={styles.blueText}>창현</Text>;
-};
-
-
-
-const hashTage = [
+const TravelInfo = [
   {
-    id: 1,
-    text: '#부산여행',
+    name: '성욱',
+    image: [recomend1, recomend2, recomend3, recomend4],
+    tag: '#우정여행 #먹부림',
   },
   {
-    id: 2,
-    text: '#우정여행',
+    name: '근재',
+    image: [recomend1, recomend2, recomend3, recomend4],
+    tag: '#우정여행 #먹부림',
   },
   {
-    id: 3,
-    text: '#레저',
-  },
-  {
-    id: 4,
-    text: '#호캉스',
-  },
-  {
-    id: 5,
-    text: '#편안한',
-  },
-  {
-    id: 6,
-    text: '#관광',
+    name: '준민',
+    image: [recomend1, recomend2, recomend3, recomend4],
+    tag: '#우정여행 #먹부림',
   },
 ];
 
 const MainScreen = () => {
-  navigation = useNavigation()
-  const goToRecomend = () =>{
-    return(
-      navigation.navigate('Recomend')
-    )
-}
+  const navigation = useNavigation();
+  const gotoRecomend = () => {
+    return navigation.navigate('Recomend');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.profile}>
-          <Image
-            source={require('./img/profileImg.png')}
-            styles={styles.profile}
-          />
-          <View style={{flexDirection: 'column', flex: 1}}>
+          <View
+            style={{
+              flex: 0.5,
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={profileImg}
+              styles={{
+                resizeMode: 'contain',
+                flex: 1,
+              }}
+            />
+            <Text
+              style={{
+                color: 'black',
+                fontSize: 24,
+                fontWeight: 'bold',
+                fontFamily: 'TENADA',
+              }}>
+              성욱
+            </Text>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignContent: 'center',
+            }}>
             <View
               style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
+                flex: 1,
                 alignItems: 'center',
+                justifyContent: 'center',
               }}>
-              <Image
-                source={require('./img/profileAirplane.png')}
-                style={{
-                  flex: 0.5,
-                  resizeMode: 'contain',
-                  marginTop: 8,
-                }}
-              />
-              <View>
-                <Text style={styles.profileText}>2022-06-07~</Text>
-                <Text style={styles.profileText}>2022-06-09 to busan</Text>
-              </View>
+              <Text style={styles.profilebigtext}>7</Text>
+              <Text style={styles.profiletext}>mylog</Text>
             </View>
             <View
               style={{
                 flex: 1,
-                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}>
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignContent: 'flex-start',
-                }}>
-                <Image
-                  source={require('./img/profileHashTag.png')}
-                  style={{
-                    resizeMode: 'contain',
-                    flex: 1,
-                    marginLeft: 10,
-                    marginBottom: 100,
-                    marginTop: 10,
-                  }}
-                />
-              </View>
-              <View>
-                {hashTage.map(tag => (
-                  <Text
-                    style={{
-                      flex: 0.5,
-                      marginLeft: 18,
-                      color: '#0D38CE',
-                      fontSize: 16,
-                      fontWeight: 'bold',
-                      fontFamily: 'ONE MOBILE OTF BOLD',
-                    }}
-                    key={tag.id}>
-                    {tag.text}
-                  </Text>
-                ))}
-              </View>
+              <Text style={styles.profilebigtext}>12</Text>
+              <Text style={styles.profiletext}>Friend</Text>
             </View>
-            <View style={{flexDirection: 'column', marginLeft: 10}} />
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text style={styles.profilebigtext}>9</Text>
+              <Text style={styles.profiletext}>ShoppingList</Text>
+            </View>
           </View>
         </View>
         <View style={styles.bottomline} />
-        <View style={styles.recomend}>
-          <View style={{flexDirection:'row',
-          justifyContent:'space-between',
-          alignItems:'center'
-          }}>
-          <Text style={styles.text}>{username()}님을 위한 추천</Text>
-          <TouchableOpacity
-            onPress={goToRecomend}>
-          <Text>
-          더보기</Text>
-          </TouchableOpacity>
+        {TravelInfo.map((info, index) => (
+          <View style={styles.recomend} key={index}>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text style={styles.text}>{info.name}님을 위한 추천</Text>
+              <TouchableOpacity onPress={gotoRecomend}>
+                <Image source={more} />
+              </TouchableOpacity>
+            </View>
+            <ScrollView horizontal={true}>
+              <Image source={info.image[0]} style={styles.recoimgae} />
+              <Image source={info.image[1]} style={styles.recoimgae} />
+              <Image source={info.image[2]} style={styles.recoimgae} />
+              <Image source={info.image[3]} style={styles.recoimgae} />
+            </ScrollView>
+            <Text style={styles.text}>{info.tag}</Text>
+            <View style={styles.bottomline} />
           </View>
-          
-          <ScrollView horizontal={true}>
-            <Image
-              source={require('./img/recomend1.png')}
-              style={styles.recoimgae}
-            />
-            <Image
-              source={require('./img/recomend2.png')}
-              style={styles.recoimgae}
-            />
-            <Image
-              source={require('./img/recomend3.png')}
-              style={styles.recoimgae}
-            />
-            <Image
-              source={require('./img/recomend4.png')}
-              style={styles.recoimgae}
-            />
-          </ScrollView>
-          <View style={styles.bottomline} />
-        </View>
-        <View style={styles.friends}>
-        <View style={{flexDirection:'row',
-          justifyContent:'space-between',
-          alignItems:'center'
-          }}>
-          <Text style={styles.text}>
-            함께 여행하는 친구 {frinedsname()}은 이렇게 옷을 입는대요 !{' '}
-          </Text>
-          <TouchableOpacity
-            onPress={goToRecomend}>
-          <Text>
-          더보기</Text>
-          </TouchableOpacity>
-          </View>
-          <ScrollView horizontal={true}>
-            <Image
-              source={require('./img/friends1.png')}
-              style={styles.recoimgae}
-            />
-            <Image
-              source={require('./img/friends2.png')}
-              style={styles.recoimgae}
-            />
-            <Image
-              source={require('./img/friends3.png')}
-              style={styles.recoimgae}
-            />
-            <Image
-              source={require('./img/friends4.png')}
-              style={styles.recoimgae}
-            />
-          </ScrollView>
-          <View style={styles.bottomline} />
-        </View>
-        <View style={styles.advertise}>
-          <Image
-            source={require('./img/advertise.png')}
-            style={
-              (styles.recoimgae,
-              {
-                justifyContent: 'center',
-                alignContent: 'center',
-                marginLeft: 30,
-              })
-            }
-          />
-          <View style={styles.bottomline} />
-        </View>
-        <View style={styles.shopingmall}>
-          <Text style={styles.text}>더 즐거운 여행을 위한</Text>
-          <Text style={styles.text}>{username()}님을 위한 쇼핑 리스트</Text>
-          <ScrollView horizontal={true}>
-            <Image
-              source={require('./img/shophingmall.png')}
-              style={styles.recoimgae}
-            />
-            <Image
-              source={require('./img/shophingmall.png')}
-              style={styles.recoimgae}
-            />
-            <Image
-              source={require('./img/shophingmall.png')}
-              style={styles.recoimgae}
-            />
-            <Image
-              source={require('./img/shophingmall.png')}
-              style={styles.recoimgae}
-            />
-            <Image
-              source={require('./img/shophingmall.png')}
-              style={styles.recoimgae}
-            />
-            <Image
-              source={require('./img/shophingmall.png')}
-              style={styles.recoimgae}
-            />
-          </ScrollView>
-        </View>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );
@@ -251,7 +140,6 @@ const styles = StyleSheet.create({
   },
   profile: {
     flex: 1,
-    backgroundColor: 'white',
     flexDirection: 'row',
     marginTop: 20,
   },
@@ -284,12 +172,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'ONE MOBILE OTF BOLD',
   },
-  profileText:{
-    color: '#0D38CE',
-    fontSize: 16,
-    fontWeight: 'bold',
-    fontFamily: 'ONE MOBILE OTF BOLD',
-  },
   recoimgae: {
     flex: 1,
     resizeMode: 'contain',
@@ -309,6 +191,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 8,
+  },
+  profilebigtext: {
+    color: 'black',
+    fontSize: 32,
+    fontWeight: 'bold',
+    fontFamily: 'ONE MOBILE OTF BOLD',
+  },
+  profiletext: {
+    color: 'black',
+    fontSize: 14,
+    fontWeight: 'bold',
+    fontFamily: 'ONE MOBILE OTF BOLD',
   },
 });
 
