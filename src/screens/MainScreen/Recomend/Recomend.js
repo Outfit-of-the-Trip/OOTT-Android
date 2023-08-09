@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import React, {useContext} from 'react';
 
 import {
@@ -13,23 +13,17 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-
-
-const Recomend = () =>{
-  
+const Recomend = () => {
   const navigation = useNavigation();
-  const gotoMain = () =>{
-    return(
-      navigation.navigate('MainScreen')
-    )
-}
+  const gotoMain = () => {
+    return navigation.navigate('bottomTab');
+  };
 
-
-  return(
-    <TouchableOpacity
-      onPress={gotoMain}>
+  return (
+    <TouchableOpacity onPress={gotoMain}>
       <Text>back</Text>
-    </TouchableOpacity>)
-}
+    </TouchableOpacity>
+  );
+};
 
-export default Recomend
+export default Recomend;
