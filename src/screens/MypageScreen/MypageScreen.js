@@ -1,17 +1,9 @@
-import React from 'react'
+import React from 'react';
 
-import {
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    TouchableOpacity
-  } from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 
 const MypageScreen = () => {
-  return (
-    <Text>Mypage Screen</Text>
-  )
-}
+  return <Text>Mypage Screen</Text>;
+};
 
-export default MypageScreen
+export default MypageScreen;

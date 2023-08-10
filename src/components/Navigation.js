@@ -6,6 +6,7 @@ import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import MainScreen from '../screens/MainScreen/MainScreen';
 import Recomend from '../screens/MainScreen/Recomend/Recomend';
 import {AuthContext} from '../utils/Auth';
+import TravelScreen from '../screens/PhotozoneScreen/PhotozoneScreen';
 
 import BottomTabs from './BottomTabNavigation';
 
@@ -14,12 +15,13 @@ const Stack = createNativeStackNavigator();
 const Navigation = () => {
   // Auth 에서 받은 userInfo 값
   const {userInfo} = useContext(AuthContext);
+  console.log('test Login :', userInfo);
 
   // 삼항연산자 사용. 만약 userInfo.id의 값이 존재한다면 MainScreen 랜더링
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {userInfo.id ? (
+        {/* {userInfo.id ? (
           <>
             <Stack.Screen
               name="bottomTab"
@@ -43,7 +45,17 @@ const Navigation = () => {
             component={HomeScreen}
             options={{headerShown: false}}
           />
-        )}
+        )} */}
+        <Stack.Screen
+          name="HomeScreen"
+          component={HomeScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Photozone"
+          component={TravelScreen}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

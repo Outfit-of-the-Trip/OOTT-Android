@@ -106,6 +106,7 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+    implementation project(':react-native-seoul-kakao-login')
     implementation project(':react-native-splash-screen')
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
@@ -126,6 +127,11 @@ dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0") {
             because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
         }
+    }
+}
+afterEvaluate {
+    project.tasks.named('copyDebugJniLibsProjectOnly').configure {
+        dependsOn ':react-native-seoul-kakao-login:mergeDebugNativeLibs'
     }
 }
 
