@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {StatusBar} from 'react-native';
-import Navigation from './components/Navigation';
+import Navigation from './components/Navigation/Navigation';
 import {AuthProvider} from './utils/Auth';
 import SplashScreen from 'react-native-splash-screen';
 

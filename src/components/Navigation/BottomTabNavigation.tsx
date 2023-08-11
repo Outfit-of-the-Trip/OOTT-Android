@@ -2,14 +2,24 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Image, TouchableOpacity} from 'react-native';
 
-import MainScreen from '../screens/MainScreen/MainScreen';
-import TravelScreen from '../screens/PhotozoneScreen/PhotozoneScreen';
-import OOTTScreen from '../screens/OOTTScreen/OOTTScreen';
-import FriendScreen from '../screens/FriendScreen/FriendScreen';
-import MypageScreen from '../screens/MypageScreen/MypageScreen';
+import MainScreen from '../../screens/MainScreen/MainScreen';
+import TravelScreen from '../../screens/PhotozoneScreen/PhotozoneScreen';
+import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
+import FriendScreen from '../../screens/FriendScreen/FriendScreen';
+import MypageScreen from '../../screens/MypageScreen/MypageScreen';
 
-import Toplogo from '../assets/images/toplogo.png';
-import Settings from '../assets/images/settings.png';
+import Toplogo from '../../assets/images/toplogo.png'
+import Settings from '../../assets/images/Settings.png'
+import home from '../../assets/images/home.png'
+import uhome from '../../assets/images/uhome.png'
+import photozone from '../../assets/images/photozone.png'
+import uphotozone from '../../assets/images/uphotozone.png'
+import friends from '../../assets/images/friends.png'
+import ufriends from '../../assets/images/ufriends.png'
+import mypage from '../../assets/images/mypage.png'
+import umypage from '../../assets/images/umypage.png'
+import bottomlogo from '../../assets/images/bottomlogo.png'
+
 const Tab = createBottomTabNavigator();
 
 const mainLogo = () => {
@@ -40,9 +50,9 @@ const BottomTabs = () => {
         options={{
           tabBarIcon: ({focused}) =>
             !focused ? (
-              <Image source={require('../assets/images/uhome.png')} />
+              <Image source={uhome} />
             ) : (
-              <Image source={require('../assets/images/home.png')} />
+              <Image source={home} />
             ),
         }}
       />
@@ -52,9 +62,9 @@ const BottomTabs = () => {
         options={{
           tabBarIcon: ({focused}) =>
             !focused ? (
-              <Image source={require('../assets/images/uphotozone.png')} />
+              <Image source={uphotozone} />
             ) : (
-              <Image source={require('../assets/images/photozone.png')} />
+              <Image source={photozone} />
             ),
         }}
       />
@@ -65,9 +75,9 @@ const BottomTabs = () => {
           tabBarShowLabel: false,
           tabBarIcon: ({focused}) =>
             !focused ? (
-              <Image source={require('../assets/images/bottomlogo.png')} />
+              <Image source={bottomlogo} />
             ) : (
-              <Image source={require('../assets/images/bottomlogo.png')} />
+              <Image source={bottomlogo} />
             ),
         }}
       />
@@ -77,9 +87,9 @@ const BottomTabs = () => {
         options={{
           tabBarIcon: ({focused}) =>
             !focused ? (
-              <Image source={require('../assets/images/ufriends.png')} />
+              <Image source={ufriends} />
             ) : (
-              <Image source={require('../assets/images/friends.png')} />
+              <Image source={friends} />
             ),
         }}
       />
@@ -89,9 +99,9 @@ const BottomTabs = () => {
         options={{
           tabBarIcon: ({focused}) =>
             !focused ? (
-              <Image source={require('../assets/images/umypage.png')} />
+              <Image source={umypage} />
             ) : (
-              <Image source={require('../assets/images/mypage.png')} />
+              <Image source={mypage} />
             ),
         }}
       />
