@@ -6,12 +6,12 @@ import {Image, TouchableOpacity} from 'react-native';
 import HomeScreen from '../../screens/HomeScreen/HomeScreen';
 import MainScreen from '../../screens/MainScreen/MainScreen';
 import Recomend from '../../screens/MainScreen/Recomend/Recomend';
-import DetailRecomend from '../../screens/MainScreen/DetailRecomend/DetailRecomend'
+import DetailRecomend from '../../screens/MainScreen/DetailRecomend/DetailRecomend';
 import {AuthContext} from '../../utils/Auth';
 
 import BottomTabs from './BottomTabNavigation';
-import Toplogo from '../../assets/images/toplogo.png'
-import Settings from '../../assets/images/Settings.png'
+import Toplogo from '../../assets/images/toplogo.png';
+import Settings from '../../assets/images/settings.png';
 
 const Stack = createNativeStackNavigator();
 

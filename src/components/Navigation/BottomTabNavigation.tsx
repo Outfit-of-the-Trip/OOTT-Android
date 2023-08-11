@@ -8,17 +8,17 @@ import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
 import FriendScreen from '../../screens/FriendScreen/FriendScreen';
 import MypageScreen from '../../screens/MypageScreen/MypageScreen';
 
-import Toplogo from '../../assets/images/toplogo.png'
-import Settings from '../../assets/images/Settings.png'
-import home from '../../assets/images/home.png'
-import uhome from '../../assets/images/uhome.png'
-import photozone from '../../assets/images/photozone.png'
-import uphotozone from '../../assets/images/uphotozone.png'
-import friends from '../../assets/images/friends.png'
-import ufriends from '../../assets/images/ufriends.png'
-import mypage from '../../assets/images/mypage.png'
-import umypage from '../../assets/images/umypage.png'
-import bottomlogo from '../../assets/images/bottomlogo.png'
+import Toplogo from '../../assets/images/toplogo.png';
+import Settings from '../../assets/images/settings.png';
+import home from '../../assets/images/home.png';
+import uhome from '../../assets/images/uhome.png';
+import photozone from '../../assets/images/photozone.png';
+import uphotozone from '../../assets/images/uphotozone.png';
+import friends from '../../assets/images/friends.png';
+import ufriends from '../../assets/images/ufriends.png';
+import mypage from '../../assets/images/mypage.png';
+import umypage from '../../assets/images/umypage.png';
+import bottomlogo from '../../assets/images/bottomlogo.png';
 
 const Tab = createBottomTabNavigator();
 
@@ -49,11 +49,7 @@ const BottomTabs = () => {
         component={MainScreen}
         options={{
           tabBarIcon: ({focused}) =>
-            !focused ? (
-              <Image source={uhome} />
-            ) : (
-              <Image source={home} />
-            ),
+            !focused ? <Image source={uhome} /> : <Image source={home} />,
         }}
       />
       <Tab.Screen
@@ -86,11 +82,7 @@ const BottomTabs = () => {
         component={FriendScreen}
         options={{
           tabBarIcon: ({focused}) =>
-            !focused ? (
-              <Image source={ufriends} />
-            ) : (
-              <Image source={friends} />
-            ),
+            !focused ? <Image source={ufriends} /> : <Image source={friends} />,
         }}
       />
       <Tab.Screen
@@ -98,11 +90,7 @@ const BottomTabs = () => {
         component={MypageScreen}
         options={{
           tabBarIcon: ({focused}) =>
-            !focused ? (
-              <Image source={umypage} />
-            ) : (
-              <Image source={mypage} />
-            ),
+            !focused ? <Image source={umypage} /> : <Image source={mypage} />,
         }}
       />
     </Tab.Navigator>
