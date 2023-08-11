@@ -2,14 +2,9 @@ import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 
 import profileImg from '../../assets/images/profileImg.png';
-import recomend1 from '../../assets/images/recomend1.png';
-import recomend2 from '../../assets/images/recomend2.png';
-import recomend3 from '../../assets/images/recomend3.png';
-import recomend4 from '../../assets/images/recomend4.png';
 import more from '../../assets/images/more.png';
-import dateairplane from '../../assets/images/dateairplane.png'
-import EmptyScreen from '../../components/EmptyScreen';
-import TravelInfo from '../../components/constants/TravelInfo';
+import dateairplane from '../../assets/images/dateairplane.png';
+import TravelInfo from '../../constants/TravelInfo';
 
 import {
   View,
@@ -18,7 +13,7 @@ import {
   SafeAreaView,
   ScrollView,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 
 const MainScreen = () => {
@@ -35,9 +30,9 @@ const MainScreen = () => {
             style={{
               flex: 0.5,
               flexDirection: 'column',
-              alignItems: 'center'
+              alignItems: 'center',
             }}>
-            <Image source={profileImg}/>
+            <Image source={profileImg} />
             <Text
               style={{
                 color: 'black',
@@ -84,15 +79,14 @@ const MainScreen = () => {
           </View>
         </View>
         <View style={styles.bottomline} />
-       {/* <EmptyScreen/> */}
-         {TravelInfo.map((info, index) => (
+        {/* <EmptyScreen/> */}
+        {TravelInfo.map((info, index) => (
           <View style={styles.recomend} key={index}>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <View
-                style={{flexDirection:'row',alignItems:'center'}}>
-              <Image source={dateairplane} style={{resizeMode:'contain',}}/>
-              <Text style={styles.datetext}>{info.date}</Text>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Image source={dateairplane} style={{resizeMode: 'contain'}} />
+                <Text style={styles.datetext}>{info.date}</Text>
               </View>
               <TouchableOpacity onPress={gotoRecomend}>
                 <Image source={more} />
@@ -143,7 +137,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'ONE MOBILE OTF REGULAR',
   },
-  datetext:{
+  datetext: {
     color: 'black',
     fontSize: 12,
     fontFamily: 'ONE MOBILE OTF REGULAR',
