@@ -7,6 +7,9 @@ import recomend2 from '../../assets/images/recomend2.png';
 import recomend3 from '../../assets/images/recomend3.png';
 import recomend4 from '../../assets/images/recomend4.png';
 import more from '../../assets/images/more.png';
+import dateairplane from '../../assets/images/dateairplane.png'
+import EmptyScreen from '../../components/EmptyScreen';
+import TravelInfo from '../../components/constants/TravelInfo';
 
 import {
   View,
@@ -15,27 +18,8 @@ import {
   SafeAreaView,
   ScrollView,
   Image,
-  Button,
-  TouchableOpacity,
+  TouchableOpacity
 } from 'react-native';
-
-const TravelInfo = [
-  {
-    name: '성욱',
-    image: [recomend1, recomend2, recomend3, recomend4],
-    tag: '#우정여행 #먹부림',
-  },
-  {
-    name: '근재',
-    image: [recomend1, recomend2, recomend3, recomend4],
-    tag: '#우정여행 #먹부림',
-  },
-  {
-    name: '준민',
-    image: [recomend1, recomend2, recomend3, recomend4],
-    tag: '#우정여행 #먹부림',
-  },
-];
 
 const MainScreen = () => {
   const navigation = useNavigation();
@@ -51,21 +35,14 @@ const MainScreen = () => {
             style={{
               flex: 0.5,
               flexDirection: 'column',
-              alignItems: 'center',
+              alignItems: 'center'
             }}>
-            <Image
-              source={profileImg}
-              styles={{
-                resizeMode: 'contain',
-                flex: 1,
-              }}
-            />
+            <Image source={profileImg}/>
             <Text
               style={{
                 color: 'black',
-                fontSize: 24,
-                fontWeight: 'bold',
-                fontFamily: 'TENADA',
+                fontSize: 16,
+                fontFamily: 'Tenada',
               }}>
               성욱
             </Text>
@@ -107,11 +84,16 @@ const MainScreen = () => {
           </View>
         </View>
         <View style={styles.bottomline} />
-        {TravelInfo.map((info, index) => (
+       {/* <EmptyScreen/> */}
+         {TravelInfo.map((info, index) => (
           <View style={styles.recomend} key={index}>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={styles.text}>{info.name}님을 위한 추천</Text>
+              <View
+                style={{flexDirection:'row',alignItems:'center'}}>
+              <Image source={dateairplane} style={{resizeMode:'contain',}}/>
+              <Text style={styles.datetext}>{info.date}</Text>
+              </View>
               <TouchableOpacity onPress={gotoRecomend}>
                 <Image source={more} />
               </TouchableOpacity>
@@ -133,10 +115,7 @@ const MainScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 5,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    backgroundColor: 'white',
+    flex: 1,
   },
   profile: {
     flex: 1,
@@ -151,26 +130,9 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 30,
   },
-  advertise: {
-    flex: 1,
-    justifyContent: 'center',
-    alignContent: 'center',
-    marginTop: 30,
-  },
-  shopingmall: {
-    flex: 1,
-    marginTop: 30,
-    marginBottom: 20,
-  },
   profileImgae: {
     flex: 1,
     resizeMode: 'contain',
-  },
-  blueText: {
-    color: '#0D38CE',
-    fontSize: 16,
-    fontWeight: 'bold',
-    fontFamily: 'ONE MOBILE OTF BOLD',
   },
   recoimgae: {
     flex: 1,
@@ -179,8 +141,12 @@ const styles = StyleSheet.create({
   text: {
     color: 'black',
     fontSize: 16,
-    fontWeight: 'bold',
-    fontFamily: 'ONE MOBILE OTF BOLD',
+    fontFamily: 'ONE MOBILE OTF REGULAR',
+  },
+  datetext:{
+    color: 'black',
+    fontSize: 12,
+    fontFamily: 'ONE MOBILE OTF REGULAR',
   },
   bottomline: {
     borderBottomColor: 'gray',
@@ -195,14 +161,12 @@ const styles = StyleSheet.create({
   profilebigtext: {
     color: 'black',
     fontSize: 32,
-    fontWeight: 'bold',
-    fontFamily: 'ONE MOBILE OTF BOLD',
+    fontFamily: 'ONE MOBILE OTF REGULAR',
   },
   profiletext: {
     color: 'black',
     fontSize: 14,
-    fontWeight: 'bold',
-    fontFamily: 'ONE MOBILE OTF BOLD',
+    fontFamily: 'TENADA',
   },
 });
 
