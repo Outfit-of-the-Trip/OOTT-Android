@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useWindowDimensions } from 'react-native';
+import { Button } from '@rneui/themed';
 
 import {
   View,
-  Button,
   StyleSheet,
   Text,
   SafeAreaView,
@@ -60,18 +60,22 @@ const Recomend = () => {
           </View>
         </View>
         <View
-          style={[styles.infosecondcontainer,{marginHorizontal:width-(width-20)}]}>
-          <Text
-            style={styles.infosecondttext}>
-            2023.07.19 Look
-          </Text>
+          style={[styles.infosecondcontainer,{marginHorizontal:width-(width-12)}]}>
           <View
-            style={styles.infosecondbutton}>
-            <Button
-              title='아바타로보기'/>
+            style={{flex:3,flexDirection:'row'}}>
+              <View
+                style={{flex:2,alignItems:'center'}}>
+                <Text
+                  style={styles.infosecondttext}>
+                  2023.07.19 Look
+                </Text>
+              </View>
+                <Button title="아바타로 보기" type="clear" titleStyle={styles.infosecondbutton}/>
+                
           </View>
         </View>
     </View>
+    <View style={styles.bottomline} />
     <View
       style={styles.showimgcontainer}>
       <TouchableOpacity
@@ -81,6 +85,7 @@ const Recomend = () => {
         style={[styles.showimg,{width:width-20}]}/>
       </TouchableOpacity>
     </View>
+    <View style={styles.bottomline} />
     <View
       style={[styles.bottomcontainer,{marginHorizontal:width-(width-20)}]}>
         <TouchableOpacity onPress={toggleImage}>
@@ -109,9 +114,10 @@ export default Recomend;
   const styles = StyleSheet.create({
     conatiner:{
       flex:5,
+      backgroundColor:'white'
     },
     infocontainer:{
-      flex:1,
+      flex:0.6,
       alignItems:'flex-start',
       justifyContent:'center',
       alignContent:'flex-start',
@@ -127,8 +133,8 @@ export default Recomend;
     },
     infofirsttext:{
      fontSize:16,
-     fontWeight:'bold',
-     color:'black'
+     color:'black',
+     fontFamily:'오뮤_다예쁨체'
     },
     infoclendar:{
       flexDirection:'row',
@@ -138,19 +144,17 @@ export default Recomend;
     infosecondcontainer:{
       flex:0.5,
       alignItems:'flex-start',
-      justifyContent:'space-between', 
       flexDirection:'row'
     },
     infosecondttext:{
       fontSize:24,  
-      fontWeight:'bold',
       color:'black',
-      flex:0.5
+      flex:1
     },
     infosecondbutton:{
-      flexDirection:'row',
-      justifyContent:'flex-end',
-      flex:0.5
+      fontSize:16,
+      color:'#4949E8',
+      fontFamily:'오뮤_다예쁨체',
     },
     showimgcontainer:{
       flex:3,
@@ -170,12 +174,22 @@ export default Recomend;
       alignItems:'center'
     },
     samedaystext:{
-      fontSize:16,
-      fontWeight:'bold',
+      fontSize:24,
+      fontFamily:'오뮤_다예쁨체',
       color:'black'
     },
     imgcontain:{
       resizeMode:'contain'
-    }
+    },
+    bottomline: {
+      borderBottomColor: 'gray',
+      borderBottomWidth: 1,
+      marginTop: 10,
+      shadowColor: 'black',
+      shadowOffset: {width: 0, height: 2},
+      shadowOpacity: 0.5,
+      shadowRadius: 4,
+      elevation: 8,
+    },
 
   })

@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import { useWindowDimensions } from 'react-native';
+import { Avatar } from '@rneui/themed';
 
 import profileImg from '../../assets/images/profileImg.png';
 import more from '../../assets/images/more.png';
@@ -35,13 +36,12 @@ const MainScreen = () => {
         <View style={styles.profile}>
           <View
             style={styles.profileimgconatiner}>
-            <Image source={profileImg} />
+            <Avatar
+              size={72}
+              rounded
+              source={profileImg} />
             <Text
-              style={{
-                color: 'black',
-                fontSize: 16,
-                fontFamily: 'Tenada',
-              }}>
+              style={styles.profileimgename}>
               성욱
             </Text>
           </View>
@@ -52,14 +52,14 @@ const MainScreen = () => {
               <Text style={styles.profilebigtext}>7</Text>
               <Text style={styles.profiletext}>mylog</Text>
             </View>
+            <TouchableOpacity
+                onPress={gotoFrineds}>
             <View
               style={styles.profiletextcontainer}>
-              <TouchableOpacity
-                onPress={gotoFrineds}>
-                <Text style={styles.profilebigtext}>12</Text>
+                <Text style={styles.profilebigtext}>7</Text>
                 <Text style={styles.profiletext}>Friend</Text>
-              </TouchableOpacity>
-            </View>
+            </View>   
+            </TouchableOpacity>
             <View
               style={styles.profiletextcontainer}>
               <Text style={styles.profilebigtext}>9</Text>
@@ -73,7 +73,7 @@ const MainScreen = () => {
           <View style={styles.recomendconatiner} key={index}>
             <View
               style={styles.recotopcontainer}>
-              <View style={{flexDirection: 'row', alignItems: 'center',marginLeft:width-(width-10)}}>
+              <View style={[styles.viewcontainer,{marginHorizontal:width-(width-10),marginBottom:width-(width-10)}]}>
                 <Image source={dateairplane} style={{resizeMode: 'contain'}} />
                 <Text style={styles.datetext}>{info.date}</Text>
               </View>
@@ -87,7 +87,9 @@ const MainScreen = () => {
               <Image source={info.image[2]} style={styles.recoimgae} />
               <Image source={info.image[3]} style={styles.recoimgae} />
             </ScrollView>
-            <Text style={styles.text}>{info.tag}</Text>
+            <View style={[styles.viewcontainer,{marginHorizontal:width-(width-10)}]}>
+            <Text style={styles.tagtext}>{info.tag}</Text>
+            </View>
             <View style={styles.bottomline} />
           </View>
         ))}
@@ -99,11 +101,17 @@ const MainScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:'white'
   },
   profile: {
     flex: 1,
     flexDirection: 'row',
     marginTop: 20,
+  },
+  profileimgename:{
+    color: 'black',
+    fontSize: 16,
+    fontFamily: '오뮤_다예쁨체',
   },
   profileimgconatiner:{
     flex: 0.5,
@@ -112,6 +120,11 @@ const styles = StyleSheet.create({
   recomendconatiner: {
     flex: 1,
     marginTop: 30,
+  },
+  viewcontainer:{
+    flexDirection: 'row',
+    justifyContent:'flex-start' ,
+    alignItems: 'center',
   },
   friends: {
     flex: 1,
@@ -131,6 +144,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    alignContent:'center'
   },
   recoimgae: {
     flex: 1,
@@ -140,15 +154,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     justifyContent: 'space-between'
   },
-  text: {
+  tagtext: {
     color: 'black',
-    fontSize: 16,
-    fontFamily: 'ONE MOBILE OTF REGULAR',
+    fontSize: 24,
+    fontFamily: '오뮤_다예쁨체',
   },
   datetext: {
     color: 'black',
-    fontSize: 12,
-    fontFamily: 'ONE MOBILE OTF REGULAR',
+    fontSize: 16,
+    fontFamily: '오뮤_다예쁨체',
   },
   bottomline: {
     borderBottomColor: 'gray',
@@ -163,12 +177,12 @@ const styles = StyleSheet.create({
   profilebigtext: {
     color: 'black',
     fontSize: 32,
-    fontFamily: 'ONE MOBILE OTF REGULAR',
+    fontFamily: '오뮤_다예쁨체',
   },
   profiletext: {
     color: 'black',
-    fontSize: 14,
-    fontFamily: 'TENADA',
+    fontSize: 16,
+    fontFamily: '오뮤_다예쁨체',
   },
 });
 

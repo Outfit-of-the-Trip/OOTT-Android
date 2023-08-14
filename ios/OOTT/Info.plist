@@ -51,5 +51,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Tenada.ttf</string>
+		<string>오뮤_다예쁨체.ttf</string>
+	</array>
 </dict>
 </plist>

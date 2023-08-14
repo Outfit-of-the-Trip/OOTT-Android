@@ -1,6 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Image, TouchableOpacity} from 'react-native';
+import {Image, TouchableOpacity,StyleSheet} from 'react-native';
 
 import MainScreen from '../../screens/MainScreen/MainScreen';
 import TravelScreen from '../../screens/PhotozoneScreen/PhotozoneScreen';
@@ -39,10 +39,13 @@ const BottomTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarShowLabel: false,
+        tabBarLabelStyle:{
+          fontSize: 12,
+          fontWeight:'bold'},
         headerTitleAlign: 'center',
         headerTitle: mainLogo,
         headerRight: settingsLogo,
+        tabBarActiveTintColor:'#4949E8'
       }}>
       <Tab.Screen
         name="홈"
@@ -68,7 +71,6 @@ const BottomTabs = () => {
         name="OOTT"
         component={OOTTScreen}
         options={{
-          tabBarShowLabel: false,
           tabBarIcon: ({focused}) =>
             !focused ? (
               <Image source={bottomlogo} />
@@ -98,3 +100,11 @@ const BottomTabs = () => {
 };
 
 export default BottomTabs;
+
+const styles = StyleSheet.create({
+  font:{
+    color: 'black',
+    fontSize: 8,
+    fontFamily: '오뮤_다예쁨체',
+  }
+})
