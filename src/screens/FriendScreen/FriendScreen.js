@@ -19,6 +19,7 @@ const FriendScreen = () => {
   const [friendName, setFriendName] = useState('');
   const [findFriendInfo, setFindFriendInfo] = useState({});
   const [editedFriendsList, setEditedFriendsList] = useState([...FriendsList]);
+
   const handleFriendName = name => {
     setFriendName(name);
   };
@@ -27,13 +28,14 @@ const FriendScreen = () => {
     navigation.goBack();
   };
   const moveFriendInfo = () => {
-    navigation.navigate('FriendInfoScreen', {userData: findFriendInfo});
+    navigation.navigate('FriendInfoScreen', findFriendInfo);
   };
 
   const findFriends = () => {
     try {
       const friendInfo = FriendsList.filter(item => item.id === friendName);
       setFindFriendInfo(...friendInfo);
+      console.log(friendInfo);
     } catch (e) {
       console.log(e);
     }
@@ -43,13 +45,14 @@ const FriendScreen = () => {
     try {
       const deleteFriend = FriendsList.filter(item => item.id !== friendName);
       setEditedFriendsList(...deleteFriend);
-      console.log(editedFriendsList);
+      console.log('editedFriendsList: ' + editedFriendsList);
     } catch (e) {
       console.log(e);
     }
   };
+
   useEffect(() => {
-    console.log(editedFriendsList);
+    console.log('editedFriendsList: ' + editedFriendsList);
     console.log(friendName);
   }, []);
   return (
@@ -92,8 +95,8 @@ const FriendScreen = () => {
             <Text>성별: {findFriendInfo.gender}&nbsp;&nbsp;</Text>
           </View>
           <View style={styles.friendDeleteButton}>
-            <Button onPress={deleteFriends} title="친구 삭제"></Button>
-            <Button onPress={moveFriendInfo} title="정보 보기"></Button>
+            <Button onPress={deleteFriends} title="친구 삭제" />
+            <Button onPress={moveFriendInfo} title="정보 보기" />
           </View>
         </View>
       ) : (
@@ -112,7 +115,8 @@ const FriendScreen = () => {
               <Text>성별: {item.gender}</Text>
             </View>
             <View style={styles.friendDeleteButton}>
-              <Button onPress={deleteFriends} title="친구 삭제"></Button>
+              <Button onPress={deleteFriends} title="친구 삭제" />
+              <Button onPress={moveFriendInfo} title="정보 보기" />
             </View>
           </View>
         ))
