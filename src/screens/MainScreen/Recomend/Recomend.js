@@ -147,9 +147,10 @@ export default Recomend;
       flexDirection:'row'
     },
     infosecondttext:{
-      fontSize:24,  
+      fontSize:32,  
       color:'black',
-      flex:1
+      flex:1,
+      fontFamily:'오뮤_다예쁨체'
     },
     infosecondbutton:{
       fontSize:16,

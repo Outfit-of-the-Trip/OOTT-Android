@@ -3,60 +3,40 @@ import viewImage from '../../../assets/images/avatar.png'
 import profileImg from '../../../assets/images/profileImg.png';
 import {
     View,
-    Button,
+    FlatList,
     StyleSheet,
     Text,
     SafeAreaView,
     Image,
     TouchableOpacity,
   } from 'react-native';
-import { ListItem, Avatar, Icon } from '@rneui/themed';
-import { FriendsList } from '../../../constants/FriendList'
-import React, {useState} from 'react';
-import { List } from 'react-native-paper';
+import { Friendex } from '../../../constants/Friendex'
+import React from 'react';
+import {CollapseBody} from 'accordion-collapse-react-native';
 
 const FriendsLook = () => {
-    const [expanded, setExpanded] = React.useState(false);
+    const renderItem = ({ item }) => (
+        <View>
+          <Text style={styles.topshowname}>{item.name}</Text>
+        </View>
+      );
+
     return(
         <SafeAreaView
             style={styles.allconatiner}>
         <View
             style={styles.firstcontainer}>
-            {/* <Image
-                source={airplane}/> */}
-            <View
-                style={{flex:1}}>
             <Text
-                style={styles.toptext}> 2023.07.19 ~ 2023.07.23 with</Text>
-            </View>
-            <View style={{flexDirection:'column',flex:0.5}}>
-            <ListItem.Accordion
-                content={
-                        <ListItem.Content>
-                            <ListItem.Title
-                                style={{fontFamily:'오뮤_다예쁨체',fontSize:24}}> 친구</ListItem.Title>
-                        </ListItem.Content>
-                }
-                isExpanded={expanded}
-                onPress={() =>{
-                    setExpanded(!expanded);
-                }}
-            >
-                <ListItem.Content>
-                    {FriendsList.map((l,i) => (
-                        <ListItem key={i} bottomDivider>
-                            <Avatar
-                                rounded
-                                source={profileImg}/>
-                            <ListItem.Content>
-                            <ListItem.Title
-                                style={styles.toptext}>{l.name[i]}</ListItem.Title>
-                            </ListItem.Content>
-                        </ListItem>
-                    ))
-                    }
-                </ListItem.Content>
-            </ListItem.Accordion>
+                style={styles.toptext}> 2023.07.19 ~ 2023.07.23 with </Text>
+            <View style={styles.topshowcontainer}>  
+                    <CollapseBody
+                    style={{height:48}}>
+                <FlatList
+                    data={Friendex}
+                    renderItem={renderItem}
+                    keyExtractor={(item,index) => index.toString()}
+                    />
+                </CollapseBody>
             </View>
         </View>
         <View style={styles.bottomline}/>
@@ -64,7 +44,6 @@ const FriendsLook = () => {
             style={styles.secondcontainer}>
             <Image
                 source={viewImage}/>
-
         </View>
         <View style={styles.bottomline}/>
         <View
@@ -101,6 +80,13 @@ topname:{
     fontSize:24,
     color:'blue',
     fontFamily:'오뮤_다예쁨체'
+},
+topshowcontainer:{
+    flex:0.5
+},
+topshowname:{
+  fontFamily:'오뮤_다예쁨체',
+  fontSize:24
 },
 secondcontainer:{
     flex:3,

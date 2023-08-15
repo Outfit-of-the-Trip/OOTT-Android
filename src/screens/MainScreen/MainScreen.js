@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import { useWindowDimensions } from 'react-native';
 import { Avatar } from '@rneui/themed';
+import axios from 'axios';
 
 import profileImg from '../../assets/images/profileImg.png';
 import more from '../../assets/images/more.png';
@@ -18,16 +19,21 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+const API_BASE_URL = 'http://192.168.0.165:3306';
+
 const MainScreen = () => {
   const navigation = useNavigation();
   const width = useWindowDimensions().width;
-
+  const [data, setData] = useState([]);
   const gotoRecomend = () => {
     return navigation.navigate('Recomend');
   };
   
   const gotoFrineds = () =>{
     return navigation.navigate('친구')
+  }
+  const getData = async () => {
+    const data = await axios.get('130.162.131.204');
   }
 
   return (
@@ -42,7 +48,7 @@ const MainScreen = () => {
               source={profileImg} />
             <Text
               style={styles.profileimgename}>
-              성욱
+              친구 
             </Text>
           </View>
           <View
