@@ -44,7 +44,7 @@ const Navigation = () => {
           headerTitle: mainLogo,
           headerRight: settingsLogo,
         }}>
-        {/* {userInfo.id ? (
+        {userInfo.id ? (
           <>
             <Stack.Screen
               name="bottomTab"
@@ -73,8 +73,8 @@ const Navigation = () => {
             component={HomeScreen}
             options={{headerShown: false}}
           />
-        )} */}
-        <Stack.Screen
+        )}
+        {/* <Stack.Screen
           name="bottomTab"
           component={BottomTabs}
           options={{headerShown: false}}
@@ -98,7 +98,7 @@ const Navigation = () => {
           name="FriendInfoScreen"
           component={FriendInfoScreen}
           options={{headerShown: true}}
-        />
+        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

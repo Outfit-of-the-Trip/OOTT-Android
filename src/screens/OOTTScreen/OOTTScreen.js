@@ -1,17 +1,29 @@
-import React from 'react'
-
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity
-} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import {Calendar} from 'react-native-calendars';
 
 const OOTTScreen = () => {
-  return (
-    <Text>OOTT Screen</Text>
-  )
-}
+  const [selected, setSelected] = useState('');
 
-export default OOTTScreen
+  return (
+    <View>
+      <Calendar
+        onDayPress={day => {
+          setSelected(day.dateString);
+          console.log(selected);
+        }}
+        markedDates={{
+          [selected]: {
+            selected: true,
+            disableTouchEvent: true,
+            selectedDotColor: 'orange',
+          },
+        }}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({});
+
+export default OOTTScreen;
