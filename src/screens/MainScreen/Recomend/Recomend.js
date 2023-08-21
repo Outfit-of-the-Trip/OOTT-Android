@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { useWindowDimensions } from 'react-native';
+import { useWindowDimensions, Modal } from 'react-native';
 import { Button } from '@rneui/themed';
+import {Calendar} from 'react-native-calendars';
+import CalendarModar from '../../../components/CalendarModal'
 
 import {
   View,
@@ -22,6 +24,8 @@ const Recomend = () => {
   const navigation = useNavigation();
   const [isImage, setIsImage] = useState(true);
   const width = useWindowDimensions().width; //기기 폭 값
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  
   const gotoRecomendTop = () => {
     return navigation.navigate('RecomendTop');
   };
@@ -31,20 +35,22 @@ const Recomend = () => {
   };
 
   const gotoRecomendShose = () => {
-    try{
     return navigation.navigate('RecomendShose');}
-    catch(e){console.log(e)}
-  };
 
   const gotoFriendsLook = () => {
     return navigation.navigate('FriendsLook');
   };
-  
+
+  const gotoCalendar = () =>{
+    return(
+        navigation.navigate('Calendar')
+    );
+  }
+ 
   const toggleImage = () => {
     setIsImage(!isImage);
   };
  
-
 
   return (
    <SafeAreaView
@@ -62,7 +68,8 @@ const Recomend = () => {
           </Text>
           <View
             style={styles.infoclendar}>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={gotoCalendar}>
               <Image
               source={calendar}/>
             </TouchableOpacity>
@@ -93,8 +100,7 @@ const Recomend = () => {
     </View>
     <View style={[styles.bottomline,{marginBottom:20}]} />
     <View
-      style={[styles.bottomfirstcontainer,{marginHorizontal:width-(width-70)}]}
-    > 
+      style={[styles.bottomfirstcontainer,{marginHorizontal:width-(width-70)}]}> 
     <TouchableOpacity
       onPress={gotoRecomendTop}>
         <Text style={styles.hashtagtext}>#상의</Text>
@@ -130,7 +136,6 @@ const Recomend = () => {
   </SafeAreaView>
   );
 };
-
 export default Recomend;
 
   const styles = StyleSheet.create({

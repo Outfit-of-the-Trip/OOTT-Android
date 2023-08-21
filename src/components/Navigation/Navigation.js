@@ -10,6 +10,7 @@ import RecomendTop from '../../screens/MainScreen/DetailRecomend/RecomendTop';
 import RecomendBottom from '../../screens/MainScreen/DetailRecomend/RecomendBottom';
 import RecomendShose from '../../screens/MainScreen/DetailRecomend/RecomendShose';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
+import Calendar from '../../components/CalendarModal';
 import {AuthContext} from '../../utils/Auth';
 
 import BottomTabs from './BottomTabNavigation';
@@ -82,6 +83,11 @@ const Navigation = () => {
             <Stack.Screen
               name="FriendsLook"
               component={FriendsLook}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="Calendar"
+              component={Calendar}
               options={{headerShown: true}}
             />
           </>
