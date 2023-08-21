@@ -1,16 +1,15 @@
-import React from 'react'
+import React, {useEffect} from 'react'
+import { WebView } from 'react-native-webview'
+import axios from 'axios';
 
 import {
-  StyleSheet,
-  Text,
   View,
-  Image,
-  TouchableOpacity
+  Text
 } from 'react-native';
 
-const TravelScreen = () => {
+const TravelScreen = () => { 
   return (
-    <Text>Travel Screen</Text>
+      <WebView source={{ uri: 'http://192.168.224.234:3000/' }} />
   )
 }
 
