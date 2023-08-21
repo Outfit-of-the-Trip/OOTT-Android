@@ -22,9 +22,18 @@ const Recomend = () => {
   const navigation = useNavigation();
   const [isImage, setIsImage] = useState(true);
   const width = useWindowDimensions().width; //기기 폭 값
-  
-  const gotoDetailRecomend = () => {
-    return navigation.navigate('DetailRecomend');
+  const gotoRecomendTop = () => {
+    return navigation.navigate('RecomendTop');
+  };
+
+  const gotoRecomendBottom= () => {
+    return navigation.navigate('RecomendBottom');
+  };
+
+  const gotoRecomendShose = () => {
+    try{
+    return navigation.navigate('RecomendShose');}
+    catch(e){console.log(e)}
   };
 
   const gotoFriendsLook = () => {
@@ -78,16 +87,29 @@ const Recomend = () => {
     <View style={styles.bottomline} />
     <View
       style={styles.showimgcontainer}>
-      <TouchableOpacity
-        onPress={gotoDetailRecomend}>
       <Image
         source={preview}
         style={[styles.showimg,{width:width-20}]}/>
-      </TouchableOpacity>
     </View>
-    <View style={styles.bottomline} />
+    <View style={[styles.bottomline,{marginBottom:20}]} />
     <View
-      style={[styles.bottomcontainer,{marginHorizontal:width-(width-20)}]}>
+      style={[styles.bottomfirstcontainer,{marginHorizontal:width-(width-70)}]}
+    > 
+    <TouchableOpacity
+      onPress={gotoRecomendTop}>
+        <Text style={styles.hashtagtext}>#상의</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+       onPress={gotoRecomendBottom}>
+        <Text style={styles.hashtagtext}>#하의</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+       onPress={gotoRecomendShose}>
+        <Text style={styles.hashtagtext}>#신발</Text>
+    </TouchableOpacity>
+    </View>
+    <View
+      style={[styles.bottomsecondcontainer,{marginHorizontal:width-(width-20)}]}>
         <TouchableOpacity onPress={toggleImage}>
           {isImage ? (
             <Image 
@@ -166,9 +188,18 @@ export default Recomend;
       flex:0.98,
       resizeMode:'contain',
       overflow:'hidden'
-    }
-    ,
-    bottomcontainer:{
+    },
+    bottomfirstcontainer:{
+      flexDirection:'row',
+      flex:0.5,
+      justifyContent:'space-between'
+    },
+    hashtagtext:{
+      fontFamily:'오뮤_다예쁨체',
+      fontSize:24,
+      color:'black'
+    },
+    bottomsecondcontainer:{
       flex:0.5,
       flexDirection:'row',
       justifyContent:'space-between',
@@ -187,10 +218,9 @@ export default Recomend;
       borderBottomWidth: 1,
       marginTop: 10,
       shadowColor: 'black',
-      shadowOffset: {width: 0, height: 2},
       shadowOpacity: 0.5,
       shadowRadius: 4,
-      elevation: 8,
+      elevation: 6,
     },
 
   })

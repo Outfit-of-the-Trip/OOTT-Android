@@ -8,6 +8,7 @@ import profileImg from '../../assets/images/profileImg.png';
 import more from '../../assets/images/more.png';
 import dateairplane from '../../assets/images/dateairplane.png';
 import TravelInfo from '../../constants/TravelInfo';
+import EmptyScreen from '../../components/EmptyScreen';
 
 import {
   View,
@@ -19,12 +20,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-const API_BASE_URL = 'http://192.168.0.165:3306';
 
 const MainScreen = () => {
   const navigation = useNavigation();
   const width = useWindowDimensions().width;
-  const [data, setData] = useState([]);
+  const [usrname, setusrname] = useState();
+  //const [usrprofile, setusrprofile] = useState(); 프로필 사진
+  const [friend,setfriend] = useState();
   const gotoRecomend = () => {
     return navigation.navigate('Recomend');
   };
@@ -32,9 +34,31 @@ const MainScreen = () => {
   const gotoFrineds = () =>{
     return navigation.navigate('친구')
   }
-  const getData = async () => {
-    const data = await axios.get('130.162.131.204');
-  }
+  useEffect(() => { //사용자 친구 데이터
+    axios.get('http://10.0.2.2:8000/api/friends/myFriends?userId=a')
+      .then(function (response) {
+        console.log(response.data);
+        setfriend(response.data)
+        console.log(setfriend.length)
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  }, []);
+
+
+  useEffect(() => { //사용자 데이터 
+    axios.get('http://10.0.2.2:8000/api/users/getUserInfo?userId=admin')
+      .then(function (response) {
+        console.log(response.data.usrId);
+        setusrname(response.data.usrId);
+       // setusrprofile(response.data.usrProfileURL) 프로필 사진
+
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -48,7 +72,7 @@ const MainScreen = () => {
               source={profileImg} />
             <Text
               style={styles.profileimgename}>
-              친구 
+              {usrname}
             </Text>
           </View>
           <View
@@ -62,7 +86,9 @@ const MainScreen = () => {
                 onPress={gotoFrineds}>
             <View
               style={styles.profiletextcontainer}>
-                <Text style={styles.profilebigtext}>7</Text>
+                <Text style={styles.profilebigtext}>
+                  8
+                </Text>
                 <Text style={styles.profiletext}>Friend</Text>
             </View>   
             </TouchableOpacity>

@@ -6,7 +6,9 @@ import {Image, TouchableOpacity} from 'react-native';
 import HomeScreen from '../../screens/HomeScreen/HomeScreen';
 import MainScreen from '../../screens/MainScreen/MainScreen';
 import Recomend from '../../screens/MainScreen/Recomend/Recomend';
-import DetailRecomend from '../../screens/MainScreen/DetailRecomend/DetailRecomend';
+import RecomendTop from '../../screens/MainScreen/DetailRecomend/RecomendTop';
+import RecomendBottom from '../../screens/MainScreen/DetailRecomend/RecomendBottom';
+import RecomendShose from '../../screens/MainScreen/DetailRecomend/RecomendShose';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
 import {AuthContext} from '../../utils/Auth';
 
@@ -63,8 +65,18 @@ const Navigation = () => {
               options={{headerShown: true}}
             />
             <Stack.Screen
-              name="DetailRecomend"
-              component={DetailRecomend}
+              name="RecomendTop"
+              component={RecomendTop}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="RecomendBottom"
+              component={RecomendBottom}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="RecomendShose"
+              component={RecomendShose}
               options={{headerShown: true}}
             />
             <Stack.Screen
