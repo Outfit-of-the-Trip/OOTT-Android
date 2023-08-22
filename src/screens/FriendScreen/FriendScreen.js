@@ -8,118 +8,132 @@ import {
   SafeAreaView,
   TextInput,
   Button,
+  TouchableOpacity,
 } from 'react-native';
 import {IconButton, Avatar} from 'react-native-paper';
 import {FriendsList} from '../../constants/FriendList';
 import avatar from '../../assets/images/avatar.png';
+import axios from 'axios';
 
 const FriendScreen = () => {
   const navigation = useNavigation();
 
   const [friendName, setFriendName] = useState('');
-  const [findFriendInfo, setFindFriendInfo] = useState({});
-  const [editedFriendsList, setEditedFriendsList] = useState([...FriendsList]);
+  const [findFriendInfo, setFindFriendInfo] = useState([]);
 
+  //친구 이름 받아오기
   const handleFriendName = name => {
     setFriendName(name);
   };
 
+  //페이지 이동 네비게이션
   const Backbutton = () => {
     navigation.goBack();
   };
   const moveFriendInfo = () => {
-    navigation.navigate('FriendInfoScreen', findFriendInfo);
+    navigation.navigate('FriendInfoScreen', friendName);
   };
 
-  const findFriends = () => {
-    try {
-      const friendInfo = FriendsList.filter(item => item.id === friendName);
-      setFindFriendInfo(...friendInfo);
-      console.log(friendInfo);
-    } catch (e) {
-      console.log(e);
+  //친구 검색 함수
+  const friendsInfo = FriendsList.filter(item => {
+    if (item.id === friendName) {
+      return item;
     }
-  };
-
-  const deleteFriends = () => {
-    try {
-      const deleteFriend = FriendsList.filter(item => item.id !== friendName);
-      setEditedFriendsList(...deleteFriend);
-      console.log('editedFriendsList: ' + editedFriendsList);
-    } catch (e) {
-      console.log(e);
+  });
+  const friendsinfo = findFriendInfo.filter(item => {
+    if (item.usrId === friendName) {
+      console.log(item.usrId);
+      return item;
     }
-  };
+  });
 
   useEffect(() => {
-    console.log('editedFriendsList: ' + editedFriendsList);
-    console.log(friendName);
+    const getFriendInfo = async () => {
+      try {
+        const response = await axios.get(
+          // 'http://10.0.2.2:3000/api/test/getFriendsTable',
+          'http://10.0.2.2:3000/api/test/getUserTable',
+        );
+        setFindFriendInfo(response.data);
+        console.log(findFriendInfo);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getFriendInfo();
   }, []);
   return (
     <SafeAreaView>
       <View style={styles.InputContainer}>
-        <IconButton
-          style={styles.backbutton}
-          onPress={Backbutton}
-          name="account-arrow-left-outline"
-          size={20}
-        />
+        <TouchableOpacity>
+          <Text style={styles.backbutton} onPress={Backbutton} size={20}>
+            &lt;
+          </Text>
+        </TouchableOpacity>
         <TextInput
           style={styles.InputBox}
           onChangeText={handleFriendName}
           placeholder="이름을 입력하세요"
         />
-        <View style={styles.deleteFindFriends}>
-          <Button onPress={findFriends} title="친구 찾기" />
-        </View>
       </View>
-      <Text style={styles.searchName}>찾는 친구 이름:&nbsp;{friendName}</Text>
+      {}
+      <Text style={styles.searchName}>
+        찾는 친구 이름:&nbsp;&nbsp;{friendName}
+      </Text>
       {/* friendName이 있으면 검색해서 나온 친구의 이름을 보여주고 
         아니라면 배열에 저장되어 있는 모든 친구의 정보를 보여주고,
         만약 삭제 버튼을 누르면 filter 함수를 통해 그 유저의 정보만 삭제한
         새로운 배열을 만들어서 editedFriendsList에 저장하고 화면에 바로 앞에서
         나온 변수의 데이터를 보여준다.
       */}
-      {friendName ? (
-        <View style={styles.personRowContainer}>
-          <View style={styles.personColumnContainer}>
-            <Avatar.Image size={30} source={avatar} />
-            <Text>{findFriendInfo.name}</Text>
-          </View>
-          <View style={styles.personColumnContainer}>
-            <Text>ID: {findFriendInfo.id}&nbsp;&nbsp;</Text>
-            <Text>나이: {findFriendInfo.age}&nbsp;&nbsp;</Text>
-          </View>
-          <View style={styles.personColumnContainer}>
-            <Text>관심 분야: {findFriendInfo.favorite}&nbsp;&nbsp;</Text>
-            <Text>성별: {findFriendInfo.gender}&nbsp;&nbsp;</Text>
-          </View>
-          <View style={styles.friendDeleteButton}>
-            <Button onPress={deleteFriends} title="친구 삭제" />
-            <Button onPress={moveFriendInfo} title="정보 보기" />
-          </View>
+      {friendName.length === 0 ? (
+        <View>
+          <Text style={styles.Loading}>친구 찾는 중...</Text>
         </View>
       ) : (
-        editedFriendsList.map((item, index) => (
-          <View key={index} style={styles.personRowContainer}>
+        // friendsInfo.map((item, index) => (
+        //   <View key={index} style={styles.personRowContainer}>
+        //     <View style={styles.personColumnContainer}>
+        //       <Avatar.Image size={30} source={avatar} />
+        //       <Text>{item.name}</Text>
+        //     </View>
+        //     <View style={styles.personColumnContainer}>
+        //       <Text>ID: {item.id}</Text>
+        //       <Text>나이: {item.age}</Text>
+        //     </View>
+        //     <View style={styles.personColumnContainer}>
+        //       <Text>관심 분야: {item.favorite}</Text>
+        //       <Text>성별: {item.gender}</Text>
+        //     </View>
+        //     <View style={styles.friendDeleteButton}>
+        //       <Button onPress={moveFriendInfo} title="정보 보기" />
+        //     </View>
+        //   </View>
+        // ))
+        friendsinfo.map((item, i) => (
+          <View key={i} style={styles.personRowContainer}>
             <View style={styles.personColumnContainer}>
               <Avatar.Image size={30} source={avatar} />
-              <Text>{item.name}</Text>
+              <Text style={styles.userId}>{item.usrId}</Text>
             </View>
             <View style={styles.personColumnContainer}>
-              <Text>ID: {item.id}</Text>
-              <Text>나이: {item.age}</Text>
+              <Text>ID: {item.usrId}</Text>
+              <Text>나이: {item.usrAge}</Text>
             </View>
             <View style={styles.personColumnContainer}>
-              <Text>관심 분야: {item.favorite}</Text>
-              <Text>성별: {item.gender}</Text>
+              <Text>관심 분야:</Text>
+              <Text>성별: {item.usrGender}</Text>
             </View>
             <View style={styles.friendDeleteButton}>
-              <Button onPress={deleteFriends} title="친구 삭제" />
               <Button onPress={moveFriendInfo} title="정보 보기" />
             </View>
           </View>
         ))
+        // friendsinfo.map((item, i) => (
+        //   <View key={i}>
+        //     <Text>{item.usrId}</Text>
+        //   </View>
+        // ))
       )}
     </SafeAreaView>
   );
@@ -129,6 +143,8 @@ export default FriendScreen;
 
 const styles = StyleSheet.create({
   backbutton: {
+    textAlign: 'center',
+    textAlignVertical: 'bottom',
     alignItems: 'center',
     width: 25,
     height: 30,
@@ -142,6 +158,12 @@ const styles = StyleSheet.create({
     width: 300,
   },
   searchName: {
+    fontFamily: '오뮤_다예쁨체',
+    fontSize: 24,
+  },
+  Loading: {
+    margin: 5,
+    fontFamily: '오뮤_다예쁨체',
     fontSize: 20,
   },
   personRowContainer: {
@@ -151,8 +173,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   personColumnContainer: {
+    margin: 5,
     flexDirection: 'column',
     justifyContent: 'center',
+  },
+  userId: {
+    textAlign: 'center',
   },
   friendDeleteButton: {
     justifyContent: 'center',

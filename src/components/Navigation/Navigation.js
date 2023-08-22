@@ -8,6 +8,9 @@ import MainScreen from '../../screens/MainScreen/MainScreen';
 import Recomend from '../../screens/MainScreen/Recomend/Recomend';
 import DetailRecomend from '../../screens/MainScreen/DetailRecomend/DetailRecomend';
 import FriendInfoScreen from '../../screens/FriendScreen/FriendInfoScreen';
+import WhereToGo from '../../screens/OOTTScreen/WhereToGo';
+import WhoDoYouGoWith from '../../screens/OOTTScreen/WhoDoYouGoWith';
+import PurposOfTravel from '../../screens/OOTTScreen/PurposOfTravel';
 import {AuthContext} from '../../utils/Auth';
 
 import BottomTabs from './BottomTabNavigation';
@@ -44,7 +47,7 @@ const Navigation = () => {
           headerTitle: mainLogo,
           headerRight: settingsLogo,
         }}>
-        {userInfo.id ? (
+        {/* {userInfo.id ? (
           <>
             <Stack.Screen
               name="bottomTab"
@@ -73,8 +76,8 @@ const Navigation = () => {
             component={HomeScreen}
             options={{headerShown: false}}
           />
-        )}
-        {/* <Stack.Screen
+        )} */}
+        <Stack.Screen
           name="bottomTab"
           component={BottomTabs}
           options={{headerShown: false}}
@@ -98,7 +101,22 @@ const Navigation = () => {
           name="FriendInfoScreen"
           component={FriendInfoScreen}
           options={{headerShown: true}}
-        /> */}
+        />
+        <Stack.Screen
+          name="WhereToGo"
+          component={WhereToGo}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="WhoDoYouGoWith"
+          component={WhoDoYouGoWith}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="PurposOfTravel"
+          component={PurposOfTravel}
+          options={{headerShown: true}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

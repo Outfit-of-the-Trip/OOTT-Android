@@ -68,7 +68,7 @@ const FriendInfoScreen = () => {
       <View style={styles.postHeader}>
         <View style={styles.postHeaderRow}>
           <Image source={Dateairplane} />
-          <Text style={styles.userHeadr}>{FriendData.name}님의 Look</Text>
+          <Text style={styles.userHeadr}>{FriendData}님의 Look</Text>
         </View>
         <View>
           <Text style={styles.times}>
@@ -83,6 +83,7 @@ const FriendInfoScreen = () => {
       <Text style={styles.Tags}>
         #BestFriend&nbsp;&nbsp;&nbsp;#Casual&nbsp;&nbsp;&nbsp;#HongDae&nbsp;&nbsp;&nbsp;
       </Text>
+      <Button title="다음"></Button>
     </View>
   );
 };
