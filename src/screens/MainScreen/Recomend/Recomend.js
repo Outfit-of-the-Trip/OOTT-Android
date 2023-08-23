@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect,useRef } from 'react';
 import { useWindowDimensions, Modal } from 'react-native';
 import { Button } from '@rneui/themed';
-import {Calendar} from 'react-native-calendars';
-import CalendarModar from '../../../components/CalendarModal'
+import SwiperFlatList from 'react-native-swiper-flatlist';
 
 import {
   View,
@@ -18,14 +17,30 @@ import preview from '../../../assets/images/recomend4.png';
 import calendar from '../../../assets/images/calendar.png';
 import heart from '../../../assets/images/heart.png';
 import uheart from '../../../assets/images/uheart.png';
+import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
 
 const Recomend = () => {
   const navigation = useNavigation();
-  const [isImage, setIsImage] = useState(true);
+  const [likedImages, setLikedImages] = useState(new Array(RecomendGarmet.length).fill(false));
+  const [isfriends,setisfriends] = useState(); //같이 가는 친구가 있는지 없는지
   const width = useWindowDimensions().width; //기기 폭 값
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  
+
+  /* useEffect(() => { //여행 데이터
+    axios.get('http://10.0.2.2:8000/api/travel')
+      .then(function (response) {
+        console.log(response.data);
+        setisfriends(response.data);
+
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  }, []); */
+  const scrollRef =useRef();
+
   const gotoRecomendTop = () => {
     return navigation.navigate('RecomendTop');
   };
@@ -37,8 +52,14 @@ const Recomend = () => {
   const gotoRecomendShose = () => {
     return navigation.navigate('RecomendShose');}
 
-  const gotoFriendsLook = () => {
-    return navigation.navigate('FriendsLook');
+  const gotoFriendsLook = () =>{ 
+      return navigation.navigate('FriendsLook')
+      /* if(isfriends!=null){// 같이 가는 친구가 있다면 친구창으로 이동
+        return navigation.navigate('FriendsLook')
+      }
+      else{ 같이 가는 친구가 없다면 팝업 출력
+        //팝업창 toggleModal();
+      } */
   };
 
   const gotoCalendar = () =>{
@@ -47,10 +68,11 @@ const Recomend = () => {
     );
   }
  
-  const toggleImage = () => {
-    setIsImage(!isImage);
+  const toggleImage = (index) => {
+    const newLikedImages = [...likedImages];
+    newLikedImages[index] = !newLikedImages[index];
+    setLikedImages(newLikedImages);
   };
- 
 
   return (
    <SafeAreaView
@@ -94,11 +116,39 @@ const Recomend = () => {
     <View style={styles.bottomline} />
     <View
       style={styles.showimgcontainer}>
-      <Image
-        source={preview}
-        style={[styles.showimg,{width:width-20}]}/>
+      <SwiperFlatList
+        showPagination
+        ref={scrollRef}
+        paginationActiveColor='black'
+        paginationStyleItem={{height:10,width:10}}
+        data={RecomendGarmet}
+        renderItem={({item, index}) =>(
+          <View>
+            <Image
+            source={item.img}
+            style={[styles.showimg,{width:width}]}/>
+             <View style={{marginHorizontal:width-(width-20),marginTop:10}}>
+             <TouchableOpacity onPress={() => {
+              console.log(index)
+              setLikedImages(index)
+              toggleImage(index)
+            }}> 
+            {likedImages[index]? (
+              <Image 
+                style={styles.imgcontain}
+                source={heart}/>
+                ) : (
+              <Image
+                style={styles.imgcontain}
+                source={uheart}/>
+            )}
+            </TouchableOpacity>
+            </View>
+          </View>
+        )}
+        keyExtractor={(Item) => Item.id.toString()}/>
     </View>
-    <View style={[styles.bottomline,{marginBottom:20}]} />
+    <View style={styles.bottomline} />
     <View
       style={[styles.bottomfirstcontainer,{marginHorizontal:width-(width-70)}]}> 
     <TouchableOpacity
@@ -116,21 +166,25 @@ const Recomend = () => {
     </View>
     <View
       style={[styles.bottomsecondcontainer,{marginHorizontal:width-(width-20)}]}>
-        <TouchableOpacity onPress={toggleImage}>
-          {isImage ? (
-            <Image 
-            style={styles.imgcontain}
-            source={heart}/>
-            ) : (
-              <Image
-              style={styles.imgcontain}
-              source={uheart}/>
-              )}
-        </TouchableOpacity>
         <TouchableOpacity
           onPress={gotoFriendsLook}>
           <Text
           style={styles.samedaystext}>같은 날 친구가 입는 옷은?</Text>
+           {/* <Modal 팝업창
+            animationType="slide"
+            transparent={true}
+            visible={isModalVisible}
+            onRequestClose={toggleModal}
+            >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={{fontFamily:'오뮤_다예쁨체',fontSize:24}}>같이 가는 친구가 없습니다</Text>
+                <TouchableOpacity onPress={toggleModal}>
+                  <Text style={{fontFamily:'오뮤_다예쁨체',fontSize:24}}>닫기</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal> */}
         </TouchableOpacity>
     </View>
   </SafeAreaView>
@@ -185,18 +239,18 @@ export default Recomend;
       fontFamily:'오뮤_다예쁨체',
     },
     showimgcontainer:{
-      flex:3,
-      alignItems:'center',
-      justifyContent:'center',
+      flex:3.5,
+      alignItems:'flex-start',justifyContent:'flex-start'
     },
     showimg:{
-      flex:0.98,
+      width:'100%',
+      height:'90%',
       resizeMode:'contain',
-      overflow:'hidden'
     },
     bottomfirstcontainer:{
+      marginTop:10,
       flexDirection:'row',
-      flex:0.5,
+      flex:0.2,
       justifyContent:'space-between'
     },
     hashtagtext:{
@@ -207,7 +261,7 @@ export default Recomend;
     bottomsecondcontainer:{
       flex:0.5,
       flexDirection:'row',
-      justifyContent:'space-between',
+      justifyContent:'flex-end',
       alignItems:'center'
     },
     samedaystext:{
@@ -216,16 +270,31 @@ export default Recomend;
       color:'black'
     },
     imgcontain:{
-      resizeMode:'contain'
+      resizeMode:'contain',
     },
     bottomline: {
       borderBottomColor: 'gray',
       borderBottomWidth: 1,
       marginTop: 10,
-      shadowColor: 'black',
+      shadowColor: 'gray',
       shadowOpacity: 0.5,
       shadowRadius: 4,
-      elevation: 6,
+      elevation: 3,
+    },
+    modalContainer: {
+      flex: 3,
+      justifyContent: 'center',
+      alignItems: 'center',
+      alignContent:'center',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      backgroundColor: 'white',
+      padding: 20,
+      borderRadius: 10,
+      elevation: 5,
     },
 
   })

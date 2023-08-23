@@ -9,7 +9,6 @@ import FriendScreen from '../../screens/FriendScreen/FriendScreen';
 import MypageScreen from '../../screens/MypageScreen/MypageScreen';
 
 import Toplogo from '../../assets/images/toplogo.png';
-import Settings from '../../assets/images/settings.png';
 import home from '../../assets/images/home.png';
 import uhome from '../../assets/images/uhome.png';
 import photozone from '../../assets/images/photozone.png';
@@ -25,16 +24,6 @@ const Tab = createBottomTabNavigator();
 const mainLogo = () => {
   return <Image style={{width: 72, height: 54}} source={Toplogo} />;
 };
-const settingsLogo = () => {
-  return (
-    <TouchableOpacity>
-      <Image
-        style={{width: 40, height: 40, marginRight: 5}}
-        source={Settings}
-      />
-    </TouchableOpacity>
-  );
-};
 const BottomTabs = () => {
   return (
     <Tab.Navigator
@@ -44,7 +33,6 @@ const BottomTabs = () => {
           fontWeight:'bold'},
         headerTitleAlign: 'center',
         headerTitle: mainLogo,
-        headerRight: settingsLogo,
         tabBarActiveTintColor:'#4949E8'
       }}>
       <Tab.Screen

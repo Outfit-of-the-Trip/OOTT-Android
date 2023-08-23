@@ -15,22 +15,11 @@ import {AuthContext} from '../../utils/Auth';
 
 import BottomTabs from './BottomTabNavigation';
 import Toplogo from '../../assets/images/toplogo.png'
-import Settings from '../../assets/images/settings.png'
 
 const Stack = createNativeStackNavigator();
 
 const mainLogo = () => {
   return <Image style={{width: 72, height: 54}} source={Toplogo} />;
-};
-const settingsLogo = () => {
-  return (
-    <TouchableOpacity>
-      <Image
-        style={{width: 40, height: 40, marginRight: 5}}
-        source={Settings}
-      />
-    </TouchableOpacity>
-  );
 };
 
 const Navigation = () => {
@@ -46,7 +35,6 @@ const Navigation = () => {
           tabBarShowLabel: false,
           headerTitleAlign: 'center',
           headerTitle: mainLogo,
-          headerRight: settingsLogo,
         }}>
         {userInfo.id ? (
           <>

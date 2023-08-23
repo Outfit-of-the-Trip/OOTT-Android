@@ -8,15 +8,53 @@ import {
     TouchableOpacity,
     ScrollView,
   } from 'react-native';
-import { useWindowDimensions } from 'react-native';
+import { useWindowDimensions,} from 'react-native';
 import {Collapse,CollapseHeader, CollapseBody, AccordionList} from 'accordion-collapse-react-native';
-
+import React, {useState,useEffect} from 'react';
 import airplaneimg from '../../../assets/images/DetailRecomendairplane.png'
+import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import ex from '../../../assets/images/recomend2.png'
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
   
 
 const RecomendShose = () => {
     const width = useWindowDimensions().width; //기기 폭 값
+    const height = useWindowDimensions().height; //기기 길이 값
+    const navigation = useNavigation();
+    const [usrname,setusrname] = useState();
+
+    const recomendGarmet = RecomendGarmet.map((ele,i) =>{
+        return(
+          <Image
+          key={i}
+          source={ele.img}
+          style={[style.showimg,{width:width-20}]}/>
+        )
+      },[RecomendGarmet])
+
+    useEffect(() => { //사용자 데이터 
+        axios.get('http://10.0.2.2:8000/api/users/getUserInfo?userId=admin')
+          .then(function (response) {
+            console.log(response.data.usrId);
+            setusrname(response.data.usrId);
+           // setusrprofile(response.data.usrProfileURL) 프로필 사진
+    
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
+      }, []);
+
+
+
+    const gotoRecomendBottom = (() =>{
+        return navigation.navigate('RecomendBottom')
+      }) 
+
+      const gotoRecomendTop = (() =>{
+        return navigation.navigate('RecomendTop')
+      }) 
 
     return(
         <SafeAreaView
@@ -34,10 +72,12 @@ const RecomendShose = () => {
                                 </View>
                             </View> 
                             <View>
-                                <TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={gotoRecomendTop}>
                                     <Text style={style.categorytext}>상의</Text>  
                                 </TouchableOpacity>
-                                <TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={gotoRecomendBottom}>
                                     <Text style={style.categorytext}>하의</Text>
                                  </TouchableOpacity>
                         </View>
@@ -47,7 +87,7 @@ const RecomendShose = () => {
                             <View
                                 style={{flex:1}}>
                                 <Text style={style.datetext}>2023.07.19</Text>
-                                <Text style={style.datetext}>성욱님을 위한 추천 상의</Text>
+                                <Text style={style.datetext}>{usrname}님을 위한 추천 신발</Text>
                             </View>
                             <View
                                 style={{zIndex:20}}>
@@ -80,11 +120,7 @@ const RecomendShose = () => {
                 <View
                     style={{flex:1}}>
                 <ScrollView horizontal={true}>
-                    <Image source={ex}/>
-                    <Image source={ex}/>
-                    <Image source={ex}/>
-                    <Image source={ex}/>
-                    <Image source={ex}/>
+                   {recomendGarmet}
                 </ScrollView>
                 </View>
                 <View
@@ -92,13 +128,9 @@ const RecomendShose = () => {
                     <Text style={{fontFamily:'오뮤_다예쁨체',fontSize:32,color:'black'}}>추천 상의와 비슷한 옷장 속 옷들</Text>
                </View>
                <View
-                    style={{flex:1}}>
-                    <ScrollView horizontal={true}>
-                    <Image source={ex}/>
-                    <Image source={ex}/>
-                    <Image source={ex}/>
-                    <Image source={ex}/>
-                    <Image source={ex}/>
+                style={{flex:1,marginBottom:height-(height-20)}}>
+                <ScrollView horizontal={true}>
+                    {recomendGarmet}
                 </ScrollView>
                 </View>
             </View>
@@ -154,5 +186,10 @@ const style = StyleSheet.create({
         fontSize:16,
         color:'black',
         fontFamily:'오뮤_다예쁨체'
-    }
+    },
+    showimg:{
+        width:'100%',
+        height:'100%',
+        resizeMode:'contain',
+      },
 })

@@ -29,8 +29,9 @@ const CalendarModal = ({isVisible, onClose}) => {
                   textDayFontFamily:'오뮤_다예쁨체', //일자 폰트 
                   textMonthFontFamily:'오뮤_다예쁨체', //달 폰트 
                 }}
-                onDayPress={day =>{
+                onDayPress={day =>{ //날짜 눌리면 day.dateString으로 해당 날짜 불름
                     setSelected(day.dateString);
+                    console.log(day.dateString) 
                 }}
                 markedDates={{
                     [selected]: {selected: true, disableTouchEvent: true, selectedColor:'#4949E8'}
