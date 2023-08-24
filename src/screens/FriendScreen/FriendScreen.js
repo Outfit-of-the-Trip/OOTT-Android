@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-
+import axios from 'axios';
 import {
   StyleSheet,
   Text,
@@ -9,11 +9,14 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
+  Image,
 } from 'react-native';
-import {IconButton, Avatar} from 'react-native-paper';
+
+import {Avatar} from 'react-native-paper';
 import {FriendsList} from '../../constants/FriendList';
+
+import ArrowBack from '../../assets/images/arrowback.png';
 import avatar from '../../assets/images/avatar.png';
-import axios from 'axios';
 
 const FriendScreen = () => {
   const navigation = useNavigation();
@@ -65,10 +68,8 @@ const FriendScreen = () => {
   return (
     <SafeAreaView>
       <View style={styles.InputContainer}>
-        <TouchableOpacity>
-          <Text style={styles.backbutton} onPress={Backbutton} size={20}>
-            &lt;
-          </Text>
+        <TouchableOpacity onPress={Backbutton}>
+          <Image style={styles.backbutton} source={ArrowBack} />
         </TouchableOpacity>
         <TextInput
           style={styles.InputBox}
@@ -91,25 +92,6 @@ const FriendScreen = () => {
           <Text style={styles.Loading}>친구 찾는 중...</Text>
         </View>
       ) : (
-        // friendsInfo.map((item, index) => (
-        //   <View key={index} style={styles.personRowContainer}>
-        //     <View style={styles.personColumnContainer}>
-        //       <Avatar.Image size={30} source={avatar} />
-        //       <Text>{item.name}</Text>
-        //     </View>
-        //     <View style={styles.personColumnContainer}>
-        //       <Text>ID: {item.id}</Text>
-        //       <Text>나이: {item.age}</Text>
-        //     </View>
-        //     <View style={styles.personColumnContainer}>
-        //       <Text>관심 분야: {item.favorite}</Text>
-        //       <Text>성별: {item.gender}</Text>
-        //     </View>
-        //     <View style={styles.friendDeleteButton}>
-        //       <Button onPress={moveFriendInfo} title="정보 보기" />
-        //     </View>
-        //   </View>
-        // ))
         friendsinfo.map((item, i) => (
           <View key={i} style={styles.personRowContainer}>
             <View style={styles.personColumnContainer}>
@@ -142,16 +124,16 @@ const FriendScreen = () => {
 export default FriendScreen;
 
 const styles = StyleSheet.create({
-  backbutton: {
-    textAlign: 'center',
-    textAlignVertical: 'bottom',
-    alignItems: 'center',
-    width: 25,
-    height: 30,
-  },
   InputContainer: {
     flexDirection: 'row',
     width: 'auto',
+    alignItems: 'center',
+  },
+  backbutton: {
+    marginRight: 5,
+    alignItems: 'flex-end',
+    width: 50,
+    height: 50,
   },
   InputBox: {
     alignItems: 'center',

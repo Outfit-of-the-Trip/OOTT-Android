@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Image, TouchableOpacity} from 'react-native';
@@ -47,7 +47,7 @@ const Navigation = () => {
           headerTitle: mainLogo,
           headerRight: settingsLogo,
         }}>
-        {/* {userInfo.id ? (
+        {userInfo.id ? (
           <>
             <Stack.Screen
               name="bottomTab"
@@ -69,6 +69,26 @@ const Navigation = () => {
               component={DetailRecomend}
               options={{headerShown: true}}
             />
+            <Stack.Screen
+              name="FriendInfoScreen"
+              component={FriendInfoScreen}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="WhereToGo"
+              component={WhereToGo}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="WhoDoYouGoWith"
+              component={WhoDoYouGoWith}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="PurposOfTravel"
+              component={PurposOfTravel}
+              options={{headerShown: true}}
+            />
           </>
         ) : (
           <Stack.Screen
@@ -76,47 +96,7 @@ const Navigation = () => {
             component={HomeScreen}
             options={{headerShown: false}}
           />
-        )} */}
-        <Stack.Screen
-          name="bottomTab"
-          component={BottomTabs}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="MainScreen"
-          component={MainScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Recomend"
-          component={Recomend}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="DetailRecomend"
-          component={DetailRecomend}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="FriendInfoScreen"
-          component={FriendInfoScreen}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="WhereToGo"
-          component={WhereToGo}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="WhoDoYouGoWith"
-          component={WhoDoYouGoWith}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="PurposOfTravel"
-          component={PurposOfTravel}
-          options={{headerShown: true}}
-        />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

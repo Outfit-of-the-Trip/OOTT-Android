@@ -1,11 +1,10 @@
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   Image,
-  ScrollView,
   StyleSheet,
   SafeAreaView,
 } from 'react-native';
@@ -14,7 +13,10 @@ import axios from 'axios';
 import {Button} from 'react-native-paper';
 import Swiper from 'react-native-swiper';
 import Heart from '../../assets/images/heart.png';
+import LoadingPage from '../../assets/Loading/OOTT_Loading.jpg';
+
 const PurposOfTravel = () => {
+  const navigation = useNavigation();
   const {params: Data} = useRoute();
   console.log(Data);
 
@@ -46,6 +48,7 @@ const PurposOfTravel = () => {
       },
     );
     console.log(repones.data);
+    navigation.navigate('MainScreen');
   };
   return (
     <SafeAreaView style={{flex: 1}}>
