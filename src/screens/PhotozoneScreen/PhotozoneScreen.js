@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useMemo, useState, useEffect } from "react";
-import { StyleSheet, View, Text, Button, Dimensions } from "react-native";
+import { StyleSheet, View, Dimensions, Text, Image } from "react-native";
 import BottomSheet, { BottomSheetScrollView, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { WebView } from 'react-native-webview';
@@ -13,13 +13,21 @@ const deviceWidth = Dimensions.get('window').width;
 
 const TravelScreen = () => {
 
-  const [markerData, setMarkerData] = useState({});
+  const [markerData, setMarkerData] = useState({
+    address : "",
+    image : "",
+    latlng : {
+      lat : 0,
+      lng : 0,
+    },
+    phonenumber: "",
+    title: ""
+  });
   
   const handleOnMessage = (e) => {
     const parsedData = JSON.parse(e.nativeEvent.data);
-    setMarkerData(parsedData);
+    setMarkerData(parsedData.data);
     handleSnapPress(0)
-    console.log(parsedData.data); // 데이터 업데이트 이후에 출력
   };
 
   const sheetRef = useRef(null);
@@ -36,14 +44,12 @@ const TravelScreen = () => {
     <GestureHandlerRootView style={{ flex: 1 }}>
 
       <View style={styles.container}>
-
         <WebView
           javaScriptEnabled={true}
           style={styles.webview}
           source={{ uri: 'http://localhost:3000' }}
           onMessage={handleOnMessage}
         />
-
         <BottomSheet
           ref={sheetRef}
           index={-1}
@@ -52,7 +58,9 @@ const TravelScreen = () => {
           enablePanDownToClose={true}
         >
           <BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
-            <DetailModal markerData={markerData.data} />
+            <DetailModal 
+              data = {markerData}
+            />
           </BottomSheetScrollView>
         </BottomSheet>
 
