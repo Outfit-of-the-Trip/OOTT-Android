@@ -41,6 +41,10 @@ const Recomend = () => {
   }, []); */
   const scrollRef =useRef();
 
+  const gotoRecomendOutter = () => {
+    return navigation.navigate('RecomendOutter');
+  };
+
   const gotoRecomendTop = () => {
     return navigation.navigate('RecomendTop');
   };
@@ -151,6 +155,10 @@ const Recomend = () => {
     <View style={styles.bottomline} />
     <View
       style={[styles.bottomfirstcontainer,{marginHorizontal:width-(width-70)}]}> 
+     <TouchableOpacity
+      onPress={gotoRecomendOutter}>
+        <Text style={styles.hashtagtext}>#아우터</Text>
+    </TouchableOpacity>
     <TouchableOpacity
       onPress={gotoRecomendTop}>
         <Text style={styles.hashtagtext}>#상의</Text>

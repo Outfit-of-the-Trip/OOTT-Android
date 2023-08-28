@@ -9,6 +9,7 @@ import Recomend from '../../screens/MainScreen/Recomend/Recomend';
 import RecomendTop from '../../screens/MainScreen/DetailRecomend/RecomendTop';
 import RecomendBottom from '../../screens/MainScreen/DetailRecomend/RecomendBottom';
 import RecomendShose from '../../screens/MainScreen/DetailRecomend/RecomendShose';
+import RecomendOutter from '../../screens/MainScreen/DetailRecomend/RecomendOutter';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
 import Calendar from '../../components/CalendarModal';
 import {AuthContext} from '../../utils/Auth';
@@ -52,6 +53,11 @@ const Navigation = () => {
               name="Recomend"
               component={Recomend}
               options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="RecomendOutter"
+              component={RecomendOutter}
+              options={{headerShown: false}}
             />
             <Stack.Screen
               name="RecomendTop"
