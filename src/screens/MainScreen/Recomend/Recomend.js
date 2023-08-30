@@ -13,33 +13,47 @@ import {
 } from 'react-native';
 
 import infoairplane from '../../../assets/images/dateairplane.png'
-import preview from '../../../assets/images/recomend4.png';
 import calendar from '../../../assets/images/calendar.png';
 import heart from '../../../assets/images/heart.png';
 import uheart from '../../../assets/images/uheart.png';
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
 
 const Recomend = () => {
   const navigation = useNavigation();
   const [likedImages, setLikedImages] = useState(new Array(RecomendGarmet.length).fill(false));
   const [isfriends,setisfriends] = useState(); //같이 가는 친구가 있는지 없는지
   const width = useWindowDimensions().width; //기기 폭 값
+  const [traveldate, settraveldate] = useState(); //여행날짜
 
-  /* useEffect(() => { //여행 데이터
-    axios.get('http://10.0.2.2:8000/api/travel')
+  useEffect(() => { //사용자 데이터 
+    axios.get('http://10.0.2.2:8000/api/users/getUserInfo?userId=admin')
       .then(function (response) {
-        console.log(response.data);
-        setisfriends(response.data);
+        console.log(response.data.usrId);
+        setusrname(response.data.usrId);
+       //setusrprofile(response.data.usrProfileURL) 프로필 사진
 
       })
       .catch(function (err) {
         console.log(err);
       });
-  }, []); */
-  const scrollRef =useRef();
+  }, []);
+
+  useEffect(() => { //여행 데이터
+    axios.get('http://10.0.2.2:8000/api/travel/getMyTravelInfo?userId=a')
+      .then(function (response) {
+        //console.log(response.data[0].travlDate);
+        var data = String(response.data[0].travlDate);
+        var input = data.substring(0,10)
+        settraveldate(input)
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  }, []);
+  
+  const scrollRef = useRef();
 
   const gotoRecomendOutter = () => {
     return navigation.navigate('RecomendOutter');
@@ -109,7 +123,7 @@ const Recomend = () => {
                 style={{flex:2,alignItems:'center'}}>
                 <Text
                   style={styles.infosecondttext}>
-                  2023.07.19 Look
+                  {traveldate} Look
                 </Text>
               </View>
                 <Button title="아바타로 보기" type="clear" titleStyle={styles.infosecondbutton}/>

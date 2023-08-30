@@ -6,119 +6,142 @@ import {
     SafeAreaView,
     Image,
     TouchableOpacity,
-    ScrollView,
+    FlatList,
   } from 'react-native';
-import React, {  useRef, useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import { useWindowDimensions } from 'react-native';
-import { Card, } from 'react-native-paper';
-import {Collapse,CollapseHeader, CollapseBody, AccordionList} from 'accordion-collapse-react-native';
-import SwiperFlatList from 'react-native-swiper-flatlist';
-
-import airplaneimg from '../../../assets/images/DetailRecomendairplane.png'
+import { useNavigation } from '@react-navigation/native';
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
-import ex from '../../../assets/images/recomend2.png'
+import axios from 'axios';
 
 const RecomendOutter = () => {
+    const navigation = useNavigation();
     const width = useWindowDimensions().width; //기기 폭 값
-    const height = useWindowDimensions().height; //기기 높이 값
-    const scrollRef = useRef(); 
+    const [traveldate, settraveldate] = useState(); //여행날짜
+    const [usrname, setusrname] = useState(); //사용자 이름
+
+    const gotoTop = () => {
+        return navigation.navigate('RecomendTop')
+    }
+
+    useEffect(() => { //사용자 데이터 
+        axios.get('http://10.0.2.2:8000/api/users/getUserInfo?userId=admin')
+          .then(function (response) {
+            console.log(response.data.usrId);
+            setusrname(response.data.usrId);
+           //setusrprofile(response.data.usrProfileURL) 프로필 사진
+    
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
+      }, []);
+
+    useEffect(() => { //여행 데이터
+        axios.get('http://10.0.2.2:8000/api/travel/getMyTravelInfo?userId=a')
+          .then(function (response) {
+            //console.log(response.data[0].travlDate);
+            var data = String(response.data[0].travlDate);
+            var input = data.substring(0,10)
+            settraveldate(input)
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
+      }, []);
+      
     return(
         <SafeAreaView
-            style={[style.container,{marginHorizontal:width-(width-15)}]}>
+            style={style.container}>
             <View
-                style={{flex:0.3}}>
+                style={{flex:0.2,marginHorizontal:width-(width-15)}}>
                     <View
-                        style={style.fistcontainer}>
-                            <View style={{flexDirection:'row',alignItems:'center'}}>
-                                <Image source={airplaneimg}/>
-                                <View
-                                    style={{marginLeft:10}}>
-                                    <Text style={style.traveldatetext}>2023.07.19~2023.07.23</Text>
+                        style={style.firsttextcontainer}>
+                            <View style={{flexDirection:'row'}}>
+                                    <Text style={style.traveldatetext}>{traveldate}</Text>
                                     <Text style={style.traveldatetext}> to Mongol</Text>
-                                </View>
                             </View> 
-                            <View>
-                                <TouchableOpacity>
-                                    <Text style={style.categorytext}>#상의</Text>  
-                                </TouchableOpacity>
-                                <TouchableOpacity>
-                                    <Text style={style.categorytext}>#하의</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity>
-                                    <Text style={style.categorytext}>#신발</Text>
-                                </TouchableOpacity>    
-                                                                  
-                            </View>
                         </View>
                     </View>
                 <View
-                    style={{flex:1,alignItems: 'center', justifyContent: 'center'}}>
-                    <Card   
-                        style={{width:'100%',height:'100%'}}>
-                    <Card.Title titleStyle={{fontSize:24, fontFamily:'오뮤_다예쁨체'}} title = "성욱님을 위한 추천 아우터"/>
-                    <Card.Content
-                        style={{height:250,backgroundColor:'blue'}}>
-                        <SwiperFlatList
-                        showPagination
-                        paginationActiveColor='black'
-                        paginationStyleItem={{height:10,width:10}}
-                        data={RecomendGarmet}
-                        ref={scrollRef}
-                        renderItem={({item,index}) =>(
-                        <View
-                            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                            <Image
-                            source={item.img}
-                            style={{resizeMode: 'contain', width:300,marginHorizontal: width-(width-15), height: 200,backgroundColor:"red"}}/>
+                    style={[style.cardcontainer,{marginHorizontal:width-(width-15)}]}>
+                      <View style={{flex:0.1}}>
+                            <Text style={style.cardtextcontainer}>
+                                {usrname}님에게 추천하는 코디
+                            </Text>
                         </View>
-                        )}/>
-                    </Card.Content>
-                    <Card.Actions>
-                        <View style={{flexDirection:"row",width:"100%",justifyContent:"center"}}>
+                <View
+                    style={{flex:1}}>
+                    <FlatList
+                        data={RecomendGarmet}
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={({item,index}) =>(
+                            <View
+                                style={style.cardimagecontainer}>
+                                <Image
+                                source={item.img}
+                                style={[style.cardimg,{marginHorizontal: width-(width-15)}]}/>
+                            </View>)}
+                        horizontal={true}/>
+                    </View>
+                        <View style={{flex:0.2,flexDirection:"row",width:"100%",justifyContent:"center"}}>
                             <TouchableOpacity>
                                 <Text
-                                    style={{fontFamily:'오뮤_다예쁨체',fontSize:16}}>
+                                    style={style.categorytext}>
                                     #낮은 가격순
                                 </Text>
                             </TouchableOpacity>
                             <TouchableOpacity>
                                 <Text
-                                    style={{fontFamily:'오뮤_다예쁨체',fontSize:16}}>
+                                    style={style.categorytext}>
                                      #높은 가격순
                                 </Text>
                             </TouchableOpacity>
                             <TouchableOpacity>
                                 <Text
-                                    style={{fontFamily:'오뮤_다예쁨체',fontSize:16}}>
+                                    style={style.categorytext}>
                                     #선호 스타일순
                                 </Text>
                             </TouchableOpacity>
                             <TouchableOpacity>
                                 <Text
-                                    style={{fontFamily:'오뮤_다예쁨체',fontSize:16}}>
+                                    style={style.categorytext}>
                                     #선호 브랜드순
                                 </Text>
                             </TouchableOpacity>
                         </View>
-                    </Card.Actions>
-                </Card>
                 </View>
                <View
-                    style={{flex:1,justifyContent:"center"}}>
-                    <Card>
-                    <Card.Title titleStyle={{fontSize:24, fontFamily:'오뮤_다예쁨체'}} title = "추천 아우터와 비슷한 옷장 속 옷들"/>
-                    <Card.Content >
-                        <ScrollView horizontal={true}>
-                            <Image style={{flex:1,height:200,width:200}} source={ex}/>
-                            <Image style={{flex:1,height:200,width:200}} source={ex}/>
-                            <Image style={{flex:1,height:200,width:200}} source={ex}/>
-                            <Image style={{flex:1,height:200,width:200}} source={ex}/>
-                            <Image style={{flex:1,height:200,width:200}} source={ex}/>
-                        </ScrollView>
-                    </Card.Content>
-                </Card>
+                    style={[style.cardcontainer,{marginHorizontal:width-(width-15)}]}>
+                    <View
+                        style={{flex:0.1}}>
+                        <Text style={style.cardtextcontainer}>
+                            옷장속에 있는 유사한 코디
+                        </Text>
+                    </View>
+                    <View
+                    style={{flex:1}}>
+                    <FlatList
+                        showsHorizontalScrollIndicator={false}
+                        data={RecomendGarmet}
+                        renderItem={({item,index}) =>(
+                            <View
+                                style={style.cardimagecontainer}>
+                                <Image
+                                source={item.img}
+                                style={[style.cardimg,{marginHorizontal: width-(width-15)}]}/>
+                            </View>)}
+                        horizontal={true}/>
+                    </View>
                 </View>
-            
+            <View
+                style={[style.bottomcontainer,{marginHorizontal: width-(width-15)}]}>
+                <TouchableOpacity
+                    onPress={gotoTop}>
+                 <Text
+                    style={style.bottomtext}>상의 -{'>'} </Text>
+                </TouchableOpacity>
+            </View>
         </SafeAreaView>
     )
 
@@ -129,17 +152,41 @@ export default RecomendOutter
 const style = StyleSheet.create({
     container:{
         flex:5,
+        backgroundColor:"white"
     },
     showimg:{
         width:'100%',
         height:'90%',
         resizeMode:'contain',
       },
-    fistcontainer:{
-        flex:1,
+    firsttextcontainer:{
+        flex:0.8,
         flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'space-between'
+        justifyContent:"center",
+        alignItems:"center"
+    },
+    cardcontainer:{
+        flex:1,alignItems: 'center',
+        justifyContent: 'center',
+        elevation:10,
+        backgroundColor:"white",
+        borderRadius:10,
+        borderWidth:2,
+        borderColor:'white',
+        marginBottom:"3%",
+    },
+    cardtextcontainer:{
+        fontFamily:'오뮤_다예쁨체',
+        fontSize:24,
+        color:"black"
+    },  
+    cardimagecontainer:{
+        flex: 1, 
+        alignItems: 'center', justifyContent: 'center'
+    },
+    cardimg:{
+        resizeMode: 'contain',
+        height:"100%"
     },
     traveldatetext:{
         fontSize:24,
@@ -147,9 +194,8 @@ const style = StyleSheet.create({
         fontFamily:'오뮤_다예쁨체',
       },
     categorytext:{
-        fontSize:24,
-        color:'grey',
         fontFamily:'오뮤_다예쁨체',
+        fontSize:16,
     },
     secondcontainer:{
         flex:0.5,
@@ -175,5 +221,15 @@ const style = StyleSheet.create({
         fontSize:16,
         color:'black',
         fontFamily:'오뮤_다예쁨체'
+    },
+    bottomcontainer:{
+        flex:0.2,
+        justifyContent:"center",
+        alignItems:"flex-end"
+    },
+    bottomtext:{
+        fontFamily:"오뮤_다예쁨체",
+        fontSize:24,
+        color:"#4949E8"
     }
 })

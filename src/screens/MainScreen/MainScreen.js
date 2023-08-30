@@ -8,7 +8,6 @@ import profileImg from '../../assets/images/profileImg.png';
 import more from '../../assets/images/more.png';
 import dateairplane from '../../assets/images/dateairplane.png';
 import TravelInfo from '../../constants/TravelInfo';
-import EmptyScreen from '../../components/EmptyScreen';
 
 import {
   View,
@@ -25,6 +24,8 @@ const MainScreen = () => {
   const navigation = useNavigation();
   const width = useWindowDimensions().width;
   const [usrname, setusrname] = useState();
+  const [traveldate, settraveldate] = useState();
+  const [travelea, settravelea] = useState();
   //const [usrprofile, setusrprofile] = useState(); 프로필 사진
   const [friend,setfriend] = useState();
   const gotoRecomend = () => {
@@ -37,9 +38,8 @@ const MainScreen = () => {
   useEffect(() => { //사용자 친구 데이터
     axios.get('http://10.0.2.2:8000/api/friends/myFriends?userId=a')
       .then(function (response) {
-        console.log(response.data);
-        setfriend(response.data)
-        console.log(setfriend.length)
+        setfriend(response.data.length)
+        console.log(response.data.length)
       })
       .catch(function (err) {
         console.log(err);
@@ -50,10 +50,25 @@ const MainScreen = () => {
   useEffect(() => { //사용자 데이터 
     axios.get('http://10.0.2.2:8000/api/users/getUserInfo?userId=admin')
       .then(function (response) {
-        console.log(response.data.usrId);
+        //console.log(response.data.usrId);
         setusrname(response.data.usrId);
        // setusrprofile(response.data.usrProfileURL) 프로필 사진
 
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => { //여행정보 데이터
+    axios.get('http://10.0.2.2:8000/api/travel/getMyTravelInfo?userId=a')
+      .then(function (response) {
+        //console.log(response.data[0].travlDate);
+        //console.log(response.data.length);
+        var data = String(response.data[0].travlDate);
+        var input = data.substring(0,10);
+        settraveldate(input)
+        settravelea(response.data.length)
       })
       .catch(function (err) {
         console.log(err);
@@ -79,7 +94,7 @@ const MainScreen = () => {
             style={styles.profileinfoconatiner}>
             <View
               style={styles.profiletextcontainer}>
-              <Text style={styles.profilebigtext}>7</Text>
+              <Text style={styles.profilebigtext}>{travelea}</Text>
               <Text style={styles.profiletext}>mylog</Text>
             </View>
             <TouchableOpacity
@@ -87,7 +102,7 @@ const MainScreen = () => {
             <View
               style={styles.profiletextcontainer}>
                 <Text style={styles.profilebigtext}>
-                  8
+                  {friend}
                 </Text>
                 <Text style={styles.profiletext}>Friend</Text>
             </View>   
@@ -107,7 +122,7 @@ const MainScreen = () => {
               style={styles.recotopcontainer}>
               <View style={[styles.viewcontainer,{marginHorizontal:width-(width-10),marginBottom:width-(width-10)}]}>
                 <Image source={dateairplane} style={{resizeMode: 'contain'}} />
-                <Text style={styles.datetext}>{info.date}</Text>
+                <Text style={styles.datetext}>{traveldate}</Text>
               </View>
               <TouchableOpacity onPress={gotoRecomend}>
                 <Image source={more} />
@@ -152,6 +167,9 @@ const styles = StyleSheet.create({
   recomendconatiner: {
     flex: 1,
     marginTop: 30,
+    elevation:8,
+    borderWidth:2,
+    borderColor:'white',
   },
   viewcontainer:{
     flexDirection: 'row',

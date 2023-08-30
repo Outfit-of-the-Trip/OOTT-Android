@@ -57,7 +57,7 @@ const Navigation = () => {
             <Stack.Screen
               name="RecomendOutter"
               component={RecomendOutter}
-              options={{headerShown: false}}
+              options={{headerShown: true}}
             />
             <Stack.Screen
               name="RecomendTop"
