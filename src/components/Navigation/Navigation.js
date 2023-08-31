@@ -13,6 +13,7 @@ import {AuthContext} from '../../utils/Auth';
 import BottomTabs from './BottomTabNavigation';
 import Toplogo from '../../assets/images/toplogo.png'
 import Settings from '../../assets/images/settings.png'
+import Bottomtab from './BottomTabTest'
 
 const Stack = createNativeStackNavigator();
 
@@ -47,11 +48,12 @@ const Navigation = () => {
         }}>
         {userInfo.id ? (
           <>
-            <Stack.Screen
+            {/* <Stack.Screen
               name="bottomTab"
               component={BottomTabs}
               options={{headerShown: false}}
-            />
+            /> */}
+            <Stack.Screen name="Root" component={Bottomtab} options={{headerShown: true}}/>
             <Stack.Screen
               name="MainScreen"
               component={MainScreen}
