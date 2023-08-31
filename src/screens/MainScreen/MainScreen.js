@@ -166,8 +166,10 @@ const styles = StyleSheet.create({
   },
   recomendconatiner: {
     flex: 1,
-    marginTop: 30,
-    elevation:8,
+    marginTop: "5%",
+    elevation:10,
+    backgroundColor:"white",
+    borderRadius:10,
     borderWidth:2,
     borderColor:'white',
   },

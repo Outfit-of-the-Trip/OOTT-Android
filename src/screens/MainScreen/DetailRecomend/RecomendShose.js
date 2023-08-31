@@ -11,7 +11,6 @@ import {
 import React, {  useEffect, useState } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import airplaneimg from '../../../assets/images/DetailRecomendairplane.png'
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import axios from 'axios';
 
