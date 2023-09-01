@@ -25,11 +25,13 @@ const PurposOfTravel = () => {
 
   const getLikeFeature = feature => {
     setLikeFeature(prevState => {
-      if (!prevState.includes(feature.title)) {
-        return [...prevState, feature.title];
+      const isLiked = prevState.includes(feature.title);
+      if (!isLiked) {
+        const newArray = [...prevState, feature.title];
+        return newArray;
       } else {
-        const index = prevState.findIndex(item => item === feature.title);
-        return prevState.slice(0, index + 1);
+        const updatedState = prevState.filter(item => item !== feature.title);
+        return updatedState;
       }
     });
   };
@@ -48,13 +50,13 @@ const PurposOfTravel = () => {
       },
     );
     console.log(repones.data);
-    navigation.navigate('MainScreen');
+    navigation.navigate('홈');
   };
   return (
     <SafeAreaView style={{flex: 1}}>
-      <Swiper loop>
-        {TravelPurpose.map((item, i) => (
-          <View key={i}>
+      <Swiper>
+        {TravelPurpose.map(item => (
+          <View key={item.id}>
             <View style={styles.SwiperContainer}>
               <Text style={styles.Text}>#{item.title}</Text>
               <Image style={styles.Image} source={item.image} />

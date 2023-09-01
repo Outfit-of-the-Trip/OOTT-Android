@@ -27,7 +27,6 @@ const WhoDoYouGoWith = () => {
           'http://10.0.2.2:3000/api/friends/myFriends?userId=a',
         );
         setMyFriendsList(response.data);
-        console.log(myFriendsList);
       } catch (e) {
         console.log(e);
       }
@@ -57,13 +56,16 @@ const WhoDoYouGoWith = () => {
     });
     console.log(stackedDate);
   };
+  useEffect(() => {
+    console.log(myFriendsList);
+  }, []);
   return (
     <SafeAreaView style={styles.allContainer}>
       <ScrollView style={styles.scroll}>
         {myFriendsList.length === 0 ? (
           <Text>데이터 가져오는 중...</Text>
         ) : (
-          myFriendsList.myFriends.map((item, i) => (
+          myFriendsList.map((item, i) => (
             <View key={i} style={styles.FriendsListRow}>
               <View style={styles.FriendsListColumn}>
                 <Avatar.Image size={40} source={Avatars} />

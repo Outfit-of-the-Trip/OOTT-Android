@@ -4,23 +4,49 @@ import {
   Text,
   Image,
   StyleSheet,
-  Button,
   Modal,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import Fashion from '../../assets/images/fashion.jpg';
 import {DataTable} from 'react-native-paper';
-import {FriendsOntheTrip} from '../../constants/FriendsOnTheTrip';
 import Dateairplane from '../../assets/images/dateairplane.png';
+import {Button} from 'react-native-paper';
+import axios from 'axios';
 const FriendInfoScreen = () => {
   const {params: FriendData} = useRoute();
   console.log(FriendData);
 
+  const [travleData, setTravleData] = useState([]);
   const [visible, setVisible] = useState(false);
 
-  const handleModal = () => setVisible(!visible);
+  const getTravleInfo = async () => {
+    setVisible(!visible);
+    try {
+      const response = await axios.get(
+        'http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=a',
+      );
+      console.log(response.data);
+      setTravleData(response.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
+  const addingFriend = async () => {
+    try {
+      const response = await axios.post(
+        'http://10.0.2.2:3000/api/friends/addFriends',
+        {
+          reqUserId: `reqTest`,
+          resUserId: `${FriendData}`,
+        },
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  };
   let today = new Date();
   let year = today.getFullYear();
   let month = today.getMonth();
@@ -30,30 +56,38 @@ const FriendInfoScreen = () => {
     <View style={styles.allContainer}>
       <Modal
         visible={visible}
-        onDismiss={handleModal}
+        onDismiss={getTravleInfo}
         animationType="fade"
         transparent={true}>
         <View style={styles.ModalScreen}>
           <View style={styles.ModalBody}>
-            <DataTable>
-              <DataTable.Header style={styles.DataTableHeader}>
-                <DataTable.Title>친구 이름</DataTable.Title>
-                <DataTable.Title>같이 간 장소</DataTable.Title>
-                <DataTable.Title>특이 사항</DataTable.Title>
-              </DataTable.Header>
-              {FriendsOntheTrip.map((item, index) => (
-                <DataTable.Row key={index}>
-                  <DataTable.Cell>{item.friendsName}</DataTable.Cell>
-                  <DataTable.Cell>{item.tripPlace}</DataTable.Cell>
-                  <DataTable.Cell>{item.significant}</DataTable.Cell>
-                </DataTable.Row>
-              ))}
-            </DataTable>
-            <Button title="cancel" onPress={handleModal}></Button>
+            <ScrollView>
+              <DataTable>
+                <DataTable.Header style={styles.dataHeader}>
+                  <DataTable.Title>친구 이름</DataTable.Title>
+                  <DataTable.Title>여행 날짜</DataTable.Title>
+                </DataTable.Header>
+                {travleData.length === 0 ? (
+                  <Text>정보 없음</Text>
+                ) : (
+                  travleData.map((item, index) => (
+                    <ScrollView key={index}>
+                      <DataTable.Row style={styles.dataRow}>
+                        <DataTable.Cell>{item.travlFriends}</DataTable.Cell>
+                        <DataTable.Cell>{item.travlDate}</DataTable.Cell>
+                      </DataTable.Row>
+                    </ScrollView>
+                  ))
+                )}
+              </DataTable>
+            </ScrollView>
+            <Button mode="outlined" onPress={getTravleInfo}>
+              cancel
+            </Button>
           </View>
         </View>
       </Modal>
-      <TouchableOpacity onPress={handleModal}>
+      <TouchableOpacity onPress={getTravleInfo}>
         <View style={styles.profileContainerRow}>
           <View style={styles.profileContainerColumn}>
             <View style={styles.textBox}>
@@ -83,7 +117,9 @@ const FriendInfoScreen = () => {
       <Text style={styles.Tags}>
         #BestFriend&nbsp;&nbsp;&nbsp;#Casual&nbsp;&nbsp;&nbsp;#HongDae&nbsp;&nbsp;&nbsp;
       </Text>
-      <Button title="다음"></Button>
+      <Button style={styles.addFriend} mode="outlined" onPress={addingFriend}>
+        친구 추가
+      </Button>
     </View>
   );
 };
@@ -158,17 +194,27 @@ const styles = StyleSheet.create({
     width: 350,
     height: 250,
     backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'space-between',
     borderWidth: 1,
     borderRadius: 10,
   },
-
+  dataHeader: {
+    borderBottomWidth: 2,
+    borderColor: 'black',
+  },
+  dataRow: {
+    borderBottomWidth: 2,
+    borderColor: 'gray',
+  },
   Tags: {
     marginTop: -20,
     fontFamily: '오뮤_다예쁨체',
     textAlign: 'center',
     fontSize: 20,
     color: 'black',
+  },
+  addFriend: {
+    borderColor: '#7401DF',
+    backgroundColor: '#F2DEF4',
   },
 });

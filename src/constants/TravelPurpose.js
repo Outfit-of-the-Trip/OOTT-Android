@@ -5,10 +5,10 @@ import Business from '../assets/images/business.jpg';
 import Famiytravle from '../assets/images/familytravel.jpg';
 import Workingholidays from '../assets/images/workingholiday.jpg';
 export const TravelPurpose = [
-  {image: Business, title: '비지니스'},
-  {image: Friendship, title: '우정'},
-  {image: Rest, title: '휴식'},
-  {image: Shopping, title: '쇼핑'},
-  {image: Famiytravle, title: '가족 여행'},
-  {image: Workingholidays, title: '워킹 홀리데이'},
+  {id: 'business', image: Business, title: '비지니스'},
+  {id: 'friendship', image: Friendship, title: '우정'},
+  {id: 'rest', image: Rest, title: '휴식'},
+  {id: 'shopping', image: Shopping, title: '쇼핑'},
+  {id: 'familytravel', image: Famiytravle, title: '가족 여행'},
+  {id: 'workingholidays', image: Workingholidays, title: '워킹 홀리데이'},
 ];
