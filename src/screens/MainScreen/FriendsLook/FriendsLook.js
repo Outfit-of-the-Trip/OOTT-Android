@@ -22,7 +22,6 @@ const FriendsLook = () => {
     const [isModalVisible, setModalVisible] = useState(false); // 모달 on/off
     const [friendname,setfriendname] = useState('') //선택된 친구 
     const [listfriendname,setlistfriendname] = useState([])
-    const height = useWindowDimensions().height;
     const toggleModal = () => { //팝업창 on/off method
         setModalVisible(!isModalVisible);
     };
@@ -39,18 +38,22 @@ const FriendsLook = () => {
         setModalVisible(false);
       };
 
-    const renderItem = ({ item }) => ( //DB에서 친구 목록 불러오는 Method
-        <View>
-            <TouchableOpacity onPress={() =>handleNameClick(item)}>
-                <Text style={styles.topshowname}>{item}</Text>
-            </TouchableOpacity>   
-        </View>
-      );
+    const renderItem = ({ item }) => { //DB에서 친구 목록 불러오는 Method
+     {  var nameArray = String(item).split('@').join('');
+        console.log(nameArray)
+        return (nameArray.map((name, index) => (
+            <View key={index}>
+            <TouchableOpacity onPress={() => handleNameClick(name)}>
+                <Text style={styles.topshowname}>{name}</Text>
+            </TouchableOpacity>
+            </View>)
+        ));}
+    };
       useEffect(() => { //사용자 친구 데이터 API 
-        axios.get('http://10.0.2.2:8000/api/friends/myFriends?userId=a')
+        axios.get('http://10.0.2.2:8000/api/travel/getMyTravelInfo?userId=a')
           .then(function (response) {
-            console.log(response.data.myFriends[0].usrId);
-            setlistfriendname(response.data.myFriends[0].usrId);
+           console.log(response.data[0].travlFriends);
+            setlistfriendname(response.data[0].travlFriends);
           })
           .catch(function (err) {
             console.log(err);
@@ -77,8 +80,8 @@ const FriendsLook = () => {
                 >
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
-                <CollapseBody
-                    style={{height:48}}>
+                 <CollapseBody
+                    style={{height:'30%'}}>
                 <FlatList
                     data={listfriendname} //펼칠 데이터 대상
                     renderItem={renderItem} //렌더링 Method
@@ -144,7 +147,7 @@ topshowcontainer:{
 },
 topshowname:{
   fontFamily:'오뮤_다예쁨체',
-  fontSize:24
+  fontSize:24,
 },
 secondcontainer:{
     flex:3,

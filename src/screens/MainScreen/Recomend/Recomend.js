@@ -12,41 +12,30 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import infoairplane from '../../../assets/images/dateairplane.png'
-import calendar from '../../../assets/images/calendar.png';
-import heart from '../../../assets/images/heart.png';
-import uheart from '../../../assets/images/uheart.png';
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import { useNavigation } from '@react-navigation/native';
+import toggleModal from '../../../components/toggleisfriendmodal'
 import axios from 'axios';
 
 const Recomend = () => {
   const navigation = useNavigation();
-  const [likedImages, setLikedImages] = useState(new Array(RecomendGarmet.length).fill(false));
   const [isfriends,setisfriends] = useState(); //같이 가는 친구가 있는지 없는지
   const width = useWindowDimensions().width; //기기 폭 값
   const [traveldate, settraveldate] = useState(); //여행날짜
-
-  useEffect(() => { //사용자 데이터 
-    axios.get('http://10.0.2.2:8000/api/users/getUserInfo?userId=admin')
-      .then(function (response) {
-        console.log(response.data.usrId);
-        setusrname(response.data.usrId);
-       //setusrprofile(response.data.usrProfileURL) 프로필 사진
-
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  }, []);
-
+  const [travelplace, settravelplace] = useState(); // 여행지
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  
   useEffect(() => { //여행 데이터
     axios.get('http://10.0.2.2:8000/api/travel/getMyTravelInfo?userId=a')
       .then(function (response) {
-        //console.log(response.data[0].travlDate);
+        //console.log(response.data[0].travlDate); 여행일정
+        //console.log(response.data[0].travlPlace); 여행 장소
         var data = String(response.data[0].travlDate);
         var input = data.substring(0,10)
         settraveldate(input)
+        settravelplace(response.data[0].travlPlace);
+        setisfriends(response.data[0].travlFriends);
+       
       })
       .catch(function (err) {
         console.log(err);
@@ -71,64 +60,48 @@ const Recomend = () => {
     return navigation.navigate('RecomendShose');}
 
   const gotoFriendsLook = () =>{ 
-      return navigation.navigate('FriendsLook')
-      /* if(isfriends!=null){// 같이 가는 친구가 있다면 친구창으로 이동
+      if(isfriends!=null){// 같이 가는 친구가 있다면 친구창으로 이동
+        console.log(isfriends);
         return navigation.navigate('FriendsLook')
       }
-      else{ 같이 가는 친구가 없다면 팝업 출력
-        //팝업창 toggleModal();
-      } */
-  };
-
-  const gotoCalendar = () =>{
-    return(
-        navigation.navigate('Calendar')
-    );
-  }
- 
-  const toggleImage = (index) => {
-    const newLikedImages = [...likedImages];
-    newLikedImages[index] = !newLikedImages[index];
-    setLikedImages(newLikedImages);
-  };
-
+      else{
+          return setIsModalVisible(!isModalVisible)
+  };}
+  
   return (
    <SafeAreaView
    style={styles.conatiner}>
     <View
       style={styles.infocontainer}>
-        <View
+        {/* <View
           style={[styles.infofirstcontainer,{marginHorizontal:width-(width-20)}]}>
           <Image
             source={infoairplane}
             style={styles.infoicon}/>
           <Text
             style={styles.infofirsttext}>
-            2023.09.19 - 2023.07.23 to Mongol
+           {traveldate} to {travelplace}
           </Text>
-          <View
-            style={styles.infoclendar}>
-            <TouchableOpacity
-              onPress={gotoCalendar}>
-              <Image
-              source={calendar}/>
-            </TouchableOpacity>
-          </View>
-        </View>
+        </View> */}
         <View
           style={[styles.infosecondcontainer,{marginHorizontal:width-(width-12)}]}>
-          <View
-            style={{flex:3,flexDirection:'row'}}>
               <View
-                style={{flex:2,alignItems:'center'}}>
+                style={{justifyContent:'space-between',flexDirection:'row',width:'100%'}}>
                 <Text
-                  style={styles.infosecondttext}>
+                  style={styles.infodatetext}>
                   {traveldate} Look
                 </Text>
+                <View>
+                  <TouchableOpacity>
+                  <Text
+                    style={{fontFamily:'오뮤_다예쁨체',fontSize:16,color:'black'}}>아바타로 보기</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity>
+                  <Text
+                     style={{fontFamily:'오뮤_다예쁨체',fontSize:16,color:'bla'}}>일정선택</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-                <Button title="아바타로 보기" type="clear" titleStyle={styles.infosecondbutton}/>
-                
-          </View>
         </View>
     </View>
     <View style={styles.bottomline} />
@@ -145,26 +118,8 @@ const Recomend = () => {
             <Image
             source={item.img}
             style={[styles.showimg,{width:width}]}/>
-             <View style={{marginHorizontal:width-(width-20),marginTop:10}}>
-             <TouchableOpacity onPress={() => {
-              console.log(index)
-              setLikedImages(index)
-              toggleImage(index)
-            }}> 
-            {likedImages[index]? (
-              <Image 
-                style={styles.imgcontain}
-                source={heart}/>
-                ) : (
-              <Image
-                style={styles.imgcontain}
-                source={uheart}/>
-            )}
-            </TouchableOpacity>
-            </View>
           </View>
-        )}
-        keyExtractor={(Item) => Item.id.toString()}/>
+        )}/>
     </View>
     <View style={styles.bottomline} />
     <View
@@ -192,21 +147,21 @@ const Recomend = () => {
           onPress={gotoFriendsLook}>
           <Text
           style={styles.samedaystext}>같은 날 친구가 입는 옷은?</Text>
-           {/* <Modal 팝업창
+           {<Modal 팝업창
             animationType="slide"
             transparent={true}
             visible={isModalVisible}
-            onRequestClose={toggleModal}
+            onRequestClose={gotoFriendsLook}
             >
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
                 <Text style={{fontFamily:'오뮤_다예쁨체',fontSize:24}}>같이 가는 친구가 없습니다</Text>
-                <TouchableOpacity onPress={toggleModal}>
+                <TouchableOpacity onPress={gotoFriendsLook}>
                   <Text style={{fontFamily:'오뮤_다예쁨체',fontSize:24}}>닫기</Text>
                 </TouchableOpacity>
               </View>
             </View>
-          </Modal> */}
+          </Modal> }
         </TouchableOpacity>
     </View>
   </SafeAreaView>
@@ -220,7 +175,7 @@ export default Recomend;
       backgroundColor:'white'
     },
     infocontainer:{
-      flex:0.6,
+      flex:0.5,
       alignItems:'flex-start',
       justifyContent:'center',
       alignContent:'flex-start',
@@ -239,18 +194,24 @@ export default Recomend;
      color:'black',
      fontFamily:'오뮤_다예쁨체'
     },
-    infoclendar:{
-      flexDirection:'row',
-      justifyContent:'flex-end',
-      flex:1
-    },
     infosecondcontainer:{
       flex:0.5,
-      alignItems:'flex-start',
       flexDirection:'row'
     },
-    infosecondttext:{
-      fontSize:32,  
+    infodatetext:{
+      fontSize:24,  
+      color:'black',
+      flex:1,
+      fontFamily:'오뮤_다예쁨체'
+    },
+    choseavatartext:{
+      fontSize:24,  
+      color:'black',
+      flex:1,
+      fontFamily:'오뮤_다예쁨체'
+    },
+    chosedatetext:{
+      fontSize:24,  
       color:'black',
       flex:1,
       fontFamily:'오뮤_다예쁨체'
@@ -267,7 +228,7 @@ export default Recomend;
     showimg:{
       width:'100%',
       height:'90%',
-      resizeMode:'contain',
+      resizeMode:'cover',
     },
     bottomfirstcontainer:{
       marginTop:10,
