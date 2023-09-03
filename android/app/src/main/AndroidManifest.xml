@@ -10,6 +10,12 @@
       android:allowBackup="true"
       android:theme="@style/AppTheme">
 
+      <meta-data 
+        android:name="com.google.android.geo.API_KEY" 
+        android:value="여기에 위에서 생성한 API 키 넣기"
+      />
+      <uses-library android:name="org.apache.http.legacy" android:required="false"/>   
+
       <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
       android:exported="true">
       <intent-filter>
