@@ -1,6 +1,3 @@
-import airplane from '../../../assets/images/dateairplane.png'
-import viewImage from '../../../assets/images/avatar.png'
-import profileImg from '../../../assets/images/profileImg.png';
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import {
     View,
@@ -13,15 +10,19 @@ import {
     Modal,
     useWindowDimensions
   } from 'react-native';
-import { Friendex } from '../../../constants/Friendex'
+import { useRoute } from '@react-navigation/native';
+import SwiperFlatList from 'react-native-swiper-flatlist';
 import React,{useEffect,useState} from 'react';
 import {CollapseBody} from 'accordion-collapse-react-native';
 import axios from 'axios';
 
 const FriendsLook = () => {
     const [isModalVisible, setModalVisible] = useState(false); // 모달 on/off
-    const [friendname,setfriendname] = useState('') //선택된 친구 
-    const [listfriendname,setlistfriendname] = useState([])
+    const [friendname,setfriendname] = useState('') //모달창에서 선택된 친구
+    const width = useWindowDimensions().width;
+    const {params: data} = useRoute(); //여행 데이터 받아오기
+    const traveldate = String(data.travlDate).substring(0,10);
+
     const toggleModal = () => { //팝업창 on/off method
         setModalVisible(!isModalVisible);
     };
@@ -39,36 +40,31 @@ const FriendsLook = () => {
       };
 
     const renderItem = ({ item }) => { //DB에서 친구 목록 불러오는 Method
-     {  var nameArray = String(item).split('@').join('');
+        const nameArray = item.split('@').filter(name => name.trim() !== '');
         console.log(nameArray)
-        return (nameArray.map((name, index) => (
+
+        if (nameArray.length === 0) {
+            return null; // or handle empty array however you want
+          }
+
+        return nameArray.map((name, index) => (
             <View key={index}>
             <TouchableOpacity onPress={() => handleNameClick(name)}>
                 <Text style={styles.topshowname}>{name}</Text>
             </TouchableOpacity>
-            </View>)
-        ));}
-    };
-      useEffect(() => { //사용자 친구 데이터 API 
-        axios.get('http://10.0.2.2:8000/api/travel/getMyTravelInfo?userId=a')
-          .then(function (response) {
-           console.log(response.data[0].travlFriends);
-            setlistfriendname(response.data[0].travlFriends);
-          })
-          .catch(function (err) {
-            console.log(err);
-          });
-      }, []);
-    
+            </View>
+        ));
+    };     
+
     return(
         <SafeAreaView
             style={styles.allconatiner}>
         <View
             style={styles.firstcontainer}>
-            <Text
-                style={styles.toptext}> 2023.07.19 ~ 2023.07.23 with </Text>
             <View style={styles.topshowcontainer}>  
-            <TouchableOpacity
+            <Text
+                style={styles.toptext}>{traveldate} with </Text>
+           <TouchableOpacity
                 onPress={toggleModal}>
                 <NameView/>
             </TouchableOpacity>
@@ -83,7 +79,7 @@ const FriendsLook = () => {
                  <CollapseBody
                     style={{height:'30%'}}>
                 <FlatList
-                    data={listfriendname} //펼칠 데이터 대상
+                    data={data.travlFriends} //펼칠 데이터 대상
                     renderItem={renderItem} //렌더링 Method
                     keyExtractor={(item,index) => index.toString()}
                     />
@@ -97,9 +93,18 @@ const FriendsLook = () => {
         <View style={styles.bottomline}/>
         <View
             style={styles.secondcontainer}>
-            <Image
-                source={viewImage}/>
-                
+             <SwiperFlatList
+                data={RecomendGarmet}
+                ItemSeparatorComponent={() => <View />}
+                renderItem={({item,index}) =>(
+                    <View
+                        style={{justifyContent:"center",alignItems:"center",width:width}}>
+                        <Image
+                           source={item.img}
+                            style={styles.showimg}/>
+                    </View>      
+        )}
+        keyExtractor={(item) => item.id} />
         </View>
         <View style={styles.bottomline}/>
         <View
@@ -122,10 +127,10 @@ allconatiner:{
      backgroundColor:'white'
 },
 firstcontainer:{
-    flex:0.5,
+    flex:0.3,
     flexDirection:'row',
     justifyContent:'center',
-    alignItems:'center',
+    alignItems:"center"
 },
 toptext:{
     fontSize:24,
@@ -143,16 +148,20 @@ topname:{
     fontFamily:'오뮤_다예쁨체'
 },
 topshowcontainer:{
-    flex:0.5
+    flex:0.5,
+    flexDirection:"row"
 },
 topshowname:{
   fontFamily:'오뮤_다예쁨체',
   fontSize:24,
 },
+showimg:{
+    width:'100%',
+    height:'100%',
+    resizeMode:'cover',
+  },
 secondcontainer:{
     flex:3,
-    justifyContent:'center',
-    alignItems:'center',
 },
 thirdcontainer:{
     flex:0.5,
@@ -167,8 +176,8 @@ bottomtext:{
 bottomline: {
   borderBottomColor: 'gray',
   borderBottomWidth: 1,
-  marginTop: 10,
-  shadowColor: 'black',
+  shadowColor: 'gray',
+  marginTop:2,
   shadowOffset: {width: 0, height: 2},
   shadowOpacity: 0.5,
   shadowRadius: 4,

@@ -9,6 +9,7 @@ import {
     FlatList,
   } from 'react-native';
 import React, {  useEffect, useState } from 'react';
+import { useRoute } from '@react-navigation/native';
 import { useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
@@ -17,39 +18,12 @@ import axios from 'axios';
 const RecomendOutter = () => {
     const navigation = useNavigation();
     const width = useWindowDimensions().width; //기기 폭 값
-    const [traveldate, settraveldate] = useState(); //여행날짜
-    const [usrname, setusrname] = useState(); //사용자 이름
-
+    const {params: data} = useRoute(); //여행 데이터 받아오기
+    const traveldate = String(data.travlDate).substring(0,10); //날짜 글자 필터링
     const gotoTop = () => {
-        return navigation.navigate('RecomendTop')
+        navigation.navigate('RecomendTop',data)
     }
 
-    useEffect(() => { //사용자 데이터 
-        axios.get('http://10.0.2.2:8000/api/users/getUserInfo?userId=admin')
-          .then(function (response) {
-            console.log(response.data.usrId);
-            setusrname(response.data.usrId);
-           //setusrprofile(response.data.usrProfileURL) 프로필 사진
-    
-          })
-          .catch(function (err) {
-            console.log(err);
-          });
-      }, []);
-
-    useEffect(() => { //여행 데이터
-        axios.get('http://10.0.2.2:8000/api/travel/getMyTravelInfo?userId=a')
-          .then(function (response) {
-            //console.log(response.data[0].travlDate);
-            var data = String(response.data[0].travlDate);
-            var input = data.substring(0,10)
-            settraveldate(input)
-          })
-          .catch(function (err) {
-            console.log(err);
-          });
-      }, []);
-      
     return(
         <SafeAreaView
             style={style.container}>
@@ -59,7 +33,7 @@ const RecomendOutter = () => {
                         style={style.firsttextcontainer}>
                             <View style={{flexDirection:'row'}}>
                                     <Text style={style.traveldatetext}>{traveldate}</Text>
-                                    <Text style={style.traveldatetext}> to Mongol</Text>
+                                    <Text style={style.traveldatetext}> to {data.travlPlace}</Text>
                             </View> 
                         </View>
                     </View>
@@ -67,7 +41,7 @@ const RecomendOutter = () => {
                     style={[style.cardcontainer,{marginHorizontal:width-(width-15)}]}>
                       <View style={{flex:0.1}}>
                             <Text style={style.cardtextcontainer}>
-                                {usrname}님에게 추천하는 코디
+                                {data.usrId}님에게 추천하는 코디
                             </Text>
                         </View>
                 <View
