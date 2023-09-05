@@ -1,83 +1,114 @@
 import React, {useState, useEffect} from 'react'
-import { SearchBar, Icon } from 'react-native-elements';
 import {useNavigation} from '@react-navigation/native';
+import SearchBar from "react-native-dynamic-search-bar";
+import axios from 'axios'
 
 import {
   StyleSheet,
   Text,
   View,
-  Image,
   TouchableOpacity,
-  ScrollView,
-  TextInput
+  FlatList,
+  Keyboard
 } from 'react-native';
 
-const OOTTScreen = () => {
-  const navigation = useNavigation();
 
-  const gotoRecomend = () => {
-    return navigation.navigate('Recomend');
-  };
+const OOTTScreen = () => {
+  const navigation = useNavigation()
 
   const [search, setSearch] = useState("")
-  const updateSearch = (search) => {
-    setSearch(search)
+  const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const [searchHistory, setSearchHistory] = useState([
+    '경기도 이천',
+    '석촌 호수',
+  ]);
+  const [travelHistory, setTravelhHistory] = useState([]);
+  const [isLoding, setIsLoding] = useState(null);
+
+
+  const gotoTravelDetail = () => {
+    return navigation.navigate('TravelDetail', {travelPlace: "경기도 이천"});
+  };
+
+  const getTravelData = () => {
+    setIsLoding(true)
+    axios.get('http://10.0.2.2:3001/api/travel/getMyTravelInfo?userId=a')
+    .then(function (res) {
+      setTravelhHistory(res.data);
+      setIsLoding(false)
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
   }
 
-  const Test = () => {
+  useEffect( () => {
+   getTravelData()
+  }, []);
+
+  const renderSearchHistory = ({ item }) => {
     return(
-      <Text>12312</Text>
+      <TouchableOpacity 
+      onPress={() => gotoTravelDetail}
+      >
+        <View style={styles.searcHistoryContainer}>
+          <Text>{item}</Text>
+        </View>
+      </TouchableOpacity>
     )
   }
 
-  return (
-    <View style={styles.rootContainer}>
-      <View style={styles.searchContainer}>
-        <SearchBar
-          platform="android"
-          placeholder= "도시 또는 여행지"
-          onChangeText={updateSearch}
-          value={search}
-          onSubmitEditing={()=>{console.log(search)}}  
-        />
-      </View>
-
-      <View style={styles.historyContainer}>
-        <Text style={styles.title}>내 여행 정보</Text>
-      </View>
-
-      <View style={styles.popularContainer}>
-        <Text style={styles.title} >인기 검색</Text>
-       
-        <View style={styles.popularContent}>
-
-          <TouchableOpacity
-	          activeOpacity={0.8} 
-            style={styles.poppular}
-            // onPress={setSearch("경기도 이천")}
-          >
-            <View style={styles.popularPhoto}>
-              <Image
-                style={styles.popularImage}
-                source = {{uri :"https://content.presspage.com/uploads/685/1920_icheon-edenparadisehotel.jpg?10000" }}
-              />
-            </View>
-            <View style={styles.popularPlace}>
-              <View style={styles.popularRegin}>
-                <Text style={styles.content}>경기도 이천</Text>
-              </View>
-              <View style={styles.popularDes}>
-                <Text>호텔 · 국내</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <View style={styles.test}></View>
+  const renderTravelHistory = ({ item }) => {
+    return(
+      <TouchableOpacity 
+        onPress={() => console.log(item.travlPlace)}
+      >
+        <View style={styles.searcHistoryContainer}>
+          <Text>{item.travlPlace}</Text>
         </View>
+
+      </TouchableOpacity>
+    )
+  }
+
+
+  return (
+    <View style={styles.rootContainer} >
+
+      <View style={styles.searchBarContainer}>
+        <SearchBar
+          style = {styles.searchBar}
+          placeholder = "도시 · 장소 또는 관광지 입력"
+          placeholderTextColor = "grey"
+          onFocus = {() => setDropdownVisible(true)}
+          onSearchPress = {() => Keyboard.dismiss()}
+          onClearPress = {() => {
+            setDropdownVisible(false)
+            Keyboard.dismiss()
+          }}
+          onChangeText = {() => setSearch(search)}                     
+        />
+
       </View>
 
-      <View style={styles.footer}>
-      </View>
-
+      {isDropdownVisible ? (
+        <View style={styles.flatListStyle}>
+          <FlatList
+            data={searchHistory}
+            renderItem={renderSearchHistory}
+            keyExtractor={(item) => item}
+          />
+        </View>
+      ):( 
+          <View style={styles.historyContainer}>
+            <Text style={styles.title}>내 여행 정보</Text>
+            <FlatList
+              data={travelHistory}
+              renderItem={renderTravelHistory}
+            />
+          </View>
+      )
+      }
     </View>
   )
 }
@@ -85,65 +116,38 @@ const OOTTScreen = () => {
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    backgroundColor: "white"
-  },
-  footer:{
-    flex: 4
+    backgroundColor: "white",
+    margin: 3,
   },
 
-  searchContainer:{
-    flex: 2,
+  searchBarContainer:{
+    flex: 1,
+    justifyContent: "center",
   },
+
   historyContainer:{
-    flex: 3,
+    flex: 8,
   },
-  popularContainer:{
-    flex: 3,
+
+  travelHistory: {
+    flex:1
+  },
+
+  flatListStyle: {
+    flex: 8,
+  },
+
+  searcHistoryContainer: {
+    margin: 10,
   },
   
   title:{
     fontSize: 17,
     color: 'black',
-    marginLeft: 20,
-    fontWeight: "bold",
-  },
-  content:{
-    color: 'black',
-    fontWeight: "bold",
-  },
-  popularContent:{
-    flex:1
-  },
-  test:{
-    flex:1
-  },
-
-  poppular:{
-    flex:1.7,
-    flexDirection: 'row',
     margin: 20,
+    fontWeight: "bold",
   },
-  popularPhoto:{
-    flex:1,
-  },  
-  popularPlace:{
-    flex: 5.5,
-    margin: 10,
-  },
-  popularRegin:{
-    flex:1,
-  },
-  popularDes:{
-    flex:1,
-  },
-  popularImage: {
-    marginTop: 10,
-    marginLeft: 3,
-    width: 40,
-    height: 40,
-    borderRadius: 300,
 
-  },
 });
 
 export default OOTTScreen
