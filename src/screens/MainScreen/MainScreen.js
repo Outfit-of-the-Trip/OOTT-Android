@@ -26,7 +26,6 @@ import EmptyScreen from '../../components/EmptyScreen';
 const MainScreen = () => {
   const{userInfo} = useContext(AuthContext);
   console.log(userInfo);
-  const profileImage = userInfo.profileImageUrl;
   const navigation = useNavigation();
   const width = useWindowDimensions().width;
 
@@ -39,20 +38,46 @@ const MainScreen = () => {
   const [friend,setfriend] = useState();
 
   const gotoRecomend = (travledata) => {
-    console.log(travledata)
+    //console.log(travledata)
     navigation.navigate('Recomend', travledata);
   };
   const gotoFrineds = () =>{
     return navigation.navigate('친구')
-  }
-  const gotoShoppingList = () =>{
-    return navigation.navigate('ShoppingList');
   }
   
   const translate = (item) =>{
     var data = String(item);
     var input = data.substring(0,10);
     return input;
+  }
+
+  const Showlog = () =>{
+     if(travelea>0){
+      return <View>
+          <FlatList
+            data={data}
+            renderItem={({ item,index }) => (
+              <View key={index} style={styles.recomendconatiner}>
+              <View
+                style={styles.recotopcontainer}>
+                <View style={[styles.viewcontainer,{marginHorizontal:width-(width-10),marginBottom:width-(width-10)}]}>
+                  <Text style={styles.datetext}>{translate(item.travlDate)} to {item.travlPlace}</Text>
+                </View>
+                <TouchableOpacity onPress={() => gotoRecomend(item)}>
+                  <Image source={more} />
+                </TouchableOpacity>
+              </View>
+              <View style={[styles.viewcontainer,{marginHorizontal:width-(width-10)}]}>
+              <Text style={styles.tagtext}>태그</Text>
+              </View>
+            </View>
+              )}
+            keyExtractor={(item) => item.usrID} // Use a unique identifier as the key
+            />
+        </View>
+    }else{
+      return <EmptyScreen/>
+    }
   }
 
   useEffect(() => { //사용자 친구 데이터
@@ -82,8 +107,7 @@ const MainScreen = () => {
   useEffect(() => { //여행정보 데이터
     axios.get('http://10.0.2.2:8000/api/travel/getMyTravelInfo?userId=a')
       .then(function (response) {
-        //console.log(response.data[0].travlDate);
-        //console.log(response.data.length);
+        console.log(response.data);
         var data = String(response.data.travlDate);
         var input = data.substring(0,10);
         settraveldate(input)
@@ -97,14 +121,14 @@ const MainScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
         <View style={styles.profile}>
           <View
             style={styles.profileimgconatiner}>
             <Avatar
-              size={72}
+              size={80}
               rounded
-              src={"https://k.kakaocdn.net/dn/DeWiq/btssN3bDnxi/am3hJpHbRDEaKS6PfPY3J1/img_640x640.jpg"} />
+              source={{
+                uri:userInfo.profileImageUrl}} />
             <Text
               style={styles.profileimgename}>
               {userInfo.nickname}
@@ -130,52 +154,13 @@ const MainScreen = () => {
                 </View>
               </TouchableOpacity> 
               </View>
- 
-            <View
-              style={styles.profiletextcontainer}>
-            <TouchableOpacity
-              onPress={gotoShoppingList}>
-              <View
-                style={{alignItems:"center"}}>
-              <Text style={styles.profilebigtext}>9</Text>
-              <Text style={styles.profiletext}>ShoppingList</Text>
-              </View>
-            </TouchableOpacity>
-            </View>
           </View>
         </View>
         <View style={styles.bottomline} />
-        <View>
-          <FlatList
-            data={data}
-            renderItem={({ item }) => (
-              <View style={styles.recomendconatiner}>
-              <View
-                style={styles.recotopcontainer}>
-                <View style={[styles.viewcontainer,{marginHorizontal:width-(width-10),marginBottom:width-(width-10)}]}>
-                  <Text style={styles.datetext}>{translate(item.travlDate)} to </Text>
-                </View>
-                <TouchableOpacity onPress={() => gotoRecomend(item)}>
-                  <Image source={more} />
-                </TouchableOpacity>
-              </View>
-              {/* <ScrollView horizontal={true}>
-                <Image source={TravelInfo.image[0]} style={styles.recoimgae} />
-                <Image source={TravelInfo.image[1]} style={styles.recoimgae} />
-                <Image source={TravelInfo.image[2]} style={styles.recoimgae} />
-                <Image source={TravelInfo.image[3]} style={styles.recoimgae} />
-              </ScrollView> */}
-              <View style={[styles.viewcontainer,{marginHorizontal:width-(width-10)}]}>
-              <Text style={styles.tagtext}>태그</Text>
-              </View>
-              <View style={styles.bottomline} />
-            </View>
-              )}
-            keyExtractor={(item) => item.usrID} // Use a unique identifier as the key
-            />
+        <View
+          style={{flex:4.6}}>
+        <Showlog/>
         </View>
-        <EmptyScreen/>
-      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -192,7 +177,7 @@ const styles = StyleSheet.create({
   },
   profileimgename:{
     color: 'black',
-    fontSize: 16,
+    fontSize: 24,
     fontFamily: '오뮤_다예쁨체',
   },
   profileimgconatiner:{
@@ -268,7 +253,7 @@ const styles = StyleSheet.create({
   },
   profiletext: {
     color: 'black',
-    fontSize: 16,
+    fontSize: 24,
     fontFamily: '오뮤_다예쁨체',
   },
 });

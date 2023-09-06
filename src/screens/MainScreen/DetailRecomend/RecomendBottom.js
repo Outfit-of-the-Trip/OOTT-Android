@@ -39,9 +39,9 @@ const RecomendBottom = () => {
                     </View>
                 <View
                     style={[style.cardcontainer,{marginHorizontal:width-(width-15)}]}>
-                      <View style={{flex:0.1}}>
+                      <View style={{flex:0.2}}>
                             <Text style={style.cardtextcontainer}>
-                               {data.usrId}님에게 추천하는 코디
+                               {data.usrId}님에게 하의 추천하는 코디
                             </Text>
                         </View>
                 <View

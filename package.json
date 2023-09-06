@@ -20,7 +20,7 @@
     "accordion-collapse-react-native": "^1.1.1",
     "axios": "^1.4.0",
     "react": "18.2.0",
-    "react-native": "0.72.3",
+    "react-native": "^0.72.4",
     "react-native-calendar": "^0.13.1",
     "react-native-calendars": "^1.1300.0",
     "react-native-modal": "^13.0.1",
