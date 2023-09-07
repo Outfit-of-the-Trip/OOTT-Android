@@ -23,8 +23,12 @@ const Recomend = () => {
   const [isImage, setIsImage] = useState(true);
   const width = useWindowDimensions().width; //기기 폭 값
   
-  const gotoNext = () => {
+  const gotoDetailRecomend = () => {
     return navigation.navigate('DetailRecomend');
+  };
+
+  const gotoFriendsLook = () => {
+    return navigation.navigate('FriendsLook');
   };
   
   const toggleImage = () => {
@@ -71,7 +75,7 @@ const Recomend = () => {
     <View
       style={styles.showimgcontainer}>
       <TouchableOpacity
-        onPress={gotoNext}>
+        onPress={gotoDetailRecomend}>
       <Image
         source={preview}
         style={[styles.showimg,{width:width-20}]}/>
@@ -90,7 +94,8 @@ const Recomend = () => {
               source={uheart}/>
               )}
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={gotoFriendsLook}>
           <Text
           style={styles.samedaystext}>같은 날 친구가 입는 옷은?</Text>
         </TouchableOpacity>

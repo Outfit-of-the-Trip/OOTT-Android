@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import { useWindowDimensions } from 'react-native';
 
 import profileImg from '../../assets/images/profileImg.png';
 import more from '../../assets/images/more.png';
@@ -18,20 +19,22 @@ import {
 
 const MainScreen = () => {
   const navigation = useNavigation();
+  const width = useWindowDimensions().width;
+
   const gotoRecomend = () => {
     return navigation.navigate('Recomend');
   };
+  
+  const gotoFrineds = () =>{
+    return navigation.navigate('친구')
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.profile}>
           <View
-            style={{
-              flex: 0.5,
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}>
+            style={styles.profileimgconatiner}>
             <Image source={profileImg} />
             <Text
               style={{
@@ -43,36 +46,22 @@ const MainScreen = () => {
             </Text>
           </View>
           <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignContent: 'center',
-            }}>
+            style={styles.profileinfoconatiner}>
             <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
+              style={styles.profiletextcontainer}>
               <Text style={styles.profilebigtext}>7</Text>
               <Text style={styles.profiletext}>mylog</Text>
             </View>
             <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Text style={styles.profilebigtext}>12</Text>
-              <Text style={styles.profiletext}>Friend</Text>
+              style={styles.profiletextcontainer}>
+              <TouchableOpacity
+                onPress={gotoFrineds}>
+                <Text style={styles.profilebigtext}>12</Text>
+                <Text style={styles.profiletext}>Friend</Text>
+              </TouchableOpacity>
             </View>
             <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
+              style={styles.profiletextcontainer}>
               <Text style={styles.profilebigtext}>9</Text>
               <Text style={styles.profiletext}>ShoppingList</Text>
             </View>
@@ -81,10 +70,10 @@ const MainScreen = () => {
         <View style={styles.bottomline} />
         {/* <EmptyScreen/> */}
         {TravelInfo.map((info, index) => (
-          <View style={styles.recomend} key={index}>
+          <View style={styles.recomendconatiner} key={index}>
             <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              style={styles.recotopcontainer}>
+              <View style={{flexDirection: 'row', alignItems: 'center',marginLeft:width-(width-10)}}>
                 <Image source={dateairplane} style={{resizeMode: 'contain'}} />
                 <Text style={styles.datetext}>{info.date}</Text>
               </View>
@@ -116,7 +105,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 20,
   },
-  recomend: {
+  profileimgconatiner:{
+    flex: 0.5,
+    alignItems: 'center',
+  },
+  recomendconatiner: {
     flex: 1,
     marginTop: 30,
   },
@@ -128,9 +121,24 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: 'contain',
   },
+  profileinfoconatiner:{
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+  profiletextcontainer:{
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   recoimgae: {
     flex: 1,
     resizeMode: 'contain',
+  },
+  recotopcontainer:{
+    flexDirection: 'row', 
+    justifyContent: 'space-between'
   },
   text: {
     color: 'black',

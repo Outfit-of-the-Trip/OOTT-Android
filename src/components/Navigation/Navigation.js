@@ -7,15 +7,18 @@ import HomeScreen from '../../screens/HomeScreen/HomeScreen';
 import MainScreen from '../../screens/MainScreen/MainScreen';
 import Recomend from '../../screens/MainScreen/Recomend/Recomend';
 import DetailRecomend from '../../screens/MainScreen/DetailRecomend/DetailRecomend';
+
 import FriendInfoScreen from '../../screens/FriendScreen/FriendInfoScreen';
 import WhereToGo from '../../screens/OOTTScreen/WhereToGo';
 import WhoDoYouGoWith from '../../screens/OOTTScreen/WhoDoYouGoWith';
 import PurposOfTravel from '../../screens/OOTTScreen/PurposOfTravel';
+import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
+
 import {AuthContext} from '../../utils/Auth';
 
 import BottomTabs from './BottomTabNavigation';
-import Toplogo from '../../assets/images/toplogo.png';
-import Settings from '../../assets/images/settings.png';
+import Toplogo from '../../assets/images/toplogo.png'
+import Settings from '../../assets/images/settings.png'
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +45,7 @@ const Navigation = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
+
           tabBarShowLabel: false,
           headerTitleAlign: 'center',
           headerTitle: mainLogo,
@@ -87,6 +91,8 @@ const Navigation = () => {
             <Stack.Screen
               name="PurposOfTravel"
               component={PurposOfTravel}
+              name="FriendsLook"
+              component={FriendsLook}
               options={{headerShown: true}}
             />
           </>
