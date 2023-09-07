@@ -91,6 +91,9 @@ const Navigation = () => {
             <Stack.Screen
               name="PurposOfTravel"
               component={PurposOfTravel}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
               name="FriendsLook"
               component={FriendsLook}
               options={{headerShown: true}}
