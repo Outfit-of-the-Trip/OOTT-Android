@@ -12,12 +12,10 @@ import RecomendShose from '../../screens/MainScreen/DetailRecomend/RecomendShose
 import RecomendOutter from '../../screens/MainScreen/DetailRecomend/RecomendOutter';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
 import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
-import DetailRecomend from '../../screens/MainScreen/DetailRecomend/DetailRecomend';
 import FriendInfoScreen from '../../screens/FriendScreen/FriendInfoScreen';
 import WhereToGo from '../../screens/OOTTScreen/WhereToGo';
 import WhoDoYouGoWith from '../../screens/OOTTScreen/WhoDoYouGoWith';
 import PurposOfTravel from '../../screens/OOTTScreen/PurposOfTravel';
-import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
 
 import {AuthContext} from '../../utils/Auth';
 
