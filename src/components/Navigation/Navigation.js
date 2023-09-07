@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Image, TouchableOpacity} from 'react-native';
@@ -12,6 +12,13 @@ import RecomendShose from '../../screens/MainScreen/DetailRecomend/RecomendShose
 import RecomendOutter from '../../screens/MainScreen/DetailRecomend/RecomendOutter';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
 import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
+import DetailRecomend from '../../screens/MainScreen/DetailRecomend/DetailRecomend';
+import FriendInfoScreen from '../../screens/FriendScreen/FriendInfoScreen';
+import WhereToGo from '../../screens/OOTTScreen/WhereToGo';
+import WhoDoYouGoWith from '../../screens/OOTTScreen/WhoDoYouGoWith';
+import PurposOfTravel from '../../screens/OOTTScreen/PurposOfTravel';
+import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
+
 import {AuthContext} from '../../utils/Auth';
 
 import BottomTabs from './BottomTabNavigation';
@@ -72,6 +79,26 @@ const Navigation = () => {
             <Stack.Screen
               name="RecomendShose"
               component={RecomendShose}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="FriendInfoScreen"
+              component={FriendInfoScreen}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="WhereToGo"
+              component={WhereToGo}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="WhoDoYouGoWith"
+              component={WhoDoYouGoWith}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="PurposOfTravel"
+              component={PurposOfTravel}
               options={{headerShown: true}}
             />
             <Stack.Screen
