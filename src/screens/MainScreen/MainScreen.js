@@ -104,7 +104,7 @@ const MainScreen = () => {
             <Avatar
               size={72}
               rounded
-              src={"https://k.kakaocdn.net/dn/DeWiq/btssN3bDnxi/am3hJpHbRDEaKS6PfPY3J1/img_640x640.jpg"} />
+              source={UR} />
             <Text
               style={styles.profileimgename}>
               {userInfo.nickname}
