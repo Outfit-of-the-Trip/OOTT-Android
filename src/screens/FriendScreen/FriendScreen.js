@@ -60,6 +60,9 @@ const FriendScreen = () => {
     };
     getFriendInfo();
   }, []);
+  useEffect(() => {
+    console.log(userInfo);
+  }, []);
   return (
     <SafeAreaView>
       <View style={styles.InputContainer}>

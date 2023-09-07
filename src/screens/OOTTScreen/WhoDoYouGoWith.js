@@ -34,20 +34,6 @@ const WhoDoYouGoWith = () => {
     getFriendList();
   }, []);
 
-  // const deleteFriend = async item => {
-  //   axios
-  //     .post('http://10.0.2.2:3000/api/friends/deleteFriend', {
-  //       requestUserID: 'a',
-  //       responseUserID: `${item.usrId}`,
-  //     })
-  //     .then(function (response) {
-  //       console.log(response.data);
-  //     })
-  //     .catch(function (err) {
-  //       console.log(err);
-  //     });
-  // };
-
   const selectFriendWithTravel = Friend => {
     console.log(Friend.usrId);
     setStackedDate({

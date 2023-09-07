@@ -39,18 +39,24 @@ const PurposOfTravel = () => {
     console.log(likeFeature);
   }, [likeFeature]);
   const passDataToDB = async () => {
-    console.log(typeof Data.days);
-    console.log(typeof Data.FriendName);
-    const repones = await axios.post(
-      'http://10.0.2.2:3000/api/travel/addTravelInfo',
-      {
-        usrId: 'a',
-        travlDate: `${String(Data.days)}`,
-        travlFriends: `${Data.FriendName}`,
-      },
-    );
-    console.log(repones.data);
-    navigation.navigate('홈');
+    try {
+      console.log(typeof Data.days);
+      console.log(typeof Data.FriendName);
+      const repones = await axios.post(
+        'http://10.0.2.2:3000/api/travel/addTravelInfo',
+        {
+          usrId: 'a',
+          // travlDate: `${String(Data.days)}`,
+          // travlFriends: `${Data.FriendName}`,
+          travlDate: '2023-02-03',
+          travlFriends: '@a@b@c',
+        },
+      );
+      console.log(repones.data);
+      navigation.navigate('홈');
+    } catch (e) {
+      console.log(e);
+    }
   };
   return (
     <SafeAreaView style={{flex: 1}}>
