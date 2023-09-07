@@ -1,4 +1,4 @@
-import React, { useState,useEffect,useRef, } from 'react';
+import React, { useState,useRef, } from 'react';
 import { useWindowDimensions, Modal } from 'react-native';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import {
@@ -12,9 +12,6 @@ import {
 import { useRoute } from '@react-navigation/native';
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import { useNavigation } from '@react-navigation/native';
-import toggleModal from '../../../components/toggleisfriendmodal'
-import profile from '../../../assets/images/recomend1.png'
-import axios from 'axios';
 
 const Recomend = () => {
   const navigation = useNavigation();
@@ -62,7 +59,7 @@ const Recomend = () => {
                 style={{justifyContent:'space-between',flexDirection:'row',width:'100%'}}>
                 <Text
                   style={styles.infodatetext}>
-                  {traveldate} Look to
+                  {traveldate} Look to {data.travlPlace}
                 </Text>
                 <View>
                   <TouchableOpacity>

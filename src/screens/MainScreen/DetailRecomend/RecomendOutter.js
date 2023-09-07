@@ -13,7 +13,6 @@ import { useRoute } from '@react-navigation/native';
 import { useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
-import axios from 'axios';
 
 const RecomendOutter = () => {
     const navigation = useNavigation();

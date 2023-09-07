@@ -12,9 +12,8 @@ import {
   } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import React,{useEffect,useState} from 'react';
+import React,{useState} from 'react';
 import {CollapseBody} from 'accordion-collapse-react-native';
-import axios from 'axios';
 
 const FriendsLook = () => {
     const [isModalVisible, setModalVisible] = useState(false); // 모달 on/off
@@ -44,7 +43,7 @@ const FriendsLook = () => {
         console.log(nameArray)
 
         if (nameArray.length === 0) {
-            return null; // or handle empty array however you want
+            return null; 
           }
 
         return nameArray.map((name, index) => (

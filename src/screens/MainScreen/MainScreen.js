@@ -27,14 +27,11 @@ const MainScreen = () => {
   const{userInfo} = useContext(AuthContext);
   console.log(userInfo);
   const navigation = useNavigation();
-  const width = useWindowDimensions().width;
+  const width = useWindowDimensions().width; //기기 넓이
 
   const [data,setData] = useState([]);
-  const [usrname, setusrname] = useState(); //사용자 이름
   const [traveldate, settraveldate] = useState(); //여행 날짜
   const [travelea, settravelea] = useState(); //등록된 여행 개수
-  //const [travelplace,settravelplace] = useState(); //여행 장소
-  //const [usrprofile, setusrprofile] = useState(); 프로필 사진
   const [friend,setfriend] = useState();
 
   const gotoRecomend = (travledata) => {
@@ -45,7 +42,7 @@ const MainScreen = () => {
     return navigation.navigate('친구')
   }
   
-  const translate = (item) =>{
+  const translate = (item) =>{ // 날짜 정리 메서드
     var data = String(item);
     var input = data.substring(0,10);
     return input;
@@ -96,7 +93,6 @@ const MainScreen = () => {
     axios.get('http://10.0.2.2:8000/api/users/getUserInfo?userId=admin')
       .then(function (response) {
         setusrname(response.data.usrId);
-       // setusrprofile(response.data.usrProfileURL) 프로필 사진
 
       })
       .catch(function (err) {
@@ -113,6 +109,7 @@ const MainScreen = () => {
         settraveldate(input)
         settravelea(response.data.length)
         setData(response.data);
+        console.log(response.data);
       })
       .catch(function (err) {
         console.log(err);
