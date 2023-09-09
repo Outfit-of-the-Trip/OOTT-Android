@@ -28,13 +28,13 @@ export const AuthProvider = ({children}) => {
     const getProfile = () => {
         
         KakaoLogin.getProfile()
-        .then((result) => {
+        .then( async (result) => {
 
             // UserInfo에 result값 저장. 이후 Navigation.js에서 로그인 여부 확인에 사용
             setUserInfo(result);
 
             // Local Storage에 유저 정보 저장
-            AsyncStorage.setItem('userInfo', JSON.stringify(result));
+            await AsyncStorage.setItem('userInfo', JSON.stringify(result))
             
         })
         .catch((error) => {

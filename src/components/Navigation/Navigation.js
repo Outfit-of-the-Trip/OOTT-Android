@@ -14,6 +14,9 @@ import BottomTabs from './BottomTabNavigation';
 import Toplogo from '../../assets/images/toplogo.png'
 import Settings from '../../assets/images/settings.png'
 
+import TravelPlace from '../../screens/OOTTScreen/TravelPlace/TravelPlace';
+import TravelFriends from '../../screens/OOTTScreen/TravelFriends/TravelFriends';
+
 const Stack = createNativeStackNavigator();
 
 const mainLogo = () => {
@@ -70,6 +73,16 @@ const Navigation = () => {
             <Stack.Screen
               name="FriendsLook"
               component={FriendsLook}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="TravelPlace"
+              component={TravelPlace}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="TravelFriends"
+              component={TravelFriends}
               options={{headerShown: true}}
             />
           </>
