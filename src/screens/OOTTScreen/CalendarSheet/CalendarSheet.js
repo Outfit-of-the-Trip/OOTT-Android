@@ -75,9 +75,7 @@ const CalendarSheet = (props) => {
                     (<Text style={styles.title}>{date[0]} ~ {date[date.length - 1]}</Text>):
                     (<Text style={styles.title}>여행 날짜를 선택해주세요</Text>) 
                 }
-                <Button title="complete" 
-                    onPress={()=>{SheetManager.hide('CalendarSheet')}}
-                />
+
             </View>
     
         </ActionSheet>

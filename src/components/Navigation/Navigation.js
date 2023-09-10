@@ -16,6 +16,7 @@ import Settings from '../../assets/images/settings.png'
 
 import TravelPlace from '../../screens/OOTTScreen/TravelPlace/TravelPlace';
 import TravelFriends from '../../screens/OOTTScreen/TravelFriends/TravelFriends';
+import TravelCategory from '../../screens/OOTTScreen/TravelCategory/TravelCategory';
 
 const Stack = createNativeStackNavigator();
 
@@ -83,6 +84,11 @@ const Navigation = () => {
             <Stack.Screen
               name="TravelFriends"
               component={TravelFriends}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="TravelCategory"
+              component={TravelCategory}
               options={{headerShown: true}}
             />
           </>

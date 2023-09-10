@@ -19,3 +19,13 @@ export const reasonState = atom({
   key: "reasonState", // 전역적으로 고유한 값
   default: "" 
 });
+
+export const userInfoState = atom({
+  key: "userInfoState",
+  default: {}
+})
+
+export const friendsState = atom({
+  key: "friendsState",
+  default: []
+})

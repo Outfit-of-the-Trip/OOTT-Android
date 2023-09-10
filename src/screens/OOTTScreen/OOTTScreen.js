@@ -50,9 +50,7 @@ const OOTTScreen = () => {
 
     return(
       <TouchableOpacity 
-        onPress={ () => {
-          setReason(item)
-        }}
+        onPress={() => setReason(item)}
         style={{          
           margin: 4,
           backgroundColor: backgroundColor,
@@ -102,14 +100,14 @@ const OOTTScreen = () => {
             <View style={styles.placeContainer}>
 
               <View style={styles.iconContainer}>
-                <Icon name="calendar-month" size={30} color={firstDate ? "blue" : "grey"} />
+                <Icon name="calendar-month" size={30} color={firstDate ? "black" : "grey"} />
               </View>
 
               <View style={styles.wheretogo}>
                 <Text style={{
                     color: "black",
                     fontSize: 20,
-                    fontWeight: 'bold',
+                    fontWeight: 'normal',
                   }}>{firstDate ? firstDate + " ~ " + lastDate  : " 날짜를 선택해주세요" }
                 </Text>
               </View>
@@ -140,13 +138,13 @@ const OOTTScreen = () => {
           >
             <View style={styles.placeContainer}>
               <View style={styles.iconContainer}>
-                <Icon name="travel-explore" size={30} color={place ? "blue" : "grey"} />
+                <Icon name="travel-explore" size={30} color={place ? "black" : "grey"} />
               </View>
               <View style={styles.wheretogo}>
                 <Text style={{
                     color: "black",
                     fontSize: 20,
-                    fontWeight: 'bold',
+                    fontWeight: 'normal',
                   }}>{place ? place : "어디로 떠나시나요?"}
                 </Text>
               </View>
@@ -265,7 +263,7 @@ const styles = StyleSheet.create({
 
   header:{
     fontSize: 25,
-    color: 'purple',
+    color: 'black',
     margin: 20,
     fontWeight: "bold",
   },

@@ -1,6 +1,8 @@
 import React, {createContext, useState}  from 'react';
 import  * as KakaoLogin from '@react-native-seoul/kakao-login';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { userInfoState } from '../states/atoms';
+import { useSetRecoilState } from 'recoil';
 
 // useContext 사용하여 상태를 전역변수처럼 사용
 export const AuthContext = createContext();
@@ -8,6 +10,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({children}) => {
 
     const [userInfo, setUserInfo] = useState({});
+    const Info = useSetRecoilState(userInfoState)
 
     // login 기능 : Kakao API 사용 -> KakaoLogin.login()
     const login = async () => {
@@ -32,6 +35,7 @@ export const AuthProvider = ({children}) => {
 
             // UserInfo에 result값 저장. 이후 Navigation.js에서 로그인 여부 확인에 사용
             setUserInfo(result);
+            Info(result)
 
             // Local Storage에 유저 정보 저장
             await AsyncStorage.setItem('userInfo', JSON.stringify(result))
