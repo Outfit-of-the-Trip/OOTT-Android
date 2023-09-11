@@ -13,27 +13,22 @@ import WhereToGo from '../../screens/OOTTScreen/WhereToGo';
 import WhoDoYouGoWith from '../../screens/OOTTScreen/WhoDoYouGoWith';
 import PurposOfTravel from '../../screens/OOTTScreen/PurposOfTravel';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
+import RecomendTop from '../../screens/MainScreen/DetailRecomend/RecomendTop';
+import RecomendBottom from '../../screens/MainScreen/DetailRecomend/RecomendBottom';
+import RecomendShose from '../../screens/MainScreen/DetailRecomend/RecomendShose';
+import RecomendOutter from '../../screens/MainScreen/DetailRecomend/RecomendOutter';
+import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
+import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
 
 import {AuthContext} from '../../utils/Auth';
 
 import BottomTabs from './BottomTabNavigation';
-import Toplogo from '../../assets/images/toplogo.png'
-import Settings from '../../assets/images/settings.png'
+import Toplogo from '../../assets/images/toplogo.png';
 
 const Stack = createNativeStackNavigator();
 
 const mainLogo = () => {
   return <Image style={{width: 72, height: 54}} source={Toplogo} />;
-};
-const settingsLogo = () => {
-  return (
-    <TouchableOpacity>
-      <Image
-        style={{width: 40, height: 40, marginRight: 5}}
-        source={Settings}
-      />
-    </TouchableOpacity>
-  );
 };
 
 const Navigation = () => {
@@ -45,11 +40,9 @@ const Navigation = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-
           tabBarShowLabel: false,
           headerTitleAlign: 'center',
           headerTitle: mainLogo,
-          headerRight: settingsLogo,
         }}>
         {userInfo.id ? (
           <>
@@ -69,8 +62,23 @@ const Navigation = () => {
               options={{headerShown: true}}
             />
             <Stack.Screen
-              name="DetailRecomend"
-              component={DetailRecomend}
+              name="RecomendOutter"
+              component={RecomendOutter}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="RecomendTop"
+              component={RecomendTop}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="RecomendBottom"
+              component={RecomendBottom}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="RecomendShose"
+              component={RecomendShose}
               options={{headerShown: true}}
             />
             <Stack.Screen
@@ -96,6 +104,11 @@ const Navigation = () => {
             <Stack.Screen
               name="FriendsLook"
               component={FriendsLook}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="ShoppingList"
+              component={ShoppingList}
               options={{headerShown: true}}
             />
           </>
