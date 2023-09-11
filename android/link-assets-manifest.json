@@ -2,12 +2,8 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "src/assets/fonts/ONE MOBILE OTF REGULAR.OTF",
-      "sha1": "6121e41dd1dc86f5efceb25b6fc8cebb5b88e66c"
-    },
-    {
-      "path": "src/assets/fonts/TENADA.TTF",
-      "sha1": "0134ece97e692354c8f42344646ee9cd5033c69e"
+      "path": "src/assets/fonts/오뮤_다예쁨체.ttf",
+      "sha1": "6246f82595d8f775c4a1e400e7780d9951660c70"
     }
   ]
 }

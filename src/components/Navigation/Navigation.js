@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Image, TouchableOpacity} from 'react-native';
@@ -7,7 +7,13 @@ import HomeScreen from '../../screens/HomeScreen/HomeScreen';
 import MainScreen from '../../screens/MainScreen/MainScreen';
 import Recomend from '../../screens/MainScreen/Recomend/Recomend';
 import DetailRecomend from '../../screens/MainScreen/DetailRecomend/DetailRecomend';
+
+import FriendInfoScreen from '../../screens/FriendScreen/FriendInfoScreen';
+import WhereToGo from '../../screens/OOTTScreen/WhereToGo';
+import WhoDoYouGoWith from '../../screens/OOTTScreen/WhoDoYouGoWith';
+import PurposOfTravel from '../../screens/OOTTScreen/PurposOfTravel';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
+
 import {AuthContext} from '../../utils/Auth';
 
 import BottomTabs from './BottomTabNavigation';
@@ -65,6 +71,26 @@ const Navigation = () => {
             <Stack.Screen
               name="DetailRecomend"
               component={DetailRecomend}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="FriendInfoScreen"
+              component={FriendInfoScreen}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="WhereToGo"
+              component={WhereToGo}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="WhoDoYouGoWith"
+              component={WhoDoYouGoWith}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="PurposOfTravel"
+              component={PurposOfTravel}
               options={{headerShown: true}}
             />
             <Stack.Screen
