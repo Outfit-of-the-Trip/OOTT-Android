@@ -53,7 +53,7 @@ const FriendScreen = () => {
           'http://10.0.2.2:3000/api/test/getUserTable',
         );
         setFindFriendInfo(response.data);
-        console.log(findFriendInfo);
+        //console.log(findFriendInfo);
       } catch (e) {
         console.log(e);
       }

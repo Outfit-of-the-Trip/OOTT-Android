@@ -3,19 +3,15 @@ import {useNavigation} from '@react-navigation/native';
 import { useWindowDimensions } from 'react-native';
 import { Avatar } from '@rneui/themed';
 import axios from 'axios';
-
-import profileImg from '../../assets/images/profileImg.png';
+import { BlurView } from '@react-native-community/blur';
 import more from '../../assets/images/more.png';
 import { AuthContext } from '../../utils/Auth';
-import dateairplane from '../../assets/images/dateairplane.png';
-import TravelInfo from '../../constants/TravelInfo';
 
 import {
   View,
   StyleSheet,
   Text,
   SafeAreaView,
-  ScrollView,
   Image,
   TouchableOpacity,
   FlatList
@@ -25,7 +21,6 @@ import EmptyScreen from '../../components/EmptyScreen';
 
 const MainScreen = () => {
   const{userInfo} = useContext(AuthContext);
-  console.log(userInfo);
   const navigation = useNavigation();
   const width = useWindowDimensions().width; //기기 넓이
 
@@ -33,10 +28,14 @@ const MainScreen = () => {
   const [traveldate, settraveldate] = useState(); //여행 날짜
   const [travelea, settravelea] = useState(); //등록된 여행 개수
   const [friend,setfriend] = useState();
+  const [isSignup,setSignup] = useState();
+  const [kakaoUsrname, setkakaoUsrname] = useState(userInfo.nickname);
+  const [dbUsrname, setDbUsrname] = useState([]);
 
   const gotoRecomend = (travledata) => {
     //console.log(travledata)
-    navigation.navigate('Recomend', travledata);
+    //console.log(userInfo)
+    navigation.navigate('Recomend', travledata,userInfo);
   };
   const gotoFrineds = () =>{
     return navigation.navigate('친구')
@@ -47,41 +46,16 @@ const MainScreen = () => {
     var input = data.substring(0,10);
     return input;
   }
-
-  const Showlog = () =>{
-     if(travelea>0){
-      return <View>
-          <FlatList
-            data={data}
-            renderItem={({ item,index }) => (
-              <View key={index} style={styles.recomendconatiner}>
-              <View
-                style={styles.recotopcontainer}>
-                <View style={[styles.viewcontainer,{marginHorizontal:width-(width-10),marginBottom:width-(width-10)}]}>
-                  <Text style={styles.datetext}>{translate(item.travlDate)} to {item.travlPlace}</Text>
-                </View>
-                <TouchableOpacity onPress={() => gotoRecomend(item)}>
-                  <Image source={more} />
-                </TouchableOpacity>
-              </View>
-              <View style={[styles.viewcontainer,{marginHorizontal:width-(width-10)}]}>
-              <Text style={styles.tagtext}>태그</Text>
-              </View>
-            </View>
-              )}
-            keyExtractor={(item) => item.usrID} // Use a unique identifier as the key
-            />
-        </View>
-    }else{
-      return <EmptyScreen/>
-    }
+  
+  const Loginokay = () =>{
+    
   }
 
   useEffect(() => { //사용자 친구 데이터
     axios.get('http://10.0.2.2:8000/api/friends/myFriends?userId=a')
       .then(function (response) {
         setfriend(response.data.length)
-        console.log(response.data.length)
+        //console.log(response.data.length)
       })
       .catch(function (err) {
         console.log(err);
@@ -90,31 +64,65 @@ const MainScreen = () => {
 
 
   useEffect(() => { //사용자 데이터 
-    axios.get('http://10.0.2.2:8000/api/users/getUserInfo?userId=admin')
+    axios.get(`http://10.0.2.2:8000/api/test/getUserTable`)
       .then(function (response) {
-        setusrname(response.data.usrId);
-
+        //console.log(response.data);
+        setDbUsrname(response.data);
+       // console.log(dbUsrname);
       })
       .catch(function (err) {
         console.log(err);
       });
   }, []);
 
+  useEffect(() =>{
+    console.log(dbUsrname);
+  })
+
   useEffect(() => { //여행정보 데이터
     axios.get('http://10.0.2.2:8000/api/travel/getMyTravelInfo?userId=a')
       .then(function (response) {
-        console.log(response.data);
+        //console.log(response.data);
         var data = String(response.data.travlDate);
         var input = data.substring(0,10);
         settraveldate(input)
         settravelea(response.data.length)
         setData(response.data);
-        console.log(response.data);
+        //console.log(response.data);
       })
       .catch(function (err) {
         console.log(err);
       });
   }, []);
+
+  const Showlog = () =>{
+    if(travelea>0){
+     return <View>
+         <FlatList
+           data={data}
+           renderItem={({ item,index }) => (
+             <View key={index} style={styles.recomendconatiner}>
+             <View
+               style={styles.recotopcontainer}>
+               <View style={[styles.viewcontainer,{marginHorizontal:width-(width-10),marginBottom:width-(width-10)}]}>
+                 <Text style={styles.datetext}>{translate(item.travlDate)} to {item.travlPlace}</Text>
+               </View>
+               <TouchableOpacity onPress={() => gotoRecomend(item)}>
+                 <Image source={more} />
+               </TouchableOpacity>
+             </View>
+             <View style={[styles.viewcontainer,{marginHorizontal:width-(width-10)}]}>
+             <Text style={styles.tagtext}>태그</Text>
+             </View>
+           </View>
+             )}
+           />
+       </View>
+   }else{
+     return <EmptyScreen/>
+   }
+ }
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -183,7 +191,7 @@ const styles = StyleSheet.create({
   },
   recomendconatiner: {
     flex: 1,
-    marginTop: "5%",
+    marginTop: "3%",
     elevation:10,
     backgroundColor:"white",
     borderRadius:10,

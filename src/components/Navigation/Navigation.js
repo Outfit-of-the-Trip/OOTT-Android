@@ -37,7 +37,7 @@ const Navigation = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-
+          animation:'fade_from_bottom',
           tabBarShowLabel: false,
           headerTitleAlign: 'center',
           headerTitle: mainLogo,
