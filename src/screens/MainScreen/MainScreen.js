@@ -18,6 +18,7 @@ import {
   Modal
 } from 'react-native';
 import EmptyScreen from '../../components/EmptyScreen';
+import recomendOOTT from '../../assets/images/recomendOOTT.png';
 
 
 const MainScreen = () => {
@@ -26,10 +27,8 @@ const MainScreen = () => {
   const width = useWindowDimensions().width; //기기 넓이
 
   const [data,setData] = useState([]);
-  const [traveldate, settraveldate] = useState(); //여행 날짜
   const [travelea, settravelea] = useState(); //등록된 여행 개수
   const [friend,setfriend] = useState();
-  const [kakaoUsrname, setkakaoUsrname] = useState(userInfo.nickname);
   const [dbUsrname, setDbUsrname] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [friendsInfo, setFriendsInfo] = useState([]);
@@ -40,6 +39,9 @@ const MainScreen = () => {
   const gotoFrineds = () =>{
     return navigation.navigate('친구')
   }
+  const gotoOOTT = () =>{
+    return navigation.navigate('OOTTScreen')
+  }
   
   const translate = (item) =>{ // 날짜 정리 메서드
     var data = String(item);
@@ -47,6 +49,33 @@ const MainScreen = () => {
     return input;
   }
   
+  const RecomendModal = (isvisible) =>{
+    return(
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={isModalVisible}
+    >
+      <BlurView
+        style={{ zIndex:5,flex:1}}
+        blurType="light" // Change blurType as needed (light, dark, extra light)
+        blurAmount={5}
+      >
+        <View
+          style={{zIndex:10,flex:1,alignContent:'center',alignItems:'center',justifyContent:'center'}}>
+            <Image source={recomendOOTT}/>
+          <Text>환영합니다 ! 처음 로그인하시네요</Text>
+          <Text>기본 정보를 등록하시고 OOTT를 사용하세요!</Text>
+          <TouchableOpacity 
+            onPress={closeModal}>
+              <Text>이동하기</Text>
+            </TouchableOpacity> 
+        </View>
+      </BlurView>
+    </Modal>
+
+    )
+  }
 
   const closeModal = () => {
     setIsModalVisible(!isModalVisible);
@@ -73,32 +102,31 @@ const MainScreen = () => {
       });
   }, []);
 
-  // 유저가 테이블에 포함되어 있는지 확인하는 로직
+   // 유저가 테이블에 포함되어 있는지 확인하는 로직
   useEffect(() => {
-    const getFriendsInfo = async () => {
-      try {
-        const response = await axios.get(
-          'http://10.0.2.2:3000/api/test/getUserTable',
-        );
-        setFriendsInfo(response.data);
-        console.log(setFriendsInfo);
-        const getUserData = friendsInfo.filter(
-          item => item.profile_nickname === userInfo.nickname,
-        );
-      } catch (e) {
-        console.log(e);
-      }finally{
-        getFriendsInfo();
+    axios.get('http://10.0.2.2:8000/api/test/getUserTable')
+    .then(function (response) {
+      setFriendsInfo(response.data);
+      const getUserData = friendsInfo.filter(
+        item => item.profile_nickname === userInfo.nickname,
+      );
+      console.log(friendsInfo)
+      console.log(getUserData.length)
+      if(getUserData.length<1){
+        setIsModalVisible(true)
+      }else{
+        setIsModalVisible(false)
       }
-    };
-  }, []);
+      
+    })
+    .catch(function (e) {
+      console.log(e);
+    });
+  }, []); 
 
   useEffect(() => { //여행정보 데이터
     axios.get('http://10.0.2.2:8000/api/travel/getMyTravelInfo?userId=a')
       .then(function (response) {
-        var data = String(response.data.travlDate);
-        var input = data.substring(0,10);
-        settraveldate(input)
         settravelea(response.data.length)
         setData(response.data);
       })
@@ -135,35 +163,9 @@ const MainScreen = () => {
    }
  }
 
-  const openModal = () =>{
-    if(friendsInfo.length < 0) {
-      setIsModalVisible(!isModalVisible);
-    }
-  }
-  
-
-
   return (
     <SafeAreaView style={styles.container}>
-      {openModal()}
-      <Modal
-      animationType="slide"
-      transparent={true}
-      visible={isModalVisible}
-      onRequestClose={closeModal}
-    >
-      <BlurView
-        style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-        blurType="light" // Change blurType as needed (light, dark, extra light)
-      >
-        <View style={{padding: 20, borderRadius: 10 }}>
-          <Text>Modal Content Goes Here</Text>
-          <TouchableOpacity onPress={closeModal}>
-            <Text>Close Modal</Text>
-          </TouchableOpacity>
-        </View>
-      </BlurView>
-    </Modal>
+    <RecomendModal isvisible={isModalVisible}/>
     <View style={styles.profile}>
       <View
         style={styles.profileimgconatiner}>

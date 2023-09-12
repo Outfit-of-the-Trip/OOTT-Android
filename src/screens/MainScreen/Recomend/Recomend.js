@@ -3,6 +3,7 @@ import { useWindowDimensions, Modal } from 'react-native';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import leftarrow from '../../../assets/images/leftarrow.png'
 import rightarrow from '../../../assets/images/rightarrow.png'
+import avatarbutton from '../../../assets/images/avatarbutton.png'
 
 import {
   View,
@@ -63,11 +64,12 @@ const Recomend = () => {
                 style={{justifyContent:'space-between',flexDirection:'row',width:'100%'}}>
                 <Text
                   style={styles.infodatetext}>
-                  {traveldate} Look to {traveldata.travlPlace}
+                  {traveldate} ~ 22/07/19 Look to {traveldata.travlPlace}
                 </Text>
                   <TouchableOpacity>
-                  <Text
-                    style={{fontFamily:'오뮤_다예쁨체',fontSize:24,color:'black'}}>아바타로 보기</Text>
+                    <Image source={avatarbutton}/>
+                  {/* <Text
+                    style={{fontFamily:'오뮤_다예쁨체',fontSize:24,color:'black'}}>아바타로 보기</Text> */}
                   </TouchableOpacity>
               </View>
         </View>

@@ -47,7 +47,7 @@ const FriendsLook = () => {
           }
 
         return nameArray.map((name, index) => (
-            <View key={index}>
+            <View key={index} style={{flexDirection:'row'}}>
             <TouchableOpacity onPress={() => handleNameClick(name)}>
                 <Text style={styles.topshowname}>{name}</Text>
             </TouchableOpacity>

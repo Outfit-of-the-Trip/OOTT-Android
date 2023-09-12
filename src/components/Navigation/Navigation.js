@@ -16,6 +16,7 @@ import FriendInfoScreen from '../../screens/FriendScreen/FriendInfoScreen';
 import WhereToGo from '../../screens/OOTTScreen/WhereToGo';
 import WhoDoYouGoWith from '../../screens/OOTTScreen/WhoDoYouGoWith';
 import PurposOfTravel from '../../screens/OOTTScreen/PurposOfTravel';
+import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
 
 import {AuthContext} from '../../utils/Auth';
 
@@ -53,6 +54,11 @@ const Navigation = () => {
               name="MainScreen"
               component={MainScreen}
               options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="OOTTScreen"
+              component={OOTTScreen}
+              options={{headerShown: true}}
             />
             <Stack.Screen
               name="Recomend"
