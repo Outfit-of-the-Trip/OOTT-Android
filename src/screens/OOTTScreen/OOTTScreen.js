@@ -35,6 +35,9 @@ const OOTTScreen = () => {
 
   const [popData] = useState(["관광", "호캉스", "배낭여행", "비즈니스"])
 
+  const buttonColor = (place && firstDate && reason) ? "black" : "grey";
+
+
   const getTravelDate = () => {
     SheetManager.show('CalendarSheet')
   }
@@ -177,16 +180,36 @@ const OOTTScreen = () => {
           </FlatList>
         </View>
 
-
-
       </View>
        
 
-      <View style={styles.nextButton}>
-        <Button disabled={(place && firstDate && reason) ? false : true} title="다음" onPress={gotoTravelFriends} />
+     
+        <View style={styles.nextButton}>
+          <TouchableOpacity 
+            disabled={(place && firstDate && reason) ? false : true}
+            onPress={gotoTravelFriends}
+            style={{          
+              margin: 10,
+              backgroundColor: buttonColor,
+              borderRadius: 20,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{
+              color: "white",
+              marginTop: 5,
+              marginBottom: 5,
+              marginLeft: 10,
+              marginRight: 10,
+              fontSize: 17,
+              fontWeight: 'normal'
+            }}>선택</Text>
+          </TouchableOpacity>
+                   
+        </View>
       </View>
      
-    </View>
     </SheetProvider>
   )
 }

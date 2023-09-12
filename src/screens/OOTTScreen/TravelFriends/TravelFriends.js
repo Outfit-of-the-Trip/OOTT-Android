@@ -146,6 +146,7 @@ const TravelFriends = () => {
     }
 
     return(
+
         <View style={styles.rootContainer} >
             <View style={styles.headerContainer}>
                 <Text style={styles.header}>누구와 함께{'\n'}여행하시나요?</Text>
@@ -167,10 +168,30 @@ const TravelFriends = () => {
             </View>
 
             <View style={styles.nextButton}>
-                <Button title="다음" onPress={pressNextButton}/>
+                <TouchableOpacity 
+                    onPress={pressNextButton}
+                    style={{          
+                        margin: 10,
+                        backgroundColor: "black",
+                        borderRadius: 20,
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <Text style={{
+                        color: "white",
+                        marginTop: 5,
+                        marginBottom: 5,
+                        marginLeft: 10,
+                        marginRight: 10,
+                        fontSize: 17,
+                        fontWeight: 'normal'
+                    }}>선택</Text>
+                </TouchableOpacity>
             </View>
 
         </View>
+
     )
 }
 

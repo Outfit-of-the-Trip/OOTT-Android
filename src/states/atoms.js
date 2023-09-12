@@ -29,3 +29,8 @@ export const friendsState = atom({
   key: "friendsState",
   default: []
 })
+
+export const categoryState = atom({
+  key: "categoryState",
+  default: ""
+})

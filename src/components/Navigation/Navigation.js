@@ -17,6 +17,7 @@ import Settings from '../../assets/images/settings.png'
 import TravelPlace from '../../screens/OOTTScreen/TravelPlace/TravelPlace';
 import TravelFriends from '../../screens/OOTTScreen/TravelFriends/TravelFriends';
 import TravelCategory from '../../screens/OOTTScreen/TravelCategory/TravelCategory';
+import RecomendSceen from '../../screens/OOTTScreen/RecomendSceen/RecomendSceen';
 
 const Stack = createNativeStackNavigator();
 
@@ -89,6 +90,11 @@ const Navigation = () => {
             <Stack.Screen
               name="TravelCategory"
               component={TravelCategory}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="RecomendSceen"
+              component={RecomendSceen}
               options={{headerShown: true}}
             />
           </>
