@@ -6,6 +6,7 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
 import android.os.Bundle;
 import org.devio.rn.splashscreen.SplashScreen;
+import com.reactnativecommunity.blurview.BlurViewPackage;
 
 public class MainActivity extends ReactActivity {
 

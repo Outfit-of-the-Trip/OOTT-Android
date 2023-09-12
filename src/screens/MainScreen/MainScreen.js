@@ -1,11 +1,11 @@
-import React, {useState,useEffect,useContext} from 'react';
+import React, {useState,useEffect,useContext,useLayoutEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import { useWindowDimensions } from 'react-native';
 import { Avatar } from '@rneui/themed';
 import axios from 'axios';
-import { BlurView } from '@react-native-community/blur';
 import more from '../../assets/images/more.png';
 import { AuthContext } from '../../utils/Auth';
+import { BlurView } from '@react-native-community/blur';
 
 import {
   View,
@@ -14,7 +14,8 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
-  FlatList
+  FlatList,
+  Modal
 } from 'react-native';
 import EmptyScreen from '../../components/EmptyScreen';
 
@@ -28,13 +29,12 @@ const MainScreen = () => {
   const [traveldate, settraveldate] = useState(); //여행 날짜
   const [travelea, settravelea] = useState(); //등록된 여행 개수
   const [friend,setfriend] = useState();
-  const [isSignup,setSignup] = useState();
   const [kakaoUsrname, setkakaoUsrname] = useState(userInfo.nickname);
   const [dbUsrname, setDbUsrname] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [friendsInfo, setFriendsInfo] = useState([]);
 
   const gotoRecomend = (travledata) => {
-    //console.log(travledata)
-    //console.log(userInfo)
     navigation.navigate('Recomend', travledata,userInfo);
   };
   const gotoFrineds = () =>{
@@ -47,15 +47,15 @@ const MainScreen = () => {
     return input;
   }
   
-  const Loginokay = () =>{
-    
-  }
+
+  const closeModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
 
   useEffect(() => { //사용자 친구 데이터
     axios.get('http://10.0.2.2:8000/api/friends/myFriends?userId=a')
       .then(function (response) {
         setfriend(response.data.length)
-        //console.log(response.data.length)
       })
       .catch(function (err) {
         console.log(err);
@@ -66,29 +66,41 @@ const MainScreen = () => {
   useEffect(() => { //사용자 데이터 
     axios.get(`http://10.0.2.2:8000/api/test/getUserTable`)
       .then(function (response) {
-        //console.log(response.data);
         setDbUsrname(response.data);
-       // console.log(dbUsrname);
       })
       .catch(function (err) {
         console.log(err);
       });
   }, []);
 
-  useEffect(() =>{
-    console.log(dbUsrname);
-  })
+  // 유저가 테이블에 포함되어 있는지 확인하는 로직
+  useEffect(() => {
+    const getFriendsInfo = async () => {
+      try {
+        const response = await axios.get(
+          'http://10.0.2.2:3000/api/test/getUserTable',
+        );
+        setFriendsInfo(response.data);
+        console.log(setFriendsInfo);
+        const getUserData = friendsInfo.filter(
+          item => item.profile_nickname === userInfo.nickname,
+        );
+      } catch (e) {
+        console.log(e);
+      }finally{
+        getFriendsInfo();
+      }
+    };
+  }, []);
 
   useEffect(() => { //여행정보 데이터
     axios.get('http://10.0.2.2:8000/api/travel/getMyTravelInfo?userId=a')
       .then(function (response) {
-        //console.log(response.data);
         var data = String(response.data.travlDate);
         var input = data.substring(0,10);
         settraveldate(input)
         settravelea(response.data.length)
         setData(response.data);
-        //console.log(response.data);
       })
       .catch(function (err) {
         console.log(err);
@@ -123,51 +135,77 @@ const MainScreen = () => {
    }
  }
 
+  const openModal = () =>{
+    if(friendsInfo.length < 0) {
+      setIsModalVisible(!isModalVisible);
+    }
+  }
+  
+
 
   return (
     <SafeAreaView style={styles.container}>
-        <View style={styles.profile}>
-          <View
-            style={styles.profileimgconatiner}>
-            <Avatar
-              size={80}
-              rounded
-              source={{
-                uri:userInfo.profileImageUrl}} />
-            <Text
-              style={styles.profileimgename}>
-              {userInfo.nickname}
-            </Text>
-          </View>
-          <View
-            style={styles.profileinfoconatiner}>
-            <View
-              style={styles.profiletextcontainer}>
-              <Text style={styles.profilebigtext}>{travelea}</Text>
-              <Text style={styles.profiletext}>mylog</Text>
-            </View>
-            <View
-              style={styles.profiletextcontainer}>
-              <TouchableOpacity
-                onPress={gotoFrineds}>
-                <View
-                  style={{alignItems:"center"}}>
-                <Text style={styles.profilebigtext}>
-                  {friend}
-                </Text>
-                <Text style={styles.profiletext}>Friend</Text>
-                </View>
-              </TouchableOpacity> 
-              </View>
-          </View>
+      {openModal()}
+      <Modal
+      animationType="slide"
+      transparent={true}
+      visible={isModalVisible}
+      onRequestClose={closeModal}
+    >
+      <BlurView
+        style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        blurType="light" // Change blurType as needed (light, dark, extra light)
+      >
+        <View style={{padding: 20, borderRadius: 10 }}>
+          <Text>Modal Content Goes Here</Text>
+          <TouchableOpacity onPress={closeModal}>
+            <Text>Close Modal</Text>
+          </TouchableOpacity>
         </View>
-        <View style={styles.bottomline} />
+      </BlurView>
+    </Modal>
+    <View style={styles.profile}>
+      <View
+        style={styles.profileimgconatiner}>
+        <Avatar
+          size={80}
+          rounded
+          source={{
+            uri:userInfo.profileImageUrl}} />
+        <Text
+          style={styles.profileimgename}>
+          {userInfo.nickname}
+        </Text>
+      </View>
+      <View
+        style={styles.profileinfoconatiner}>
         <View
-          style={{flex:4.6}}>
-        <Showlog/>
+          style={styles.profiletextcontainer}>
+          <Text style={styles.profilebigtext}>{travelea}</Text>
+          <Text style={styles.profiletext}>mylog</Text>
         </View>
-    </SafeAreaView>
-  );
+        <View
+          style={styles.profiletextcontainer}>
+          <TouchableOpacity
+            onPress={gotoFrineds}>
+            <View
+              style={{alignItems:"center"}}>
+            <Text style={styles.profilebigtext}>
+              {friend}
+            </Text>
+            <Text style={styles.profiletext}>Friend</Text>
+            </View>
+          </TouchableOpacity> 
+          </View>
+      </View>
+    </View>
+    <View style={styles.bottomline} />
+    <View
+      style={{flex:4.6}}>
+    <Showlog/>
+    </View>
+  </SafeAreaView>);
+
 };
 
 const styles = StyleSheet.create({

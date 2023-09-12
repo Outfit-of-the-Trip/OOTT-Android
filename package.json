@@ -12,6 +12,7 @@
   "dependencies": {
     "@gorhom/bottom-sheet": "^4.4.7",
     "@react-native-async-storage/async-storage": "^1.19.1",
+    "@react-native-community/blur": "^4.3.2",
     "@react-native-community/cli-doctor": "^11.3.7",
     "@react-native-seoul/kakao-login": "^5.3.0",
     "@react-navigation/bottom-tabs": "^6.5.8",
@@ -23,7 +24,6 @@
     "axios": "^1.4.0",
     "react": "18.2.0",
     "react-native": "^0.72.4",
-    "react-native-blur": "^3.2.2",
     "react-native-calendar": "^0.13.1",
     "react-native-calendars": "^1.1300.0",
     "react-native-gesture-handler": "^2.12.1",
