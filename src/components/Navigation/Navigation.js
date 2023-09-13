@@ -33,9 +33,6 @@ const Stack = createNativeStackNavigator();
 const mainLogo = () => {
   return <Image style={{width: 72, height: 54}} source={Toplogo} />;
 };
-const logo = () =>{
-  return 0;
-}
 const Navigation = () => {
   // Auth 에서 받은 userInfo 값
   const {userInfo} = useContext(AuthContext);
