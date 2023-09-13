@@ -14,6 +14,7 @@ import { useRoute } from '@react-navigation/native';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import React,{useState} from 'react';
 import {CollapseBody} from 'accordion-collapse-react-native';
+import Swiper from 'react-native-swiper'
 
 const FriendsLook = () => {
     const [isModalVisible, setModalVisible] = useState(false); // 모달 on/off
@@ -92,18 +93,22 @@ const FriendsLook = () => {
         <View style={styles.bottomline}/>
         <View
             style={styles.secondcontainer}>
-             <SwiperFlatList
-                data={RecomendGarmet}
-                ItemSeparatorComponent={() => <View />}
-                renderItem={({item,index}) =>(
-                    <View
-                        style={{justifyContent:"center",alignItems:"center",width:width}}>
-                        <Image
-                           source={item.img}
-                            style={styles.showimg}/>
-                    </View>      
-        )}
-        keyExtractor={(item) => item.id} />
+            <Swiper
+        dotStyle={{backgroundColor:'grey',width:8}}
+        activeDotColor='#4949E8'
+        /* showsButtons 좌우 화살표 표시
+        nextButton={<Image style={{height:30}}source={rightarrow}/>}
+        prevButton={<Image style={{height:30}}source={leftarrow}/>} */
+        >
+        {RecomendGarmet.map((img,index) =>(
+          <View
+          key={index}>
+          <Image
+          source={img.img}
+          style={[styles.showimg,{width:width}]}/>
+        </View>
+        ))}
+     </Swiper>
         </View>
         <View style={styles.bottomline}/>
         <View

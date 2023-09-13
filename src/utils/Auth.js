@@ -1,6 +1,8 @@
-import React, {createContext, useState} from 'react';
-import * as KakaoLogin from '@react-native-seoul/kakao-login';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {createContext, useState}  from 'react';
+import  * as KakaoLogin from '@react-native-seoul/kakao-login';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { userInfoState } from '../states/atoms';
+import { useSetRecoilState } from 'recoil';
 
 // useContext 사용하여 상태를 전역변수처럼 사용
 export const AuthContext = createContext();

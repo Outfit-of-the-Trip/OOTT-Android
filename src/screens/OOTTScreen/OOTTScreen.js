@@ -1,5 +1,13 @@
+
+import React, {useState, useEffect} from 'react'
 import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import {SheetProvider, SheetManager} from 'react-native-actions-sheet';
+import { useRecoilState, useRecoilValue } from "recoil";
+import { searchState, firstDateState, lastDateState, reasonState } from '../../states/atoms';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+import './sheet';
+
 import {
   View,
   Text,
@@ -7,123 +15,288 @@ import {
   SafeAreaView,
   useWindowDimensions,
   TouchableOpacity,
+  Button,
+  FlatList
 } from 'react-native';
 import {CalendarList, Calendar} from 'react-native-calendars';
-import {Button} from 'react-native-paper';
+
 
 const OOTTScreen = () => {
-  const [selected, setSelected] = useState('');
-  const navigation = useNavigation();
-  const height = useWindowDimensions().height;
-  const goNextPage = () => {
-    navigation.navigate('WhereToGo', selected);
+  const navigation = useNavigation()
+
+  const gotoTravelPlace = () => {
+    return navigation.navigate('TravelPlace');
+  };
+  const gotoTravelFriends = () => {
+    return navigation.navigate('TravelFriends');
   };
 
-  return (
-    <View style={styles.allContainer}>
-      <Calendar
-        onDayPress={day => {
-          setSelected(day.dateString);
-        }}
-        markedDates={{
-          [selected]: {
-            selected: true,
-            disableTouchEvent: true,
-            selectedDotColor: 'orange',
-          },
-        }}
-        theme={{
-          selectedDayBackgroundColor: 'red',
-          arrowColor: 'skyblue',
-          dotColor: 'orange',
-          todayTextColor: 'blue', //오늘 날짜 색깔
-          textDayFontSize: 24, // 일자 폰트 사이즈
-          textMonthFontSize: 32, //달 폰트 사이즈
-          textSectionTitleColor: '#4949E8', // 요일 색깔
-          textDayFontFamily: '오뮤_다예쁨체', //일자 폰트
-          textMonthFontFamily: '오뮤_다예쁨체', //달 폰트
-        }}
-      />
+  const place = useRecoilValue(searchState);
+  const firstDate = useRecoilValue(firstDateState);
+  const lastDate = useRecoilValue(lastDateState);
+  const [reason, setReason] = useRecoilState(reasonState)
 
-      <View style={styles.nextButton}>
-        <Button onPress={goNextPage} mode="outlined">
-          다음
-        </Button>
+  const [isLoding, setIsLoding] = useState(null);
+
+  const [popData] = useState(["관광", "호캉스", "배낭여행", "비즈니스"])
+
+  const buttonColor = (place && firstDate && reason) ? "black" : "grey";
+
+
+  const getTravelDate = () => {
+    SheetManager.show('CalendarSheet')
+  }
+
+  const gotoTravelDate = async () => {
+    return navigation.navigate('TravelDate');
+  };
+
+  const renderButton = ({ item }) => {
+
+    const isSelected = reason == item;
+    const backgroundColor = isSelected ? 'skyblue' : '#fbfbfb';
+
+    return(
+      <TouchableOpacity 
+        onPress={() => setReason(item)}
+        style={{          
+          margin: 4,
+          backgroundColor: backgroundColor,
+          borderRadius: 20,
+        }}
+      >
+        <Text style={{
+          color: "black",
+          marginTop: 5,
+          marginBottom: 5,
+          marginLeft: 10,
+          marginRight: 10,
+          fontSize: 17,
+          fontWeight: 'normal'
+        }}>{item}</Text>
+      </TouchableOpacity>
+    )
+  }
+
+
+
+  
+  return (
+    <SheetProvider>
+    <View style={styles.rootContainer} >
+
+
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>당신의 여행정보를{'\n'}입력해주세요</Text>
       </View>
-    </View>
-    // <SafeAreaView style={[styles.container]}>
-    //   <View style={{flex: 1}}>
-    //     <Calendar
-    //       style={styles.calendar}
-    //       horizontal={true} //수평스크롤
-    //       theme={{
-    //         todayTextColor: 'blue', //오늘 날짜 색깔
-    //         textDayFontSize: 24, // 일자 폰트 사이즈
-    //         textMonthFontSize: 32, //달 폰트 사이즈
-    //         textSectionTitleColor: '#4949E8', // 요일 색깔
-    //         textDayFontFamily: '오뮤_다예쁨체', //일자 폰트
-    //         textMonthFontFamily: '오뮤_다예쁨체', //달 폰트
-    //       }}
-    //       onDayPress={day => {
-    //         setSelected(day.dateString);
-    //         console.log(day.dateString);
-    //       }}
-    //       markedDates={{
-    //         [selected]: {
-    //           selected: true,
-    //           disableTouchEvent: true,
-    //           selectedColor: '#4949E8',
-    //         },
-    //       }}
-    //     />
-    //   </View>
-    //   <View style={[styles.secondcontainer, {marginBottom: height - height}]}>
-    //     <TouchableOpacity style={styles.btn}>
-    //       <Text style={styles.font} onPress={goNextPage}>
-    //         다음
-    //       </Text>
-    //     </TouchableOpacity>
-    //   </View>
-    // </SafeAreaView>
-  );
-};
+
+
+      <View style={styles.dateContainer}>
+        <View style={styles.place}>
+          <TouchableOpacity 
+            onPress={getTravelDate}
+            style={{
+              margin: 10,
+              borderWidth:1,
+              borderColor:'black',
+              alignItems:'center',
+              justifyContent:'center',
+              height: 50,
+              borderRadius:100,
+            }}
+          >
+            <View style={styles.placeContainer}>
+
+              <View style={styles.iconContainer}>
+                <Icon name="calendar-month" size={30} color={firstDate ? "black" : "grey"} />
+              </View>
+
+              <View style={styles.wheretogo}>
+                <Text style={{
+                    color: "black",
+                    fontSize: 20,
+                    fontWeight: 'normal',
+                  }}>{firstDate ? firstDate + " ~ " + lastDate  : " 날짜를 선택해주세요" }
+                </Text>
+              </View>
+    
+            </View> 
+
+          </TouchableOpacity>
+
+        </View>
+      </View>
+
+
+      <View style={styles.searchBarContainer}>
+        <View style={styles.place}>
+
+
+          <TouchableOpacity 
+            onPress={gotoTravelPlace}
+            style={{
+              margin: 10,
+              borderWidth:1,
+              borderColor:'black',
+              alignItems:'center',
+              justifyContent:'center',
+              height: 50,
+              borderRadius:100,
+            }}
+          >
+            <View style={styles.placeContainer}>
+              <View style={styles.iconContainer}>
+                <Icon name="travel-explore" size={30} color={place ? "black" : "grey"} />
+              </View>
+              <View style={styles.wheretogo}>
+                <Text style={{
+                    color: "black",
+                    fontSize: 20,
+                    fontWeight: 'normal',
+                  }}>{place ? place : "어디로 떠나시나요?"}
+                </Text>
+              </View>
+            </View> 
+          </TouchableOpacity>
+
+
+
+        </View>
+      </View>
+
+
+      <View style={styles.reasonContainer}>
+
+
+
+        <View style={styles.textContainer}>
+          <Text style={styles.title}>왜 가나요?</Text>
+        </View>
+
+
+
+        <View style={styles.buttonGroup}>
+          <FlatList
+            numColumns={4}
+            keyExtractor={ (item)=> item }
+            data={popData}
+            renderItem={ renderButton }
+          >
+          </FlatList>
+        </View>
+
+      </View>
+       
+
+     
+        <View style={styles.nextButton}>
+          <TouchableOpacity 
+            disabled={(place && firstDate && reason) ? false : true}
+            onPress={gotoTravelFriends}
+            style={{          
+              margin: 10,
+              backgroundColor: buttonColor,
+              borderRadius: 20,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{
+              color: "white",
+              marginTop: 5,
+              marginBottom: 5,
+              marginLeft: 10,
+              marginRight: 10,
+              fontSize: 17,
+              fontWeight: 'normal'
+            }}>선택</Text>
+          </TouchableOpacity>
+                   
+        </View>
+      </View>
+     
+    </SheetProvider>
+  )
+}
 
 const styles = StyleSheet.create({
-  nextButton: {
-    marginTop: 10,
+  rootContainer: {
+    flex: 1,
+    backgroundColor: "white",
   },
-  container: {
+  headerContainer:{
+    flex: 5,
+    justifyContent: "center",
+  },
+  dateContainer:{
     flex: 2,
-    backgroundColor: 'white',
   },
-  secondcontainer: {
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+  searchBarContainer:{
+    flex: 1.5,
+    marginTop: 30,
+    justifyContent: "center",
+    alignContent: "center",
+
   },
-  calendar: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-    borderRadius: 20,
-    borderColor: '#E9E9E9',
+  reasonContainer:{
+    flex: 4,
+    margin: 15,
+    marginTop: 100,
   },
-  font: {
-    fontFamily: '오뮤_다예쁨체',
-    fontSize: 24,
-    color: '#4949E8',
+
+  nextButton: {
+    flex:4,
+    justifyContent: "center",
+    margin: 10
   },
-  btn: {
-    backgroundColor: '#FFFFFF', // 버튼 배경색
-    paddingVertical: 8,
-    paddingHorizontal: 130,
-    borderRadius: 20, // 버튼 테두리 둥글기
-    borderWidth: 1.4, // 버튼 테두리 두께
-    borderColor: '#4949E8', // 버튼 테두리 색상
-    shadowColor: '#000', // 그림자 색상
-    shadowOffset: {width: 0, height: 2}, // 그림자 위치
-    shadowOpacity: 0.2, // 그림자 투명도
-    shadowRadius: 6, // 그림자 둥글기
-    elevation: 6, // Android의 그림자 효과
+
+  textContainer:{
+    flex: 1,
   },
+  buttonGroup:{
+    flex: 3,
+    marginTop: 20,
+  },
+  buttonContainer:{
+    margin: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  placeContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+
+  iconContainer:{
+    flex:1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  place:{
+    flex:1
+  },
+  wheretogo:{
+    flex: 4,
+    justifyContent: "center",
+    alignContent: "center",
+
+  },
+  title:{
+    fontSize: 20,
+    color: 'black',
+    fontWeight: "bold",
+  },
+
+  header:{
+    fontSize: 25,
+    color: 'black',
+    margin: 20,
+    fontWeight: "bold",
+  },
+  
+
 });
 
-export default OOTTScreen;
+export default OOTTScreen

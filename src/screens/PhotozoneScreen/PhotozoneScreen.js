@@ -1,5 +1,5 @@
-import React, { useCallback, useRef, useMemo, useState, useEffect } from "react";
-import { StyleSheet, View, Dimensions, Text, Image } from "react-native";
+import React, { useCallback, useRef, useMemo, useState } from "react";
+import { StyleSheet, View, Dimensions} from "react-native";
 import BottomSheet, { BottomSheetScrollView, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { WebView } from 'react-native-webview';
@@ -34,7 +34,7 @@ const TravelScreen = () => {
   const snapPoints = useMemo(() => ["40%", "100%"], []);
 
   const handleSheetChange = useCallback((index) => {
-    console.log("handleSheetChange", index);
+    // console.log("handleSheetChange", index);
   }, []);
   const handleSnapPress = useCallback((index) => {
     sheetRef.current?.snapToIndex(index, { animationDuration: 100 });
@@ -47,7 +47,7 @@ const TravelScreen = () => {
         <WebView
           javaScriptEnabled={true}
           style={styles.webview}
-          source={{ uri: 'http://localhost:3000' }}
+          source={{ uri: 'http://localhost:3000/photozone' }}
           onMessage={handleOnMessage}
         />
         <BottomSheet

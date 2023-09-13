@@ -23,6 +23,11 @@ import {AuthContext} from '../../utils/Auth';
 import BottomTabs from './BottomTabNavigation';
 import Toplogo from '../../assets/images/toplogo.png'
 
+import TravelPlace from '../../screens/OOTTScreen/TravelPlace/TravelPlace';
+import TravelFriends from '../../screens/OOTTScreen/TravelFriends/TravelFriends';
+import TravelCategory from '../../screens/OOTTScreen/TravelCategory/TravelCategory';
+import RecomendSceen from '../../screens/OOTTScreen/RecomendSceen/RecomendSceen';
+
 const Stack = createNativeStackNavigator();
 
 const mainLogo = () => {
@@ -113,6 +118,25 @@ const Navigation = () => {
             <Stack.Screen
               name="ShoppingList"
               component={ShoppingList}
+            />
+            <Stack.Screen
+              name='RecomendSceen'
+              component={RecomendSceen}
+              options={{headerShown:true}}
+              />
+            <Stack.Screen
+              name="TravelPlace"
+              component={TravelPlace}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="TravelFriends"
+              component={TravelFriends}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="TravelCategory"
+              component={TravelCategory}
               options={{headerShown: true}}
             />
           </>
