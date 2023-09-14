@@ -21,7 +21,7 @@ import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
 import {AuthContext} from '../../utils/Auth';
 
 import BottomTabs from './BottomTabNavigation';
-import Toplogo from '../../assets/images/toplogo.png'
+import Toplogo from '../../assets/images/toplogo.png';
 
 import TravelPlace from '../../screens/OOTTScreen/TravelPlace/TravelPlace';
 import TravelFriends from '../../screens/OOTTScreen/TravelFriends/TravelFriends';
@@ -42,6 +42,7 @@ const Navigation = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
+
           animation:'fade_from_bottom',
           tabBarShowLabel: false,
           headerTitleAlign: 'center',
