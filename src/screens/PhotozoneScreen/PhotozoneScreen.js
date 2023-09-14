@@ -32,8 +32,8 @@ const TravelScreen = () => {
   const sheetRef = useRef(null);
   const snapPoints = useMemo(() => ['40%', '100%'], []);
 
-  const handleSheetChange = useCallback((index) => {
-    // console.log("handleSheetChange", index);
+  const handleSheetChange = useCallback(index => {
+    console.log('handleSheetChange', index);
   }, []);
   const handleSnapPress = useCallback(index => {
     sheetRef.current?.snapToIndex(index, {animationDuration: 100});
@@ -46,6 +46,7 @@ const TravelScreen = () => {
           javaScriptEnabled={true}
           style={styles.webview}
           source={{ uri: 'http://localhost:3000/photozone' }}
+          //source={{uri: 'http://localhost:3000'}}
           onMessage={handleOnMessage}
         />
         <BottomSheet
