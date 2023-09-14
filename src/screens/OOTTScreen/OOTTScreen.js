@@ -42,7 +42,9 @@ const OOTTScreen = () => {
 
   const buttonColor = (place && firstDate && reason) ? "black" : "grey";
 
-
+  const dumy = () =>{
+    return 0;
+  }
   const getTravelDate = () => {
     SheetManager.show('CalendarSheet')
   }
