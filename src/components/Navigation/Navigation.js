@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Image, TouchableOpacity} from 'react-native';
@@ -12,17 +12,27 @@ import RecomendShose from '../../screens/MainScreen/DetailRecomend/RecomendShose
 import RecomendOutter from '../../screens/MainScreen/DetailRecomend/RecomendOutter';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
 import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
+import FriendInfoScreen from '../../screens/FriendScreen/FriendInfoScreen';
+import WhereToGo from '../../screens/OOTTScreen/WhereToGo';
+import WhoDoYouGoWith from '../../screens/OOTTScreen/WhoDoYouGoWith';
+import PurposOfTravel from '../../screens/OOTTScreen/PurposOfTravel';
+import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
+
 import {AuthContext} from '../../utils/Auth';
 
 import BottomTabs from './BottomTabNavigation';
 import Toplogo from '../../assets/images/toplogo.png'
+
+import TravelPlace from '../../screens/OOTTScreen/TravelPlace/TravelPlace';
+import TravelFriends from '../../screens/OOTTScreen/TravelFriends/TravelFriends';
+import TravelCategory from '../../screens/OOTTScreen/TravelCategory/TravelCategory';
+import RecomendSceen from '../../screens/OOTTScreen/RecomendSceen/RecomendSceen';
 
 const Stack = createNativeStackNavigator();
 
 const mainLogo = () => {
   return <Image style={{width: 72, height: 54}} source={Toplogo} />;
 };
-
 const Navigation = () => {
   // Auth 에서 받은 userInfo 값
   const {userInfo} = useContext(AuthContext);
@@ -32,7 +42,7 @@ const Navigation = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-
+          animation:'fade_from_bottom',
           tabBarShowLabel: false,
           headerTitleAlign: 'center',
           headerTitle: mainLogo,
@@ -48,6 +58,11 @@ const Navigation = () => {
               name="MainScreen"
               component={MainScreen}
               options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="OOTTScreen"
+              component={OOTTScreen}
+              options={{headerShown: true}}
             />
             <Stack.Screen
               name="Recomend"
@@ -75,6 +90,26 @@ const Navigation = () => {
               options={{headerShown: true}}
             />
             <Stack.Screen
+              name="FriendInfoScreen"
+              component={FriendInfoScreen}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="WhereToGo"
+              component={WhereToGo}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="WhoDoYouGoWith"
+              component={WhoDoYouGoWith}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="PurposOfTravel"
+              component={PurposOfTravel}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
               name="FriendsLook"
               component={FriendsLook}
               options={{headerShown: true}}
@@ -82,6 +117,25 @@ const Navigation = () => {
             <Stack.Screen
               name="ShoppingList"
               component={ShoppingList}
+            />
+            <Stack.Screen
+              name='RecomendSceen'
+              component={RecomendSceen}
+              options={{headerShown:true}}
+              />
+            <Stack.Screen
+              name="TravelPlace"
+              component={TravelPlace}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="TravelFriends"
+              component={TravelFriends}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="TravelCategory"
+              component={TravelCategory}
               options={{headerShown: true}}
             />
           </>
