@@ -9,6 +9,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
   const [userInfo, setUserInfo] = useState({});
+  const Info = useSetRecoilState(userInfoState)
 
   // login 기능 : Kakao API 사용 -> KakaoLogin.login()
   const login = async () => {
@@ -32,6 +33,7 @@ export const AuthProvider = ({children}) => {
       .then(result => {
         // UserInfo에 result값 저장. 이후 Navigation.js에서 로그인 여부 확인에 사용
         setUserInfo(result);
+        Info(result)
         // Local Storage에 유저 정보 저장
         AsyncStorage.setItem('userInfo', JSON.stringify(result));
       })

@@ -17,7 +17,7 @@ import WhereToGo from '../../screens/OOTTScreen/WhereToGo';
 import WhoDoYouGoWith from '../../screens/OOTTScreen/WhoDoYouGoWith';
 import PurposOfTravel from '../../screens/OOTTScreen/PurposOfTravel';
 import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
-import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
+// import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
 
 import {AuthContext} from '../../utils/Auth';
 
