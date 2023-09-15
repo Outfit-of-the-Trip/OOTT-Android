@@ -33,6 +33,7 @@ const TravelFriends = () => {
 
 
     useEffect(() => {
+        console.log(userInfo[0].nickname)
         const getUserFriedns = async () => {
             axios.get('http://10.0.2.2:3001/api/friends/myFriends?userId='+userInfo[0].nickname)
             .then(function (res) {
