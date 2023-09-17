@@ -20,6 +20,9 @@ import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
 // import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
 
 import {AuthContext} from '../../utils/Auth';
+import KeywordScreen from 'D:/RN/OOTT-Android/src/screens/MypageScreen/KeywordScreen.js';
+import ClosetScreen from 'D:/RN/OOTT-Android/src/screens/MypageScreen/ClosetScreen.js';
+import AbataScreen from 'D:/RN/OOTT-Android/src/screens/MypageScreen/AbataScreen.js';
 
 import BottomTabs from './BottomTabNavigation';
 import Toplogo from '../../assets/images/toplogo.png';
@@ -140,6 +143,21 @@ const Navigation = () => {
             <Stack.Screen
               name="TravelCategory"
               component={TravelCategory}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="KeywordScreen"
+              component={KeywordScreen}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="ClosetScreen"
+              component={ClosetScreen}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="AbataScreen"
+              component={AbataScreen}
               options={{headerShown: true}}
             />
           </>
