@@ -22,7 +22,7 @@ import avatar from '../../assets/images/avatar.png';
 const FriendScreen = () => {
   const {userInfo} = useContext(AuthContext);
   const navigation = useNavigation();
-
+  console.log(userInfo);
   const [friendName, setFriendName] = useState('');
   const [findFriendInfo, setFindFriendInfo] = useState([]);
 
