@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, Platform } from 'react-native';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -54,12 +54,10 @@ function ClosetScreen() {
 
   const handleAddPhoto = async () => {
     const cameraPermission = Platform.select({
-      ios: PERMISSIONS.IOS.CAMERA,
       android: PERMISSIONS.ANDROID.CAMERA,
     });
 
     const storagePermission = Platform.select({
-      ios: PERMISSIONS.IOS.PHOTO_LIBRARY,
       android: PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
     });
 
