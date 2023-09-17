@@ -1,29 +1,23 @@
-import React from 'react'
-
-import {     SlickTabBarNavigator, DotSize } from 'rn-slick-bottom-tabs';
+import React, { useEffect } from 'react'
+import { SlickTabBarNavigator, DotSize } from 'rn-slick-bottom-tabs';
 import {Image} from 'react-native';
-
-import {Ionicons as Icon} from '@expo/vector-icons'
 
 import MainScreen from '../../screens/MainScreen/MainScreen';
 import TravelScreen from '../../screens/PhotozoneScreen/PhotozoneScreen';
 import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
 import FriendScreen from '../../screens/FriendScreen/FriendScreen';
 import MypageScreen from '../../screens/MypageScreen/MypageScreen';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const Tabs = SlickTabBarNavigator()
 
 const TabBarIcon = (props) => {
 
     return (
-        // <Icon
-        //     name={props.name}
-        //     size={props.size ? props.size : 24}
-        //     color={props.tintColor}
-        // />
-        <Image
-            style={{width: 20, height: 20}}
-            source = {{uri : "https://cdn-icons-png.flaticon.com/128/3917/3917032.png"}}
+        <Icon
+            name={props.name}
+            size={props.size ? props.size : 24}
+            color={props.tintColor}
         />
     )
 }
@@ -48,14 +42,14 @@ export default () => (
 
     >
         <Tabs.Screen
-            name="MainScreen"
+            name="Home"
             component={MainScreen}
             options={{
                 tabBarIcon: ({focused, color}) => (
                     <TabBarIcon
                         focused={focused}
                         tintColor={color}
-                        name="home-sharp"
+                        name="home"
                     />
                 ),
 
@@ -63,7 +57,7 @@ export default () => (
         />
 
         <Tabs.Screen
-            name="TravelScreen"
+            name="Travel"
             component={TravelScreen}
             options={{
                 tabBarIcon: ({focused, color}) => (
@@ -77,7 +71,7 @@ export default () => (
         />
 
         <Tabs.Screen
-            name="OOTTScreen"
+            name="OOTT"
             component={OOTTScreen}
             options={{
                 tabBarIcon: ({focused, color}) => (
@@ -91,28 +85,28 @@ export default () => (
         />
 
         <Tabs.Screen
-            name="FriendScreen"
+            name="Friends"
             component={FriendScreen}
             options={{
                 tabBarIcon: ({focused, color}) => (
                     <TabBarIcon
                         focused={focused}
                         tintColor={color}
-                        name="ios-notifications"
+                        name="people"
                     />
                 ),
             }}
         />
 
         <Tabs.Screen
-                name="MypageScreen"
+                name="Mypage"
                 component={MypageScreen}
                 options={{
                     tabBarIcon: ({focused, color}) => (
                         <TabBarIcon
                             focused={focused}
                             tintColor={color}
-                            name="ios-notifications"
+                            name="person"
                         />
                     ),
                 }}
@@ -121,7 +115,4 @@ export default () => (
     </Tabs.Navigator>
 )
 
-//On your navigation index
-
-//<Stack.Screen name="Root" component={BottomTab} options={{headerShown: true}}/>
 
