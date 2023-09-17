@@ -27,7 +27,7 @@
     "deprecated-react-native-prop-types": "^4.2.1",
     "native-base": "^3.4.28",
     "patch-package": "^8.0.0",
-    "react": "18.2.0",
+    "react": "17.0.1",
     "react-native": "0.72.4",
     "react-native-actions-sheet": "^0.9.0-alpha.21",
     "react-native-bit-swiper": "^1.1.8",
@@ -52,7 +52,8 @@
     "react-native-swiper-flatlist": "^3.2.3",
     "react-native-vector-icons": "^10.0.0",
     "react-native-webview": "^13.3.1",
-    "recoil": "^0.7.7"
+    "recoil": "^0.7.7",
+    "rn-slick-bottom-tabs": "^1.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
