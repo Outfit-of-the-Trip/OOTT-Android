@@ -1,32 +1,43 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, Platform } from 'react-native';
-import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  Platform,
+} from 'react-native';
+import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
 import ImagePicker from 'react-native-image-crop-picker';
-import { PERMISSIONS, check, request, RESULTS } from 'react-native-permissions';
+import {PERMISSIONS, check, request, RESULTS} from 'react-native-permissions';
+
+import Abc from '../../assets/images/adc.png';
 
 const OuterwearComponent = () => (
-  <ScrollView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+  <ScrollView style={{flex: 1, backgroundColor: '#FFFFFF'}}>
     <Text>아우터 내용</Text>
     {/* 아우터 아이템을 여기에 표시 */}
   </ScrollView>
 );
 
 const TopsComponent = () => (
-  <ScrollView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+  <ScrollView style={{flex: 1, backgroundColor: '#FFFFFF'}}>
     <Text>상의 내용</Text>
     {/* 상의 아이템을 여기에 표시 */}
   </ScrollView>
 );
 
 const BottomsComponent = () => (
-  <ScrollView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+  <ScrollView style={{flex: 1, backgroundColor: '#FFFFFF'}}>
     <Text>하의 내용</Text>
     {/* 하의 아이템을 여기에 표시 */}
   </ScrollView>
 );
 
 const FootwearComponent = () => (
-  <ScrollView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+  <ScrollView style={{flex: 1, backgroundColor: '#FFFFFF'}}>
     <Text>신발 내용</Text>
     {/* 신발 아이템을 여기에 표시 */}
   </ScrollView>
@@ -44,10 +55,10 @@ function ClosetScreen() {
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: 'first', title: '아우터' },
-    { key: 'second', title: '상의' },
-    { key: 'third', title: '하의' },
-    { key: 'fourth', title: '신발' },
+    {key: 'first', title: '아우터'},
+    {key: 'second', title: '상의'},
+    {key: 'third', title: '하의'},
+    {key: 'fourth', title: '신발'},
   ]);
 
   const [selectedImages, setSelectedImages] = useState([]);
@@ -76,17 +87,17 @@ function ClosetScreen() {
           options,
           cancelButtonIndex,
         },
-        (buttonIndex) => {
+        buttonIndex => {
           if (buttonIndex === 0) {
             // "사진 촬영" 선택
             ImagePicker.openCamera({
               mediaType: 'photo',
             })
-              .then((image) => {
+              .then(image => {
                 const newImages = [...selectedImages, image.path];
                 setSelectedImages(newImages);
               })
-              .catch((error) => {
+              .catch(error => {
                 console.log(error);
               });
           } else if (buttonIndex === 1) {
@@ -94,31 +105,35 @@ function ClosetScreen() {
             ImagePicker.openPicker({
               mediaType: 'photo',
             })
-              .then((image) => {
+              .then(image => {
                 const newImages = [...selectedImages, image.path];
                 setSelectedImages(newImages);
               })
-              .catch((error) => {
+              .catch(error => {
                 console.log(error);
               });
           }
-        }
+        },
       );
     } else {
       // 권한 요청
       const cameraRequest = request(cameraPermission);
       const storageRequest = request(storagePermission);
 
-      Promise.all([cameraRequest, storageRequest])
-        .then(([cameraResult, storageResult]) => {
-          if (cameraResult === RESULTS.GRANTED && storageResult === RESULTS.GRANTED) {
+      Promise.all([cameraRequest, storageRequest]).then(
+        ([cameraResult, storageResult]) => {
+          if (
+            cameraResult === RESULTS.GRANTED &&
+            storageResult === RESULTS.GRANTED
+          ) {
             // 권한이 승인됨
             // 이미지 피커 사용 코드 추가
           } else {
             // 사용자가 권한을 부여하지 않았거나 권한 요청이 실패한 경우
             // 사용자에게 권한이 필요하다는 알림을 표시하거나 다른 조치를 취할 수 있음
           }
-        });
+        },
+      );
     }
   };
 
@@ -128,29 +143,29 @@ function ClosetScreen() {
         <Text>옷장</Text>
         <TouchableOpacity onPress={handleAddPhoto}>
           <Image
-            source={require('D:/RN/OOTT-Android/src/assets/images/adc.png')} // 추가 아이콘 이미지
+            source={Abc} // 추가 아이콘 이미지
             style={styles.addPhotoIcon}
           />
         </TouchableOpacity>
       </View>
 
       <TabView
-        navigationState={{ index, routes }}
+        navigationState={{index, routes}}
         renderScene={renderScene} // renderScene 함수를 전달
         onIndexChange={setIndex}
-        initialLayout={{ width: layout.width }}
-        renderTabBar={(props) => (
+        initialLayout={{width: layout.width}}
+        renderTabBar={props => (
           <TabBar
             {...props}
-            indicatorStyle={{ backgroundColor: '#4949E8' }}
-            style={{ backgroundColor: '#FFF' }}
-            labelStyle={{ color: '#000' }}
+            indicatorStyle={{backgroundColor: '#4949E8'}}
+            style={{backgroundColor: '#FFF'}}
+            labelStyle={{color: '#000'}}
           />
         )}
       />
       <ScrollView>
         {selectedImages.map((image, index) => (
-          <Image key={index} source={{ uri: image }} style={styles.image} />
+          <Image key={index} source={{uri: image}} style={styles.image} />
         ))}
       </ScrollView>
     </View>
