@@ -85,6 +85,7 @@ const MainScreen = () => {
     axios.get('http://10.0.2.2:8000/api/friends/myFriends?userId=a')
       .then(function (response) {
         setfriend(response.data.length)
+        console.log(setfriend)
       })
       .catch(function (err) {
         console.log(err);
