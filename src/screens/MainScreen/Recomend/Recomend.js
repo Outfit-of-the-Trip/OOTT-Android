@@ -1,6 +1,10 @@
 import React, { useState,useRef, } from 'react';
 import { useWindowDimensions, Modal } from 'react-native';
 import SwiperFlatList from 'react-native-swiper-flatlist';
+import leftarrow from '../../../assets/images/leftarrow.png'
+import rightarrow from '../../../assets/images/rightarrow.png'
+import avatarbutton from '../../../assets/images/avatarbutton.png'
+
 import {
   View,
   StyleSheet,
@@ -12,12 +16,13 @@ import {
 import { useRoute } from '@react-navigation/native';
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import { useNavigation } from '@react-navigation/native';
+import Swiper from 'react-native-swiper'
 
 const Recomend = () => {
   const navigation = useNavigation();
-  const {params: data} = useRoute(); //여행 데이터 받아오기 
-  const traveldate = String(data.travlDate).substring(0,10); //날짜 글자 필터링
- 
+  const {params: traveldata,userdata} = useRoute(); //여행 데이터 받아오기 
+  const traveldate = String(traveldata.travlDate).substring(0,10); //날짜 글자 필터링
+  //console.log(userdata);
   const width = useWindowDimensions().width; //기기 폭 값
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -40,9 +45,9 @@ const Recomend = () => {
     return navigation.navigate('RecomendShose',travledata);}
 
   const gotoFriendsLook = () =>{ 
-      if(data.travlFriends!=null){// 같이 가는 친구가 있다면 친구창으로 이동
-        console.log(data.travlFriend);
-        navigation.navigate('FriendsLook',data)
+      if(traveldata.travlFriends!=null){// 같이 가는 친구가 있다면 친구창으로 이동
+        console.log(traveldata.travlFriend);
+        navigation.navigate('FriendsLook',traveldata)
       }
       else{
           return setIsModalVisible(!isModalVisible)
@@ -59,61 +64,60 @@ const Recomend = () => {
                 style={{justifyContent:'space-between',flexDirection:'row',width:'100%'}}>
                 <Text
                   style={styles.infodatetext}>
-                  {traveldate} Look to {data.travlPlace}
+                  {traveldate} ~ 22/07/19 Look to {traveldata.travlPlace}
                 </Text>
-                <View>
                   <TouchableOpacity>
-                  <Text
-                    style={{fontFamily:'오뮤_다예쁨체',fontSize:16,color:'black'}}>아바타로 보기</Text>
+                    <Image source={avatarbutton}/>
+                  {/* <Text
+                    style={{fontFamily:'오뮤_다예쁨체',fontSize:24,color:'black'}}>아바타로 보기</Text> */}
                   </TouchableOpacity>
-                  <TouchableOpacity>
-                  <Text
-                     style={{fontFamily:'오뮤_다예쁨체',fontSize:16,color:'black'}}>일정선택</Text>
-                  </TouchableOpacity>
-                </View>
               </View>
         </View>
     </View>
     <View style={styles.bottomline} />
     <View
       style={styles.showimgcontainer}>
-      <SwiperFlatList
-        ref={scrollRef}
-        paginationActiveColor='black'
-        paginationStyleItem={{height:10,width:10}}
-        data={RecomendGarmet}
-        renderItem={({item, index}) =>(
-          <View>
-            <Image
-            source={item.img}
-            style={[styles.showimg,{width:width}]}/>
-          </View>
-        )}/>
+      <Swiper
+        dotStyle={{backgroundColor:'grey',width:8}}
+        activeDotColor='#4949E8'
+        /* showsButtons 좌우 화살표 표시
+        nextButton={<Image style={{height:30}}source={rightarrow}/>}
+        prevButton={<Image style={{height:30}}source={leftarrow}/>} */
+        >
+        {RecomendGarmet.map((img,index) =>(
+          <View
+          key={index}>
+          <Image
+          source={img.img}
+          style={[styles.showimg,{width:width}]}/>
+        </View>
+        ))}
+     </Swiper>
     </View>
     <View style={styles.bottomline} />
     <View
       style={[styles.bottomfirstcontainer,{marginHorizontal:width-(width-70)}]}> 
      <TouchableOpacity
-      onPress={() => gotoRecomendOutter(data)}>
+      onPress={() => gotoRecomendOutter(traveldata,userdata)}>
         <Text style={styles.hashtagtext}>#아우터</Text>
     </TouchableOpacity>
     <TouchableOpacity
-      onPress={() => gotoRecomendTop(data)}>
+      onPress={() => gotoRecomendTop(traveldata,userdata)}>
         <Text style={styles.hashtagtext}>#상의</Text>
     </TouchableOpacity>
     <TouchableOpacity
-       onPress={() => gotoRecomendBottom(data)}>
+       onPress={() => gotoRecomendBottom(traveldata,userdata)}>
         <Text style={styles.hashtagtext}>#하의</Text>
     </TouchableOpacity>
     <TouchableOpacity
-       onPress={() => gotoRecomendShose(data)}>
+       onPress={() => gotoRecomendShose(traveldata,userdata)}>
         <Text style={styles.hashtagtext}>#신발</Text>
     </TouchableOpacity>
     </View>
     <View
       style={[styles.bottomsecondcontainer,{marginHorizontal:width-(width-20)}]}>
         <TouchableOpacity
-          onPress={() => gotoFriendsLook(data)}>
+          onPress={() => gotoFriendsLook(traveldata)}>
           <Text
           style={styles.samedaystext}>같은 날 친구가 입는 옷은?</Text>
            {<Modal 팝업창

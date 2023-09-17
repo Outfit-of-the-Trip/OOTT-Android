@@ -39,7 +39,7 @@ const RecomendOutter = () => {
                     style={[style.cardcontainer,{marginHorizontal:width-(width-15)}]}>
                       <View style={{flex:0.2}}>
                             <Text style={style.cardtextcontainer}>
-                                {data.usrId}님에게 추천하는 신발 코디
+                                {data.usrId}님에게 추천하는 신발
                             </Text>
                         </View>
                 <View
@@ -88,7 +88,7 @@ const RecomendOutter = () => {
                     <View
                         style={{flex:0.1}}>
                         <Text style={style.cardtextcontainer}>
-                            옷장속에 있는 유사한 코디
+                            옷장속에 있는 유사한 신발
                         </Text>
                     </View>
                     <View
