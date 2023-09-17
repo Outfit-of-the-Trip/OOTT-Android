@@ -28,6 +28,8 @@ import TravelPlace from '../../screens/OOTTScreen/TravelPlace/TravelPlace';
 import TravelFriends from '../../screens/OOTTScreen/TravelFriends/TravelFriends';
 import TravelCategory from '../../screens/OOTTScreen/TravelCategory/TravelCategory';
 import RecomendSceen from '../../screens/OOTTScreen/RecomendSceen/RecomendSceen';
+import Settings from '../../assets/images/settings.png'
+import Bottomtab from './BottomTabTest'
 
 const Stack = createNativeStackNavigator();
 
@@ -50,11 +52,12 @@ const Navigation = () => {
         }}>
         {userInfo.id ? (
           <>
-            <Stack.Screen
+            {/* <Stack.Screen
               name="bottomTab"
               component={BottomTabs}
               options={{headerShown: false}}
-            />
+            /> */}
+            <Stack.Screen name="Root" component={Bottomtab} options={{headerShown: true}}/>
             <Stack.Screen
               name="MainScreen"
               component={MainScreen}
