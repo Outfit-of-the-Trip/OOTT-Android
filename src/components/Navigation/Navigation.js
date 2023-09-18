@@ -11,14 +11,12 @@ import RecomendBottom from '../../screens/MainScreen/DetailRecomend/RecomendBott
 import RecomendShose from '../../screens/MainScreen/DetailRecomend/RecomendShose';
 import RecomendOutter from '../../screens/MainScreen/DetailRecomend/RecomendOutter';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
-import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
 import FriendInfoScreen from '../../screens/FriendScreen/FriendInfoScreen';
 import WhereToGo from '../../screens/OOTTScreen/WhereToGo';
 import WhoDoYouGoWith from '../../screens/OOTTScreen/WhoDoYouGoWith';
 import PurposOfTravel from '../../screens/OOTTScreen/PurposOfTravel';
 import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
-import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
-
+import Unity from '../unitiy';
 import {AuthContext} from '../../utils/Auth';
 
 import BottomTabs from './BottomTabNavigation';
@@ -71,6 +69,11 @@ const Navigation = () => {
               options={{headerShown: true}}
             />
             <Stack.Screen
+              name="Unity"
+              component={Unity}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
               name="RecomendOutter"
               component={RecomendOutter}
               options={{headerShown: true}}
@@ -114,10 +117,6 @@ const Navigation = () => {
               name="FriendsLook"
               component={FriendsLook}
               options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="ShoppingList"
-              component={ShoppingList}
             />
             <Stack.Screen
               name='RecomendSceen'
