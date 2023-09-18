@@ -83,9 +83,10 @@ const MainScreen = () => {
   useEffect(() => {
     //사용자 친구 데이터
     axios
-      .get('http://10.0.2.2:3000/api/friends/myFriends?userId=a')
+      .get('http://10.0.2.2:8000/api/friends/myFriends?userId=a')
       .then(function (response) {
-        setfriend(response.data.length);
+        setfriend(response.data.length)
+        console.log(setfriend)
       })
       .catch(function (err) {
         console.log(err);
@@ -95,7 +96,7 @@ const MainScreen = () => {
   useEffect(() => {
     //사용자 데이터
     axios
-      .get(`http://10.0.2.2:3000/api/test/getUserTable`)
+      .get(`http://10.0.2.2:8000/api/test/getUserTable`)
       .then(function (response) {
         setDbUsrname(response.data);
       })
@@ -107,7 +108,7 @@ const MainScreen = () => {
   // 유저가 테이블에 포함되어 있는지 확인하는 로직
   useEffect(() => {
     axios
-      .get('http://10.0.2.2:3000/api/test/getUserTable')
+      .get('http://10.0.2.2:8000/api/test/getUserTable')
       .then(function (response) {
         setFriendsInfo(response.data);
         const getUserData = friendsInfo.filter(
@@ -129,7 +130,7 @@ const MainScreen = () => {
   useEffect(() => {
     //여행정보 데이터
     axios
-      .get('http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=a')
+      .get('http://10.0.2.2:8000/api/travel/getMyTravelInfo?userId=a')
       .then(function (response) {
         settravelea(response.data.length);
         setData(response.data);

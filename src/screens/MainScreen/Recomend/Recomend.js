@@ -28,6 +28,10 @@ const Recomend = () => {
 
   const scrollRef = useRef();
 
+  const gotoUnity = () => {
+    navigation.navigate('Unity');
+  }
+
   const gotoRecomendOutter = (travledata) => {
     console.log(travledata)
     navigation.navigate('RecomendOutter',travledata);
@@ -66,7 +70,8 @@ const Recomend = () => {
                   style={styles.infodatetext}>
                   {traveldate} ~ 22/07/19 Look to {traveldata.travlPlace}
                 </Text>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={gotoUnity}>
                     <Image source={avatarbutton}/>
                   {/* <Text
                     style={{fontFamily:'오뮤_다예쁨체',fontSize:24,color:'black'}}>아바타로 보기</Text> */}

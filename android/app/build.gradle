@@ -78,6 +78,9 @@ android {
         applicationId "com.oott"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a"
+        }
         versionCode 1
         versionName "1.0"
     }
@@ -108,6 +111,8 @@ dependencies {
     implementation("com.facebook.react:react-android")
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-vector-icons')
+    implementation project(':unityLibrary')
+    implementation files("${project(':unityLibrary').projectDir}/libs/unity-classes.jar")
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.squareup.okhttp3', module:'okhttp'
