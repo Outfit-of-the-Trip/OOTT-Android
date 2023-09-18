@@ -81,19 +81,23 @@ const MainScreen = () => {
     setIsModalVisible(!isModalVisible);
   };
 
-  useEffect(() => { //사용자 친구 데이터
-    axios.get('http://10.0.2.2:8000/api/friends/myFriends?userId=a')
+  useEffect(() => {
+    //사용자 친구 데이터
+    axios
+      .get('http://10.0.2.2:8000/api/friends/myFriends?userId=a')
       .then(function (response) {
         setfriend(response.data.length)
+        console.log(setfriend)
       })
       .catch(function (err) {
         console.log(err);
       });
   }, []);
 
-
-  useEffect(() => { //사용자 데이터 
-    axios.get(`http://10.0.2.2:8000/api/test/getUserTable`)
+  useEffect(() => {
+    //사용자 데이터
+    axios
+      .get(`http://10.0.2.2:8000/api/test/getUserTable`)
       .then(function (response) {
         setDbUsrname(response.data);
       })
