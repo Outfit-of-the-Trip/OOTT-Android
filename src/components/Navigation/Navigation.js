@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Image, TouchableOpacity} from 'react-native';
+import {Button, Image, Text, TouchableOpacity} from 'react-native';
 
 import HomeScreen from '../../screens/HomeScreen/HomeScreen';
 import MainScreen from '../../screens/MainScreen/MainScreen';
@@ -13,6 +13,7 @@ import RecomendOutter from '../../screens/MainScreen/DetailRecomend/RecomendOutt
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
 import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
 import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
+import SendInfoScreen from '../../screens/MypageScreen/SendInfoScreen';
 // import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
 
 import {AuthContext} from '../../utils/Auth';
@@ -20,6 +21,7 @@ import KeywordScreen from '../../screens/MypageScreen/KeywordScreen';
 import ClosetScreen from '../../screens/MypageScreen/ClosetScreen';
 import AbataScreen from '../../screens/MypageScreen/AbataScreen';
 import Toplogo from '../../assets/images/toplogo.png';
+import Rest from '../../assets/images/rest.jpg';
 
 import TravelPlace from '../../screens/OOTTScreen/TravelPlace/TravelPlace';
 import TravelFriends from '../../screens/OOTTScreen/TravelFriends/TravelFriends';
@@ -46,19 +48,10 @@ const Navigation = () => {
           tabBarShowLabel: false,
           headerTitleAlign: 'center',
           headerTitle: mainLogo,
+          headerLeft: ({onPress}) => <Button icon="menu" title="메뉴" />,
         }}>
         {userInfo.id ? (
           <>
-            {/* <Stack.Screen
-              name="bottomTab"
-              component={BottomTabs}
-              options={{headerShown: false}}
-            /> */}
-            <Stack.Screen
-              name="Root"
-              component={Bottomtab}
-              options={{headerShown: true}}
-            />
             <Stack.Screen
               name="MainScreen"
               component={MainScreen}
@@ -134,6 +127,13 @@ const Navigation = () => {
               name="AbataScreen"
               component={AbataScreen}
               options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="SendInfoScreen"
+              component={SendInfoScreen}
+              options={{
+                headerShown: true,
+              }}
             />
           </>
         ) : (

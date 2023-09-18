@@ -78,6 +78,7 @@ const MainScreen = () => {
 
   const closeModal = () => {
     setIsModalVisible(!isModalVisible);
+    navigation.navigate('KeywordScreen');
   };
 
   useEffect(() => {
