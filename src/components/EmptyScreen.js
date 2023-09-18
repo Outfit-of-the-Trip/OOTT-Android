@@ -1,5 +1,3 @@
-import { SafeAreaView } from 'react-native-safe-area-context';
-import emptyImg from '../assets/images/emptyImg.png'
 import { useWindowDimensions } from 'react-native';
 import ex from '../assets/images/recomend3.png'
 import {

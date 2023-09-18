@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Image, TouchableOpacity} from 'react-native';
@@ -12,20 +12,27 @@ import RecomendShose from '../../screens/MainScreen/DetailRecomend/RecomendShose
 import RecomendOutter from '../../screens/MainScreen/DetailRecomend/RecomendOutter';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
 import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
-import {AuthContext} from '../../utils/Auth';
-import KeywordScreen from 'D:/RN/OOTT-Android/src/screens/MypageScreen/KeywordScreen.js';
-import ClosetScreen from 'D:/RN/OOTT-Android/src/screens/MypageScreen/ClosetScreen.js';
-import AbataScreen from 'D:/RN/OOTT-Android/src/screens/MypageScreen/AbataScreen.js';
+import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
+// import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
 
-import BottomTabs from './BottomTabNavigation';
-import Toplogo from '../../assets/images/toplogo.png'
+import {AuthContext} from '../../utils/Auth';
+import KeywordScreen from '../../screens/MypageScreen/KeywordScreen';
+import ClosetScreen from '../../screens/MypageScreen/ClosetScreen';
+import AbataScreen from '../../screens/MypageScreen/AbataScreen';
+import Toplogo from '../../assets/images/toplogo.png';
+
+import TravelPlace from '../../screens/OOTTScreen/TravelPlace/TravelPlace';
+import TravelFriends from '../../screens/OOTTScreen/TravelFriends/TravelFriends';
+import TravelCategory from '../../screens/OOTTScreen/TravelCategory/TravelCategory';
+import RecomendSceen from '../../screens/OOTTScreen/RecomendSceen/RecomendSceen';
+
+import Bottomtab from './BottomTabTest';
 
 const Stack = createNativeStackNavigator();
 
 const mainLogo = () => {
   return <Image style={{width: 72, height: 54}} source={Toplogo} />;
 };
-
 const Navigation = () => {
   // Auth 에서 받은 userInfo 값
   const {userInfo} = useContext(AuthContext);
@@ -35,22 +42,32 @@ const Navigation = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-
+          animation: 'fade_from_bottom',
           tabBarShowLabel: false,
           headerTitleAlign: 'center',
           headerTitle: mainLogo,
         }}>
         {userInfo.id ? (
           <>
-            <Stack.Screen
+            {/* <Stack.Screen
               name="bottomTab"
               component={BottomTabs}
               options={{headerShown: false}}
+            /> */}
+            <Stack.Screen
+              name="Root"
+              component={Bottomtab}
+              options={{headerShown: true}}
             />
             <Stack.Screen
               name="MainScreen"
               component={MainScreen}
               options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="OOTTScreen"
+              component={OOTTScreen}
+              options={{headerShown: true}}
             />
             <Stack.Screen
               name="Recomend"
@@ -82,9 +99,25 @@ const Navigation = () => {
               component={FriendsLook}
               options={{headerShown: true}}
             />
+            <Stack.Screen name="ShoppingList" component={ShoppingList} />
             <Stack.Screen
-              name="ShoppingList"
-              component={ShoppingList}
+              name="RecomendSceen"
+              component={RecomendSceen}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="TravelPlace"
+              component={TravelPlace}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="TravelFriends"
+              component={TravelFriends}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="TravelCategory"
+              component={TravelCategory}
               options={{headerShown: true}}
             />
             <Stack.Screen

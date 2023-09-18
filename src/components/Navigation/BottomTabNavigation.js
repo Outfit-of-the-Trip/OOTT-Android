@@ -1,6 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Image, TouchableOpacity,StyleSheet} from 'react-native';
+import {Image, StyleSheet} from 'react-native';
 
 import MainScreen from '../../screens/MainScreen/MainScreen';
 import TravelScreen from '../../screens/PhotozoneScreen/PhotozoneScreen';
@@ -28,12 +28,13 @@ const BottomTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarLabelStyle:{
+        tabBarLabelStyle: {
           fontSize: 12,
-          fontWeight:'bold'},
+          fontWeight: 'bold',
+        },
         headerTitleAlign: 'center',
         headerTitle: mainLogo,
-        tabBarActiveTintColor:'#4949E8'
+        tabBarActiveTintColor: '#4949E8',
       }}>
       <Tab.Screen
         name="홈"
@@ -90,9 +91,9 @@ const BottomTabs = () => {
 export default BottomTabs;
 
 const styles = StyleSheet.create({
-  font:{
+  font: {
     color: 'black',
     fontSize: 8,
     fontFamily: '오뮤_다예쁨체',
-  }
-})
+  },
+});
