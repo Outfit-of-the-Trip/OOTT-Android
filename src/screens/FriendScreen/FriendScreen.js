@@ -7,21 +7,18 @@ import {
   View,
   SafeAreaView,
   TextInput,
-  TouchableOpacity,
   Image,
+  ScrollView,
 } from 'react-native';
 
 import {Avatar, Button} from 'react-native-paper';
-import {FriendsList} from '../../constants/FriendList';
 import {AuthContext} from '../../utils/Auth';
-import SkeletonUI from '../../components/skeleton';
-
-import Backbuttons from '../../assets/images/backbuttonpng.png';
-import avatar from '../../assets/images/avatar.png';
+import Glass from '../../assets/images/glass.png';
 
 const FriendScreen = () => {
+  // await AsyncStorage.getItem('userInfo') 현재 로그인한 계정의 데이터를 가져올 수 있음.
   const {userInfo} = useContext(AuthContext);
-  const navigation = useNavigation();
+  console.log(userInfo);
 
   const [friendName, setFriendName] = useState('');
   const [findFriendInfo, setFindFriendInfo] = useState([]);
@@ -31,12 +28,40 @@ const FriendScreen = () => {
     setFriendName(name);
   };
 
-  //페이지 이동 네비게이션
-  const Backbutton = () => {
-    navigation.goBack();
+  //친구 추가
+  const addingFriend = async username => {
+    console.log(userInfo.nickname);
+    console.log(username.usrId);
+    try {
+      const response = await axios.post(
+        'http://10.0.2.2:3000/api/friends/addFriends',
+        {
+          reqUser: `${userInfo.nickname}`,
+          resUser: `${username.usrId}`,
+        },
+      );
+      console.log(response.data);
+    } catch (e) {
+      console.log(e);
+    }
   };
-  const moveFriendInfo = () => {
-    navigation.navigate('FriendInfoScreen', friendName);
+
+  //친구 삭제
+  const deletingFriend = async username => {
+    console.log(userInfo.nickname);
+    console.log(username.usrId);
+    try {
+      const response = await axios.post(
+        'http://10.0.2.2:3000/api/friends/deleteFriend',
+        {
+          reqUser: `${userInfo.nickname}`,
+          resUser: `${username.usrId}`,
+        },
+      );
+      console.log(response.data);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   //친구 검색 함수
@@ -46,6 +71,8 @@ const FriendScreen = () => {
       return item;
     }
   });
+
+  //모든 유저 데이터 가져오기
   useEffect(() => {
     const getFriendInfo = async () => {
       try {
@@ -53,22 +80,18 @@ const FriendScreen = () => {
           'http://10.0.2.2:3000/api/test/getUserTable',
         );
         setFindFriendInfo(response.data);
-        //console.log(findFriendInfo);
+        console.log(findFriendInfo);
       } catch (e) {
         console.log(e);
       }
     };
     getFriendInfo();
   }, []);
-  useEffect(() => {
-    console.log(userInfo);
-  }, []);
+
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.allContainer}>
       <View style={styles.InputContainer}>
-        <TouchableOpacity onPress={Backbutton}>
-          <Image style={styles.backbutton} source={Backbuttons} />
-        </TouchableOpacity>
+        <Image style={styles.searchImg} source={Glass} />
         <Text style={styles.contour}></Text>
         <TextInput
           style={styles.InputBox}
@@ -77,49 +100,54 @@ const FriendScreen = () => {
           placeholderTextColor="black"
         />
       </View>
-      {}
-      <Text style={styles.searchName}>
-        찾는 친구 이름:&nbsp;&nbsp;{friendName}
-      </Text>
-      {/* friendName이 있으면 검색해서 나온 친구의 이름을 보여주고 
-        아니라면 배열에 저장되어 있는 모든 친구의 정보를 보여주고,
-        만약 삭제 버튼을 누르면 filter 함수를 통해 그 유저의 정보만 삭제한
-        새로운 배열을 만들어서 editedFriendsList에 저장하고 화면에 바로 앞에서
-        나온 변수의 데이터를 보여준다.
-      */}
-      {friendName.length === 0 ? (
-        <View>
-          <SkeletonUI />
-          <SkeletonUI />
-          <SkeletonUI />
-          <SkeletonUI />
-        </View>
-      ) : (
-        friendsinfo.map((item, i) => (
-          <View key={i} style={styles.personRowContainer}>
-            <View style={styles.personColumnContainer}>
-              <Avatar.Image size={30} source={avatar} />
-              <Text style={styles.userId}>{item.usrId}</Text>
-            </View>
-            <View style={styles.personColumnContainer}>
-              <Text style={styles.textfont}>ID : {item.usrId}</Text>
-              <Text style={styles.textfont}>나이 : {item.usrAge}</Text>
-            </View>
-            <View style={styles.personColumnContainer}>
-              <Text style={styles.textfont}>관심 분야 :</Text>
-              <Text style={styles.textfont}>성별 : {item.usrGender}</Text>
-            </View>
-            <View style={styles.friendDeleteButton}>
-              <Button
-                onPress={moveFriendInfo}
-                mode="outlined"
-                style={styles.textfont}>
-                정보 보기
-              </Button>
-            </View>
-          </View>
-        ))
-      )}
+      <ScrollView>
+        {friendName.length === 0 ? (
+          <View></View>
+        ) : (
+          friendsinfo.map((item, i) => {
+            let userIds;
+            if (item.usrId.length > 5) {
+              userIds = item.usrId.slice(0, 4) + '..';
+            }
+            return (
+              <View key={i} style={styles.personRowContainer}>
+                <View style={styles.row}>
+                  <View style={styles.personColumnContainer}>
+                    <Avatar.Image
+                      size={50}
+                      source={{uri: item.usrProfileURL}}
+                      style={styles.avatarContainer}
+                    />
+                    <Text style={styles.userId}>
+                      {item.usrId.length > 5 ? userIds : item.usrId}
+                    </Text>
+                  </View>
+                  <View style={styles.personColumnContainer}>
+                    <Text style={styles.textfont}>ID : &nbsp;{item.usrId}</Text>
+                    <Text style={styles.textfont}>
+                      나이 : &nbsp;{item.usrAge}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.friendDeleteButton}>
+                  <Button
+                    onPress={() => addingFriend(item)}
+                    mode="contained"
+                    style={styles.addingButton}>
+                    친구 추가
+                  </Button>
+                  <Button
+                    onPress={() => deletingFriend(item)}
+                    mode="contained-tonal"
+                    style={styles.addingButton}>
+                    친구 삭제
+                  </Button>
+                </View>
+              </View>
+            );
+          })
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -127,26 +155,32 @@ const FriendScreen = () => {
 export default FriendScreen;
 
 const styles = StyleSheet.create({
+  allContainer: {
+    backgroundColor: '#E6E6E6',
+    height: '100%',
+  },
   InputContainer: {
     flexDirection: 'row',
     width: 'auto',
     alignItems: 'center',
-    borderRadius: 5,
+    borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#5F04B4',
+    borderColor: '#9F81F7',
     margin: 5,
+    backgroundColor: '#FFFFFF',
   },
-  backbutton: {
+  searchImg: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 65,
-    height: 65,
+    width: 40,
+    height: 40,
     borderRightWidth: 5,
     marginRight: 5,
+    marginLeft: 5,
   },
   contour: {
     borderRightWidth: 1,
-    fontSize: 40,
+    fontSize: 24,
     marginRight: 10,
     borderColor: '#7401DF',
   },
@@ -155,7 +189,7 @@ const styles = StyleSheet.create({
     width: '80%',
     fontFamily: '오뮤_다예쁨체',
     fontSize: 20,
-    color: 'black',
+    color: '#000000',
   },
   searchName: {
     margin: 5,
@@ -163,18 +197,16 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: 'black',
   },
-  Loading: {
-    margin: 5,
-    fontFamily: '오뮤_다예쁨체',
-    fontSize: 20,
-  },
   personRowContainer: {
     margin: 5,
-    marginTop: 10,
+    padding: 4,
+    marginTop: 5,
     borderRadius: 10,
     flexDirection: 'row',
-    borderWidth: 1,
+    borderWidth: 2,
     justifyContent: 'space-between',
+    borderColor: '#9F81F7',
+    backgroundColor: '#F2F2F2',
   },
   personColumnContainer: {
     margin: 9,
@@ -182,20 +214,35 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     fontFamily: '오뮤_다예쁨체',
   },
+  row: {
+    flexDirection: 'row',
+  },
+  avatarContainer: {
+    borderRadius: 10,
+    backgroundColor: '#F2F2F2',
+  },
   userId: {
     textAlign: 'center',
     fontFamily: '오뮤_다예쁨체',
     fontSize: 20,
-    width: 30,
+    width: 50,
+    color: 'black',
   },
   friendDeleteButton: {
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
   textfont: {
     fontFamily: '오뮤_다예쁨체',
-    fontSize: 20,
+    fontSize: 22,
+    color: '#000000',
+    marginTop: 8,
   },
-  deleteFindFriends: {
-    justifyContent: 'center',
+  addingButton: {
+    margin: 3,
+    borderColor: '#9F81F7',
+    color: '#000000',
+    borderWidth: 1.7,
+    fontSize: 15,
+    borderRadius: 10,
   },
 });

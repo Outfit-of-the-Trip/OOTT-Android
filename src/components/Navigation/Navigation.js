@@ -18,14 +18,17 @@ import PurposOfTravel from '../../screens/OOTTScreen/PurposOfTravel';
 import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
 import Unity from '../unitiy';
 import {AuthContext} from '../../utils/Auth';
-
-import BottomTabs from './BottomTabNavigation';
+import KeywordScreen from '../../screens/MypageScreen/KeywordScreen';
+import ClosetScreen from '../../screens/MypageScreen/ClosetScreen';
+import AbataScreen from '../../screens/MypageScreen/AbataScreen';
 import Toplogo from '../../assets/images/toplogo.png';
 
 import TravelPlace from '../../screens/OOTTScreen/TravelPlace/TravelPlace';
 import TravelFriends from '../../screens/OOTTScreen/TravelFriends/TravelFriends';
 import TravelCategory from '../../screens/OOTTScreen/TravelCategory/TravelCategory';
 import RecomendSceen from '../../screens/OOTTScreen/RecomendSceen/RecomendSceen';
+
+import Bottomtab from './BottomTabTest';
 
 const Stack = createNativeStackNavigator();
 
@@ -41,17 +44,22 @@ const Navigation = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          animation:'fade_from_bottom',
+          animation: 'fade_from_bottom',
           tabBarShowLabel: false,
           headerTitleAlign: 'center',
           headerTitle: mainLogo,
         }}>
         {userInfo.id ? (
           <>
-            <Stack.Screen
+            {/* <Stack.Screen
               name="bottomTab"
               component={BottomTabs}
               options={{headerShown: false}}
+            /> */}
+            <Stack.Screen
+              name="Root"
+              component={Bottomtab}
+              options={{headerShown: true}}
             />
             <Stack.Screen
               name="MainScreen"
@@ -94,35 +102,16 @@ const Navigation = () => {
               options={{headerShown: true}}
             />
             <Stack.Screen
-              name="FriendInfoScreen"
-              component={FriendInfoScreen}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="WhereToGo"
-              component={WhereToGo}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="WhoDoYouGoWith"
-              component={WhoDoYouGoWith}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="PurposOfTravel"
-              component={PurposOfTravel}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
               name="FriendsLook"
               component={FriendsLook}
               options={{headerShown: true}}
             />
+            <Stack.Screen name="ShoppingList" component={ShoppingList} />
             <Stack.Screen
               name='RecomendSceen'
               component={RecomendSceen}
-              options={{headerShown:true}}
-              />
+              options={{headerShown: true}}
+            />
             <Stack.Screen
               name="TravelPlace"
               component={TravelPlace}
@@ -136,6 +125,21 @@ const Navigation = () => {
             <Stack.Screen
               name="TravelCategory"
               component={TravelCategory}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="KeywordScreen"
+              component={KeywordScreen}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="ClosetScreen"
+              component={ClosetScreen}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="AbataScreen"
+              component={AbataScreen}
               options={{headerShown: true}}
             />
           </>
