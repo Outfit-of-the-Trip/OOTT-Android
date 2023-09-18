@@ -11,6 +11,7 @@ import Swiper from 'react-native-swiper';
 
 import Goodheartfilled from '../../assets/images/goodheartfilled-240.png';
 import Goodheart from '../../assets/images/goodheart.png';
+import {useNavigation} from '@react-navigation/native';
 
 const layouts = [
   {
@@ -137,6 +138,7 @@ const layouts = [
 ];
 
 const KeywordScreen = () => {
+  const navigation = useNavigation();
   const [currentKeywordIndex, setCurrentKeywordIndex] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // Add this state
   const [likedKeywords, setLikedKeywords] = useState([]);
@@ -242,12 +244,15 @@ const KeywordScreen = () => {
           <TouchableOpacity
             onPress={() =>
               Alert.alert('패션 키워드 설정을 완료하시겠습니까?', '', [
-                {text: '예', onPress: () => console.log('Yes')},
+                {
+                  text: '예',
+                  onPress: () => navigation.navigate('SendInfoScreen'),
+                },
                 {text: '아니오', onPress: () => console.log('No')},
               ])
             }
             style={styles.doneBtn}>
-            <Text doneBtnText>완료</Text>
+            <Text style={styles.doneBtnText}>완료</Text>
           </TouchableOpacity>
         </View>
       </View>

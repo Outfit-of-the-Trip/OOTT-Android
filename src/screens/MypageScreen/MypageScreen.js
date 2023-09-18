@@ -1,18 +1,19 @@
-import React, {useState} from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  Alert,
-  Image,
-} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {View, TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-
-import ProfileImg from '../../assets/images/profileImg.png';
+import {AuthContext} from '../../utils/Auth';
+import axios from 'axios';
+import {Drawer} from 'react-native-paper';
 
 const MypageScreen = () => {
+  const {userInfo} = useContext(AuthContext);
+  // console.log(userInfo);
+  const [entireUserInfo, setEntireUserInfo] = useState();
+  const [isVisible, setIsVisible] = useState(false);
+  const [active, setActive] = useState('');
+
   const navigation = useNavigation();
+
   const gotoKeywordScreen = () => {
     return navigation.navigate('KeywordScreen');
   };
@@ -23,59 +24,93 @@ const MypageScreen = () => {
     return navigation.navigate('AbataScreen');
   };
 
+  useEffect(() => {
+    const getallFriendInfo = async () => {
+      try {
+        const response = await axios.get(
+          'http://10.0.2.2:3000/api/test/getUserTable',
+        );
+        setEntireUserInfo(response.data);
+        const friendsData = entireUserInfo.filter(
+          item => item.usrId === userInfo.nickname,
+        );
+        // console.log(friendsData);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getallFriendInfo();
+  }, []);
+
+  useEffect(() => {
+    // console.log(entireUserInfo);
+  }, []);
+
   return (
     <View style={{flex: 3}}>
+      <Drawer.Section title="MyPage list">
+        <Drawer.Item
+          label="아바타 설정하기"
+          active={active === '아바타 설정하기'}
+          onPress={() => setActive('아바타 설정하기')}
+          icon="account-supervisor"
+        />
+        <Drawer.Item
+          label="패션 키워드 설정하기"
+          active={active === '패션 키워드 설정하기'}
+          onPress={() => setActive('패션 키워드 설정하기')}
+        />
+        <Drawer.Item
+          label="로그아웃"
+          active={active === '로그아웃'}
+          onPress={() => setActive('로그아웃')}
+        />
+      </Drawer.Section>
       <View style={styles.profileContainer}>
         <View style={styles.porfImgContainer}>
-          <Image style={styles.profileImage} source={ProfileImg} />
+          <Image
+            style={styles.profileImage}
+            source={{uri: userInfo.profileImageUrl}}
+          />
         </View>
         <View style={styles.profileList}>
-          <View style={styles.name}>
-            <Text style={styles.text}>이름</Text>
-            <Text style={styles.profContent}>양준민</Text>
+          <View style={styles.userProfileContainer}>
+            <Text style={styles.category}>Name </Text>
+            <Text style={styles.usrvalues}>{userInfo.nickname}</Text>
           </View>
-          <View style={styles.nickname}>
-            <Text style={styles.text}>닉네임</Text>
-            <Text style={styles.profContent}>user2</Text>
+          <View style={styles.userProfileContainer}>
+            <Text style={styles.category}>이메일</Text>
+            <Text style={styles.usrvalues}>{userInfo.email}</Text>
           </View>
-          <View style={styles.keyword}>
-            <Text style={styles.text}>선호하는 패션 키워드</Text>
-            <Text style={styles.profContent}>와이드 키치</Text>
+          <View style={styles.userProfileContainer}>
+            <Text style={styles.category}>선호 스타일</Text>
+            <Text style={styles.usrvalues}>와이드 키치</Text>
           </View>
         </View>
       </View>
       <View style={styles.all}>
-        <TouchableOpacity onPress={gotoAbataScreen} style={styles.abataBtn}>
+        <TouchableOpacity
+          onPress={gotoAbataScreen}
+          style={styles.buttonWithBackground}>
           <Text style={styles.btnText}>아바타 설정하기</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={gotoKeywordScreen} style={styles.keywordBtn}>
-          <Text style={styles.btnText}>패션 키워드 설정하기</Text>
+        <TouchableOpacity
+          onPress={gotoKeywordScreen}
+          style={styles.buttonWithoutBackground}>
+          <Text style={styles.btnTexts}>패션 키워드 설정하기</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={gotoClosetScreen} style={styles.closetBtn}>
+        <TouchableOpacity
+          onPress={gotoClosetScreen}
+          style={styles.buttonWithBackground}>
           <Text style={styles.btnText}>옷장 설정</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() =>
-            Alert.alert(
-              '오픈 라이센스',
-              '이거 쓰고 저거 쓰고 이것저것 스고 다섯서어어어ㅓ어어어',
-              [{text: '확인', onPress: () => console.log('OK')}],
-            )
-          }
-          style={styles.closetBtn}>
-          <Text style={styles.btnText}>라이센스</Text>
+        <TouchableOpacity style={styles.buttonWithoutBackground}>
+          <Text style={styles.btnTexts}>라이센스</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() =>
-            Alert.alert('My title', 'My msg', [
-              {text: 'Yes', onPress: () => console.log('Yes')},
-              {text: 'No', onPress: () => console.log('No')},
-            ])
-          }
-          style={styles.logoutBtn}>
+        <TouchableOpacity style={styles.buttonWithBackground}>
           <Text style={styles.btnText}>로그아웃</Text>
         </TouchableOpacity>
       </View>
@@ -91,6 +126,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
+  ModalScreen: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   porfImgContainer: {
     backgroundColor: '#FFFFFF',
     flex: 1,
@@ -101,103 +142,80 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   profileImage: {
-    width: 150,
-    height: 150,
+    width: 130,
+    height: 130,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 100,
   },
   profileList: {
-    flex: 0.8,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
     flexDirection: 'column',
     justifyContent: 'flex-start',
   },
-  name: {
-    flex: 0.2,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+  userProfileContainer: {
+    paddingVertical: 5,
   },
-  nickname: {
-    flex: 0.2,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+  category: {
+    fontSize: 15,
+    color: '#000000',
+    fontWeight: 'bold',
   },
-  keyword: {
-    flex: 0.2,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+  usrvalues: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: '#9F81F7',
   },
   profContent: {
     fontSize: 18, // 버튼 텍스트 크기
     fontWeight: '900',
   },
   all: {
-    backgroundColor: '#FFFFFF',
-    flex: 1.8,
-    justifyContent: 'flex-end',
+    flex: 2.1,
+    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'white',
   },
-  abataBtn: {
-    backgroundColor: '#FFFFFF', // 버튼 배경색
+  buttonWithBackground: {
+    width: '80%',
     paddingVertical: 10,
-    paddingHorizontal: 95,
-    borderRadius: 20, // 버튼 테두리 둥글기
-    borderWidth: 1.4, // 버튼 테두리 두께
-    borderColor: '#007AFF', // 버튼 테두리 색상
-    shadowColor: '#000', // 그림자 색상
-    shadowOffset: {width: 0, height: 2}, // 그림자 위치
-    shadowOpacity: 0.2, // 그림자 투명도
-    shadowRadius: 6, // 그림자 둥글기
-    elevation: 6, // Android의 그림자 효과
+    borderRadius: 20,
+    borderWidth: 1.4,
+    borderColor: '#7401DF',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 6,
     margin: 10,
+    backgroundColor: '#7401DF',
   },
-  keywordBtn: {
-    backgroundColor: '#FFFFFF', // 버튼 배경색
+  buttonWithoutBackground: {
+    width: '80%',
+    backgroundColor: '#FFFFFF',
     paddingVertical: 10,
-    paddingHorizontal: 70,
-    borderRadius: 20, // 버튼 테두리 둥글기
-    borderWidth: 1.4, // 버튼 테두리 두께
-    borderColor: '#007AFF', // 버튼 테두리 색상
-    shadowColor: '#000', // 그림자 색상
-    shadowOffset: {width: 0, height: 2}, // 그림자 위치
-    shadowOpacity: 0.2, // 그림자 투명도
-    shadowRadius: 6, // 그림자 둥글기
-    elevation: 6, // Android의 그림자 효과
-    margin: 10,
-  },
-  closetBtn: {
-    backgroundColor: '#FFFFFF', // 버튼 배경색
-    paddingVertical: 10,
-    paddingHorizontal: 120,
-    borderRadius: 20, // 버튼 테두리 둥글기
-    borderWidth: 1.4, // 버튼 테두리 두께
-    borderColor: '#007AFF', // 버튼 테두리 색상
-    shadowColor: '#000', // 그림자 색상
-    shadowOffset: {width: 0, height: 2}, // 그림자 위치
-    shadowOpacity: 0.2, // 그림자 투명도
-    shadowRadius: 6, // 그림자 둥글기
-    elevation: 6, // Android의 그림자 효과
-    margin: 10,
-  },
-  logoutBtn: {
-    backgroundColor: '#FFFFFF', // 버튼 배경색
-    paddingVertical: 10,
-    paddingHorizontal: 123,
-    borderRadius: 20, // 버튼 테두리 둥글기
-    borderWidth: 1.4, // 버튼 테두리 두께
-    borderColor: '#007AFF', // 버튼 테두리 색상
-    shadowColor: '#000', // 그림자 색상
-    shadowOffset: {width: 0, height: 2}, // 그림자 위치
-    shadowOpacity: 0.2, // 그림자 투명도
-    shadowRadius: 6, // 그림자 둥글기
-    elevation: 6, // Android의 그림자 효과
+    borderRadius: 20,
+    borderWidth: 1.4,
+    borderColor: '#7401DF',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 6,
     margin: 10,
   },
   btnText: {
-    color: '#007AFF', // 버튼 텍스트 색상
-    fontSize: 22, // 버튼 텍스트 크기
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 22,
+    fontWeight: '400',
+  },
+  btnTexts: {
+    textAlign: 'center',
+    color: 'black',
+    fontSize: 22,
     fontWeight: '400',
   },
 });
