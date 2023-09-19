@@ -29,10 +29,9 @@ const TravelFriends = () => {
         gotoTravelCategory()
     }
 
-
     useEffect(() => {
         const getUserFriedns = async () => {
-            axios.get(backendURL+'api/friends/myFriends?userId='+userInfo[0].nickname)
+            axios.get(backendURL+'/api/friends/myFriends?userId='+userInfo[0].nickname)
             .then(function (res) {
                 const proccessedData = res.data.map(item=>{
                     const isClicked = false
@@ -46,8 +45,10 @@ const TravelFriends = () => {
             .catch(function (error) {
                 console.log(error);
             });
+        }
 
     getUserFriedns();
+    
   }, []);
 
   const changeLook = index => {

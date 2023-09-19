@@ -12,7 +12,7 @@ import RecomendShose from '../../screens/MainScreen/DetailRecomend/RecomendShose
 import RecomendOutter from '../../screens/MainScreen/DetailRecomend/RecomendOutter';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
 import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
-import FriendInfoScreen from '../../screens/FriendScreen/FriendInfoScreen';
+// import FriendInfoScreen from '../../screens/FriendScreen/FriendInfoScreen';
 import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
 
 
@@ -42,16 +42,20 @@ const Navigation = () => {
   // 삼항연산자 사용. 만약 userInfo.id의 값이 존재한다면 MainScreen 랜더링
   return (
     <NavigationContainer>
-      <Stack.Navigator
+       <Stack.Navigator
         screenOptions={{
           animation: 'fade_from_bottom',
           tabBarShowLabel: false,
           headerTitleAlign: 'center',
           headerTitle: mainLogo,
-          headerLeft: ({onPress}) => <Button icon="menu" title="메뉴" />,
         }}>
         {userInfo.id ? (
           <>
+            <Stack.Screen
+              name="Root"
+              component={Bottomtab}
+              options={{headerShown: true}}
+            />
             <Stack.Screen
               name="MainScreen"
               component={MainScreen}
@@ -128,13 +132,13 @@ const Navigation = () => {
               component={AbataScreen}
               options={{headerShown: true}}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
               name="SendInfoScreen"
               component={SendInfoScreen}
               options={{
                 headerShown: true,
               }}
-            />
+            /> */}
           </>
         ) : (
           <Stack.Screen
