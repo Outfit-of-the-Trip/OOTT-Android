@@ -13,11 +13,7 @@ import RecomendOutter from '../../screens/MainScreen/DetailRecomend/RecomendOutt
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
 import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
 import FriendInfoScreen from '../../screens/FriendScreen/FriendInfoScreen';
-import WhereToGo from '../../screens/OOTTScreen/WhereToGo';
-import WhoDoYouGoWith from '../../screens/OOTTScreen/WhoDoYouGoWith';
-import PurposOfTravel from '../../screens/OOTTScreen/PurposOfTravel';
 import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
-// import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
 
 import {AuthContext} from '../../utils/Auth';
 
@@ -97,30 +93,6 @@ const Navigation = () => {
               name="FriendInfoScreen"
               component={FriendInfoScreen}
               options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="WhereToGo"
-              component={WhereToGo}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="WhoDoYouGoWith"
-              component={WhoDoYouGoWith}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="PurposOfTravel"
-              component={PurposOfTravel}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="FriendsLook"
-              component={FriendsLook}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="ShoppingList"
-              component={ShoppingList}
             />
             <Stack.Screen
               name='RecomendSceen'
