@@ -18,7 +18,7 @@ import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
 
 import {AuthContext} from '../../utils/Auth';
 import KeywordScreen from '../../screens/MypageScreen/KeywordScreen';
-import ClosetScreen from '../../screens/MypageScreen/ClosetScreen';
+import ClosetScreen from '../../screens/MypageScreen/ClosetScreen/ClosetScreen';
 import AbataScreen from '../../screens/MypageScreen/AbataScreen';
 import Toplogo from '../../assets/images/toplogo.png';
 import Rest from '../../assets/images/rest.jpg';
