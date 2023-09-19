@@ -1,139 +1,136 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {AuthContext} from '../../utils/Auth';
+import {useNavigation, NavigationContainer} from '@react-navigation/native';
+import { AuthContext,  } from '../../utils/Auth';
 import axios from 'axios';
-import {Drawer} from 'react-native-paper';
+import { backendURL } from '../../constants/url';
+import { NativeBaseProvider, Pressable, HamburgerIcon, Menu, Box } from "native-base";
+import ClosetScreen from './ClosetScreen/ClosetScreen';
+import KeywordScreen from './KeywordScreen';
+
+
+import {
+  View, 
+  TouchableOpacity, 
+  Text, 
+  StyleSheet, 
+  Image,
+  Button,
+} from 'react-native';
+
 
 const MypageScreen = () => {
-  const {userInfo} = useContext(AuthContext);
-  // console.log(userInfo);
-  const [entireUserInfo, setEntireUserInfo] = useState();
-  const [isVisible, setIsVisible] = useState(false);
-  const [active, setActive] = useState('');
 
   const navigation = useNavigation();
 
-  const gotoKeywordScreen = () => {
+  const gotoTravelPlace = () => {
     return navigation.navigate('KeywordScreen');
   };
-  const gotoClosetScreen = () => {
-    return navigation.navigate('ClosetScreen');
-  };
-  const gotoAbataScreen = () => {
-    return navigation.navigate('AbataScreen');
-  };
 
-  useEffect(() => {
-    const getallFriendInfo = async () => {
-      try {
-        const response = await axios.get(
-          'http://10.0.2.2:3000/api/test/getUserTable',
-        );
-        setEntireUserInfo(response.data);
-        const friendsData = entireUserInfo.filter(
-          item => item.usrId === userInfo.nickname,
-        );
-        // console.log(friendsData);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    getallFriendInfo();
-  }, []);
+  const {userInfo} = useContext(AuthContext);
+  const {logout} = useContext(AuthContext);
 
-  useEffect(() => {
-    // console.log(entireUserInfo);
-  }, []);
+  const MenuSlide = () => {  
+    return(
+      <Box h="10%" w="10%" alignItems="flex-start">
+      <Menu w="170" trigger={triggerProps => {
+        return <Pressable {...triggerProps}>
+                <HamburgerIcon size={30}/>
+              </Pressable>;
+      }}>
+          <Menu.Item onPress={gotoTravelPlace}>패션 키워드 설정</Menu.Item>
+          <Menu.Item onPress={()=>console.log("아바타")}>아바타 설정</Menu.Item>
+          <Menu.Item onPress={logout}>로그아웃</Menu.Item>
+        </Menu>
+        </Box>
+    )
+  }
 
   return (
-    <View style={{flex: 3}}>
-      <Drawer.Section title="MyPage list">
-        <Drawer.Item
-          label="아바타 설정하기"
-          active={active === '아바타 설정하기'}
-          onPress={() => setActive('아바타 설정하기')}
-          icon="account-supervisor"
-        />
-        <Drawer.Item
-          label="패션 키워드 설정하기"
-          active={active === '패션 키워드 설정하기'}
-          onPress={() => setActive('패션 키워드 설정하기')}
-        />
-        <Drawer.Item
-          label="로그아웃"
-          active={active === '로그아웃'}
-          onPress={() => setActive('로그아웃')}
-        />
-      </Drawer.Section>
-      <View style={styles.profileContainer}>
-        <View style={styles.porfImgContainer}>
-          <Image
-            style={styles.profileImage}
-            source={{uri: userInfo.profileImageUrl}}
-          />
+    <NativeBaseProvider>
+      <View style={styles.rootContainer}>
+        
+        <View style={styles.menuContainer}>
+            <MenuSlide />
         </View>
-        <View style={styles.profileList}>
-          <View style={styles.userProfileContainer}>
-            <Text style={styles.category}>Name </Text>
-            <Text style={styles.usrvalues}>{userInfo.nickname}</Text>
+       
+
+        <View style={styles.profileContainer}>
+
+
+          <View style={styles.porfImgContainer}>
+            <Image
+              style={styles.profileImage}
+              source={{uri: userInfo.profileImageUrl}}
+            />
           </View>
-          <View style={styles.userProfileContainer}>
-            <Text style={styles.category}>이메일</Text>
-            <Text style={styles.usrvalues}>{userInfo.email}</Text>
+
+          <View style={styles.profileList}>
+
+            <View style={styles.userProfileContainer}>
+              <Text style={styles.category}>Name </Text>
+              <Text style={styles.usrvalues}>{userInfo.nickname}</Text>
+            </View>
+
+            <View style={styles.userProfileContainer}>
+              <Text style={styles.category}>이메일</Text>
+              <Text style={styles.usrvalues}>{userInfo.email}</Text>
+            </View>
+
+            <View style={styles.userProfileContainer}>
+              <Text style={styles.category}>선호 스타일</Text>
+              <Text style={styles.usrvalues}>와이드 키치</Text>
+            </View>
+
           </View>
-          <View style={styles.userProfileContainer}>
-            <Text style={styles.category}>선호 스타일</Text>
-            <Text style={styles.usrvalues}>와이드 키치</Text>
-          </View>
+
         </View>
-      </View>
-      <View style={styles.all}>
-        <TouchableOpacity
-          onPress={gotoAbataScreen}
-          style={styles.buttonWithBackground}>
-          <Text style={styles.btnText}>아바타 설정하기</Text>
-        </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={gotoKeywordScreen}
-          style={styles.buttonWithoutBackground}>
-          <Text style={styles.btnTexts}>패션 키워드 설정하기</Text>
-        </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={gotoClosetScreen}
-          style={styles.buttonWithBackground}>
-          <Text style={styles.btnText}>옷장 설정</Text>
-        </TouchableOpacity>
+        <View style={styles.closetContainer}>
+          <ClosetScreen/>
+        </View>
 
-        <TouchableOpacity style={styles.buttonWithoutBackground}>
-          <Text style={styles.btnTexts}>라이센스</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonWithBackground}>
-          <Text style={styles.btnText}>로그아웃</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+
+        </View>
+    </NativeBaseProvider>
+    
+   
+
   );
 };
 
 const styles = StyleSheet.create({
+  rootContainer:{
+    backgroundColor: "white",
+    flex:1,
+  },
+
+  menuContainer:{
+    flex: 0.5,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+  },
   profileContainer: {
-    backgroundColor: '#FFFFFF',
-    flex: 1.2,
+    flex: 3,
     justifyContent: 'flex-start',
     alignItems: 'center',
     flexDirection: 'row',
   },
+  closetContainer: {
+    flex: 8,
+  },
+
+  menuButton: {
+    margin: 10,
+    backgroundColor: "skyblue"
+  },
+
   ModalScreen: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   porfImgContainer: {
-    backgroundColor: '#FFFFFF',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -149,7 +146,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   profileList: {
-    flex: 1,
+    flex: 1.3,
     justifyContent: 'center',
     alignItems: 'flex-start',
     flexDirection: 'column',
@@ -160,11 +157,10 @@ const styles = StyleSheet.create({
   },
   category: {
     fontSize: 15,
-    color: '#000000',
     fontWeight: 'bold',
   },
   usrvalues: {
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#9F81F7',
   },
@@ -172,12 +168,7 @@ const styles = StyleSheet.create({
     fontSize: 18, // 버튼 텍스트 크기
     fontWeight: '900',
   },
-  all: {
-    flex: 2.1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-  },
+
   buttonWithBackground: {
     width: '80%',
     paddingVertical: 10,
@@ -194,7 +185,6 @@ const styles = StyleSheet.create({
   },
   buttonWithoutBackground: {
     width: '80%',
-    backgroundColor: '#FFFFFF',
     paddingVertical: 10,
     borderRadius: 20,
     borderWidth: 1.4,
