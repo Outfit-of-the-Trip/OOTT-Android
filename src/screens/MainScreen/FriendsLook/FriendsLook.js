@@ -11,7 +11,6 @@ import {
     useWindowDimensions
   } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import SwiperFlatList from 'react-native-swiper-flatlist';
 import React,{useState} from 'react';
 import {CollapseBody} from 'accordion-collapse-react-native';
 import Swiper from 'react-native-swiper'
@@ -100,9 +99,6 @@ const FriendsLook = () => {
             <Swiper
         dotStyle={{backgroundColor:'grey',width:8}}
         activeDotColor='#4949E8'
-        /* showsButtons 좌우 화살표 표시
-        nextButton={<Image style={{height:30}}source={rightarrow}/>}
-        prevButton={<Image style={{height:30}}source={leftarrow}/>} */
         >
         {RecomendGarmet.map((img,index) =>(
           <View
