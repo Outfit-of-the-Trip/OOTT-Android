@@ -4,7 +4,8 @@ import {userInfoState, friendsState} from '../../../states/atoms';
 import axios from 'axios';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import {useNavigation} from '@react-navigation/native';
-import {Divider} from '@rneui/themed';
+import { Divider } from '@rneui/themed';
+import { backendURL } from '../../../constants/url';
 
 import {
   StyleSheet,
@@ -16,39 +17,36 @@ import {
 } from 'react-native';
 
 const TravelFriends = () => {
-  const navigation = useNavigation();
+    const navigation = useNavigation()
 
-  const saveFriendsData = useSetRecoilState(friendsState);
+    const saveFriendsData = useSetRecoilState(friendsState)
 
-  const gotoTravelCategory = () => {
-    return navigation.navigate('TravelCategory');
-  };
-  const pressNextButton = () => {
-    saveFriendsData(friendsData);
-    gotoTravelCategory();
-  };
-
-  useEffect(() => {
-    const getUserFriedns = async () => {
-      axios
-        .get(
-          'http://10.0.2.2:3000/api/friends/myFriends?userId=' +
-            userInfo[0].nickname,
-        )
-        .then(function (res) {
-          const proccessedData = res.data.map(item => {
-            const isClicked = false;
-            const look = 'None';
-            return {...item, isClicked, look};
-          });
-
-          setFriendsData(proccessedData);
-          setIsLoding(false);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+    const gotoTravelCategory = () => {
+        return navigation.navigate('TravelCategory');
     };
+    const pressNextButton = () => {
+        saveFriendsData(friendsData)
+        gotoTravelCategory()
+    }
+
+
+    useEffect(() => {
+        const getUserFriedns = async () => {
+            axios.get(backendURL+'api/friends/myFriends?userId='+userInfo[0].nickname)
+            .then(function (res) {
+                const proccessedData = res.data.map(item=>{
+                    const isClicked = false
+                    const look = "None"
+                    return {...item, isClicked, look}
+                })
+                
+                setFriendsData(proccessedData)
+                setIsLoding(false)
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
     getUserFriedns();
   }, []);
 

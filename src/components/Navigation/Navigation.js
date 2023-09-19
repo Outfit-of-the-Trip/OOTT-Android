@@ -12,9 +12,9 @@ import RecomendShose from '../../screens/MainScreen/DetailRecomend/RecomendShose
 import RecomendOutter from '../../screens/MainScreen/DetailRecomend/RecomendOutter';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
 import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
+import FriendInfoScreen from '../../screens/FriendScreen/FriendInfoScreen';
 import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
-import SendInfoScreen from '../../screens/MypageScreen/SendInfoScreen';
-// import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
+
 
 import {AuthContext} from '../../utils/Auth';
 import KeywordScreen from '../../screens/MypageScreen/KeywordScreen';
