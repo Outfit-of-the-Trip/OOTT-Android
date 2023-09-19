@@ -1,10 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {useNavigation, NavigationContainer} from '@react-navigation/native';
-import { AuthContext } from '../../utils/Auth';
+import { AuthContext,  } from '../../utils/Auth';
 import axios from 'axios';
 import { backendURL } from '../../constants/url';
 import { NativeBaseProvider, Pressable, HamburgerIcon, Menu, Box } from "native-base";
 import ClosetScreen from './ClosetScreen/ClosetScreen';
+import KeywordScreen from './KeywordScreen';
 
 
 import {
@@ -18,7 +19,15 @@ import {
 
 
 const MypageScreen = () => {
+
+  const navigation = useNavigation();
+
+  const gotoTravelPlace = () => {
+    return navigation.navigate('KeywordScreen');
+  };
+
   const {userInfo} = useContext(AuthContext);
+  const {logout} = useContext(AuthContext);
 
   const MenuSlide = () => {  
     return(
@@ -28,9 +37,9 @@ const MypageScreen = () => {
                 <HamburgerIcon size={30}/>
               </Pressable>;
       }}>
-          <Menu.Item onPress={()=>console.log("키워드")}>패션 키워드 설정</Menu.Item>
+          <Menu.Item onPress={gotoTravelPlace}>패션 키워드 설정</Menu.Item>
           <Menu.Item onPress={()=>console.log("아바타")}>아바타 설정</Menu.Item>
-          <Menu.Item onPress={()=>console.log("로그아웃")}>로그아웃</Menu.Item>
+          <Menu.Item onPress={logout}>로그아웃</Menu.Item>
         </Menu>
         </Box>
     )
@@ -108,7 +117,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   closetContainer: {
-    flex: 7,
+    flex: 8,
   },
 
   menuButton: {

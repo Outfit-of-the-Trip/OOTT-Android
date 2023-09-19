@@ -27,16 +27,15 @@ const Closet = () => {
 
     const renderImage = ({ item, index }) => {
         return(
-                <Image
-                    source={{uri: item}}
-                    style={{width: 120, height: 120, borderRadius: 10, margin: 6}}
-                />
+            <Image
+                source={{uri: item}}
+                style={{width: 120, height: 120, borderRadius: 10, margin: 6}}
+            />
         )
       }
 
     return(
-        <View style={styles.rootcontainer}>
-
+        <>
             <View style={styles.plusButton}>
                 <Icon
                     name="plus"
@@ -54,18 +53,14 @@ const Closet = () => {
                     renderItem={ renderImage }
                 ></FlatList>
             </View>
-
-        </View>
+        </>
     )
 }
 
 const styles = StyleSheet.create({
-    rootcontainer:{
-        flex:1,
-    },
     plusButton:{
         marginVertical:10,
-        marginRight: 10,
+        marginRight: 15,
         alignItems: "flex-end"
 
     },
