@@ -7,10 +7,10 @@ dependencies {
 }
 
 android {
-    ndkPath "C:/Program Files/unity editor/2022.3.8f1/Editor/Data/PlaybackEngines/AndroidPlayer/NDK"
-
-    compileSdkVersion 32
-    buildToolsVersion '32.0.0'
+    ndkPath "C://Users//jsu54//AppData//Local//Android//Sdk//ndk//23.1.7779620"
+    ndkVersion = "23.1.7779620"
+    compileSdkVersion 33
+    buildToolsVersion '33.0.2'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
