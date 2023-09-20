@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -12,10 +12,12 @@ import Swiper from 'react-native-swiper';
 import Goodheartfilled from '../../assets/images/goodheartfilled-240.png';
 import Goodheart from '../../assets/images/goodheart.png';
 import {useNavigation} from '@react-navigation/native';
+import {Avatar} from '@rneui/themed';
+import axios from 'axios'
 
 const layouts = [
   {
-    keyword: '#포말',
+    keyword: 'formal',
     images: [
       'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
       'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
@@ -26,7 +28,7 @@ const layouts = [
     ],
   },
   {
-    keyword: '#댄디',
+    keyword: 'dandy',
     images: [
       'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
       'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
@@ -37,7 +39,7 @@ const layouts = [
     ],
   },
   {
-    keyword: '#캐주얼',
+    keyword: 'casual',
     images: [
       'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
       'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
@@ -48,7 +50,7 @@ const layouts = [
     ],
   },
   {
-    keyword: '#스트릿',
+    keyword: 'street',
     images: [
       'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
       'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
@@ -70,7 +72,7 @@ const layouts = [
     ],
   },
   {
-    keyword: '#빈티지',
+    keyword: 'sporty',
     images: [
       'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
       'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
@@ -81,7 +83,62 @@ const layouts = [
     ],
   },
   {
-    keyword: '#모던',
+    keyword: 'vintage',
+    images: [
+      'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.nkvH3Uds4vJtH1AmYxhwVAHaHa?w=209&h=209&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.TEZ5mKQHg3pvFztiGv9yOgHaHa?w=195&h=195&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
+      // Add more image URLs here.
+    ],
+  },
+  {
+    keyword: 'modern',
+    images: [
+      'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.nkvH3Uds4vJtH1AmYxhwVAHaHa?w=209&h=209&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.TEZ5mKQHg3pvFztiGv9yOgHaHa?w=195&h=195&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
+      // Add more image URLs here.
+    ],
+  },
+  {
+    keyword: 'feminine',
+    images: [
+      'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.nkvH3Uds4vJtH1AmYxhwVAHaHa?w=209&h=209&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.TEZ5mKQHg3pvFztiGv9yOgHaHa?w=195&h=195&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
+      // Add more image URLs here.
+    ],
+  },
+  {
+    keyword: 'minimalism',
+    images: [
+      'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.nkvH3Uds4vJtH1AmYxhwVAHaHa?w=209&h=209&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.TEZ5mKQHg3pvFztiGv9yOgHaHa?w=195&h=195&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
+      // Add more image URLs here.
+    ],
+  },
+  {
+    keyword: 'Amekazi',
+    images: [
+      'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.nkvH3Uds4vJtH1AmYxhwVAHaHa?w=209&h=209&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.TEZ5mKQHg3pvFztiGv9yOgHaHa?w=195&h=195&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
+      // Add more image URLs here.
+    ],
+  },
+  {
+    keyword: 'classic',
     images: [
       'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
       'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
@@ -142,7 +199,8 @@ const KeywordScreen = () => {
   const [currentKeywordIndex, setCurrentKeywordIndex] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // Add this state
   const [likedKeywords, setLikedKeywords] = useState([]);
-  const [likesCount, setLikesCount] = useState(0);
+  const [likesCount, setLikesCount] = useState(1);
+  const [ispost,setpost] = useState(false);
 
   const handleNextKeyword = () => {
     if (currentKeywordIndex < layouts.length - 1) {
@@ -165,14 +223,24 @@ const KeywordScreen = () => {
   const keyword = layouts[currentKeywordIndex].keyword;
   const keywordImages = layouts[currentKeywordIndex].images;
 
-  const handleLikeToggle = () => {
-    if (likedKeywords.includes(keyword)) {
+  const handleLikeToggle =  () => {
+    if (likedKeywords.includes(keyword)) { //좋아요 해제되었을 때
       setLikedKeywords(likedKeywords.filter(kw => kw !== keyword));
       setLikesCount(likesCount - 1);
+       /* const response = await axios.post(apiURL/{likesCount}) 
+        */
     } else {
-      if (likedKeywords.length < 3) {
+      if (likedKeywords.length < 3) { // 좋아요 눌렸을 때
         setLikedKeywords([...likedKeywords, keyword]);
         setLikesCount(likesCount + 1);
+        /* console.log(keyword); // 키워드 */ 
+        console.log(likesCount); //
+        const updateStyle =`usrStyle${likesCount.toString()}` //태그칼럼명맞추기
+        console.log(updateStyle)
+        /* const response = await axios.post(apiURL/{likesCount},{
+           : keyword
+        });  */
+        
       } else {
         // Show a message or handle the case where the user tries to like more than 3 keywords
         // You can display a toast, alert, or disable the like button here.
@@ -196,14 +264,16 @@ const KeywordScreen = () => {
   return (
     <View style={styles.all}>
       <View style={styles.textContainer}>
-        <Text style={styles.text}>
+        <Avatar
+          size={50}/>
+        <Text style={[styles.text,{marginLeft:'5%'}]}>
           맘에 드는 키워드를 3개까지 선택해 보세요!
         </Text>
       </View>
 
       <View style={styles.layout1}>
         <View style={styles.keywordContainer}>
-          <Text style={styles.keyword}>{keyword}</Text>
+          <Text style={styles.keyword}>#{keyword}</Text>
         </View>
 
         <View style={styles.ImgContainer}>
@@ -262,29 +332,27 @@ const KeywordScreen = () => {
 
 const styles = StyleSheet.create({
   all: {
-    flex: 1,
+    flex: 3,
     backgroundColor: '#FFFFFF',
   },
   textContainer: {
-    backgroundColor: '#FFFFFF',
     flex: 0.1,
-    justifyContent: 'center',
+    flexDirection:'row',
     alignItems: 'center',
+    alignContent:'center'
   },
   text: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: 16,
-    fontWeight: 'normal',
+    fontFamily:'오뮤_다예쁨체',
+    fontSize: 20,
   },
   layout1: {
     flex: 1,
   },
   keywordContainer: {
-    borderBlockColor: '#FFFFFF',
     flex: 0.1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor:'red'
   },
   keyword: {
     justifyContent: 'center',
@@ -296,7 +364,7 @@ const styles = StyleSheet.create({
   ImgContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1,
+    flex: 0.5,
   },
   slide: {
     flex: 1,
@@ -305,8 +373,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bottom: {
-    backgroundColor: '#FFFFFF',
-    flex: 0.3,
+    flex: 0.1,
     flexDirection: 'column',
   },
   ControlView: {
@@ -343,7 +410,6 @@ const styles = StyleSheet.create({
   },
   doneBtnView: {
     flex: 0.5,
-    backgroundColor: '#FFFFFF',
     flexDirection: 'row',
     alignItems: 'flex-end',
   },

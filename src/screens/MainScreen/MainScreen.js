@@ -1,11 +1,11 @@
-import React, {useState,useEffect,useContext,useLayoutEffect} from 'react';
+import React, {useState, useEffect, useContext, useLayoutEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import { useWindowDimensions } from 'react-native';
-import { Avatar } from '@rneui/themed';
+import {useWindowDimensions} from 'react-native';
+import {Avatar} from '@rneui/themed';
 import axios from 'axios';
 import more from '../../assets/images/more.png';
-import { AuthContext } from '../../utils/Auth';
-import { BlurView } from '@react-native-community/blur';
+import {AuthContext} from '../../utils/Auth';
+import FirstLogin from '../../components/FirstLogin';
 
 import {
   View,
@@ -15,32 +15,27 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
-  Modal
 } from 'react-native';
 import EmptyScreen from '../../components/EmptyScreen';
-import recomendOOTT from '../../assets/images/recomendOOTT.png';
 
 
 const MainScreen = () => {
-  const{userInfo} = useContext(AuthContext);
+  const {userInfo} = useContext(AuthContext);
   const navigation = useNavigation();
   const width = useWindowDimensions().width; //기기 넓이
 
-  const [data,setData] = useState([]);
+  const [data, setData] = useState([]);
   const [travelea, settravelea] = useState(); //등록된 여행 개수
-  const [friend,setfriend] = useState();
+  const [friend, setfriend] = useState();
   const [dbUsrname, setDbUsrname] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [friendsInfo, setFriendsInfo] = useState([]);
+  const [isfirstlogin,setfirstlogin] = useState();
 
   const gotoRecomend = (travledata) => {
     navigation.navigate('Recomend', travledata,userInfo);
   };
   const gotoFrineds = () =>{
     return navigation.navigate('친구')
-  }
-  const gotoOOTT = () =>{
-    return navigation.navigate('OOTTScreen')
   }
   
   const translate = (item) =>{ // 날짜 정리 메서드
@@ -49,55 +44,11 @@ const MainScreen = () => {
     return input;
   }
   
-  const RecomendModal = (isvisible) =>{
-    return(
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={isModalVisible}
-    >
-      <BlurView
-        style={{ zIndex:5,flex:1}}
-        blurType="light" // Change blurType as needed (light, dark, extra light)
-        blurAmount={5}
-      >
-        <View
-          style={{zIndex:10,flex:1,alignContent:'center',alignItems:'center',justifyContent:'center'}}>
-            <View
-              style={{flex:0.8,justifyContent:'center'}}>
-              <Image 
-                style={{marginHorizontal:width-20}}
-                source={recomendOOTT}/>
-            </View>
-            <View
-              style={{flex:0.2,justifyContent:'center',alignItems:'center'}}>
-              <Text
-                style={styles.modalfont}>환영합니다 ! 처음 로그인하시네요</Text>
-              <Text
-              style={styles.modalfont}>기본 정보를 등록하시고 OOTT를 사용하세요!</Text>
-              <TouchableOpacity 
-                onPress={gotoOOTT}>
-                  <Text
-                    style={styles.modalfont}>이동하기</Text>
-                </TouchableOpacity> 
-              </View>
-        </View>
-      </BlurView>
-    </Modal>
-
-    )
-  }
-
-  const closeModal = () => {
-    setIsModalVisible(!isModalVisible);
-    navigation.navigate('KeywordScreen');
-  };
 
   useEffect(() => { //사용자 친구 데이터
-    axios.get('http://10.0.2.2:8000/api/friends/myFriends?userId=a')
+    axios.get('http://10.0.2.2:8000/api/friends/myFriends?userId=정성욱')
       .then(function (response) {
         setfriend(response.data.length)
-        console.log(response.data)
       })
       .catch(function (err) {
         console.log(err);
@@ -109,34 +60,17 @@ const MainScreen = () => {
     axios.get(`http://10.0.2.2:8000/api/test/getUserTable`)
       .then(function (response) {
         setDbUsrname(response.data);
+        setfirstlogin(response.data.usrUpdateAt)
+        console.log(isfirstlogin);
       })
       .catch(function (err) {
         console.log(err);
       });
   }, []);
 
-   // 유저가 테이블에 포함되어 있는지 확인하는 로직
-  useEffect(() => {
-    axios.get('http://10.0.2.2:8000/api/users/getUserInfo?userId=admin')
-    .then(function (response) {
-      setFriendsInfo(response.data);
-      const getUserData = friendsInfo.filter(
-        item => item.profile_nickname === userInfo.nickname,
-      );
-      if(getUserData.length<1){
-        setIsModalVisible(true)
-      }else{
-        setIsModalVisible(false)
-      }
-      
-    })
-    .catch(function (e) {
-      console.log(e);
-    });
-  }, []); 
 
   useEffect(() => { //여행정보 데이터
-    axios.get('http://10.0.2.2:8000/api/travel/getMyTravelInfo?userId=a')
+    axios.get('http://10.0.2.2:8000/api/travel/getMyTravelInfo?userId=정성욱')
       .then(function (response) {
         settravelea(response.data.length)
         setData(response.data);
@@ -145,6 +79,8 @@ const MainScreen = () => {
         console.log(err);
       });
   }, []);
+
+
 
   const Showlog = () =>{
     if(travelea>0){
@@ -176,7 +112,6 @@ const MainScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-    <RecomendModal isvisible={isModalVisible}/>
     <View style={styles.profile}>
       <View
         style={styles.profileimgconatiner}>
@@ -215,7 +150,10 @@ const MainScreen = () => {
     <View style={styles.bottomline} />
     <View
       style={{flex:4.6}}>
-    <Showlog/>
+    {isfirstlogin==!null?(
+      <Showlog/>):(
+      <FirstLogin/>
+    )}
     </View>
   </SafeAreaView>);
 

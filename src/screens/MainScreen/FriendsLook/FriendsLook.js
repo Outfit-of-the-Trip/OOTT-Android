@@ -1,19 +1,15 @@
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import {
     View,
-    FlatList,
     StyleSheet,
     Text,
     SafeAreaView,
     Image,
     TouchableOpacity,
-    Modal,
     useWindowDimensions
   } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import SwiperFlatList from 'react-native-swiper-flatlist';
 import React,{useState} from 'react';
-import {CollapseBody} from 'accordion-collapse-react-native';
 import Swiper from 'react-native-swiper'
 import { Avatar } from '@rneui/themed';
 

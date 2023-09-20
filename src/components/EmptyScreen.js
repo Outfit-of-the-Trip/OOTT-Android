@@ -1,11 +1,12 @@
 import { useWindowDimensions } from 'react-native';
 import ex from '../assets/images/recomend3.png'
+import recomendOOTT from '../assets/images/recomendOOTT.png';
 import {
     View,
     StyleSheet,
     Text,
     Image,
-    ScrollView,
+    ScrollView
   } from 'react-native';
 
 const EmptyScreen = () => { //여행일정 아무것도 추가 안되어있을때 화면 , 컴포넌트로 빼기
@@ -47,8 +48,9 @@ const EmptyScreen = () => { //여행일정 아무것도 추가 안되어있을�
               </ScrollView>
         </View>
       </View>
-    )
-  }
+    )  
+}
+  
 
   const styles = StyleSheet.create({
     container:{
@@ -68,6 +70,16 @@ const EmptyScreen = () => { //여행일정 아무것도 추가 안되어있을�
       fontFamily:'오뮤_다예쁨체',
       fontSize:16,
       color:'black'
+    },
+    fontblack:{
+      fontFamily:'오뮤_다예쁨체',
+      fontSize:24,
+      color:'black'
+    },
+    fontmove:{
+      fontFamily:'오뮤_다예쁨체',
+      fontSize:20,
+      color:'#4949E8'
     }
 
   })
