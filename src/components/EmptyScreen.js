@@ -86,27 +86,3 @@ const EmptyScreen = () => { //여행일정 아무것도 추가 안되어있을�
 
 
 export default EmptyScreen
-
-
-
-
-{/* <View
-        style={styles.container}>
-        <Image source={emptyImg} style={styles.img}/>
-        <Text style={styles.text}>여행 일정을 추가하세요</Text>
-        </View> 
-    container:{
-        flex:2,
-        alignItems:'center',
-        marginTop:130
-    },
-    img:{
-        flex:1,
-        resizeMode:'contain' 
-    },
-    text:{
-        color: 'black',
-        fontSize: 16,
-        fontFamily: 'ONE MOBILE OTF REGULAR', 
-    }
-      */}

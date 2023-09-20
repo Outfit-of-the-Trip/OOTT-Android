@@ -132,6 +132,13 @@ const Navigation = () => {
               component={AbataScreen}
               options={{headerShown: true}}
             />
+            {/* <Stack.Screen
+              name="SendInfoScreen"
+              component={SendInfoScreen}
+              options={{
+                headerShown: true,
+              }}
+            /> */}
           </>
         ) : (
           <Stack.Screen

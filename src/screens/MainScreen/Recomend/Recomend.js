@@ -1,7 +1,5 @@
 import React, { useState,useRef, } from 'react';
 import { useWindowDimensions, Modal } from 'react-native';
-import leftarrow from '../../../assets/images/leftarrow.png'
-import rightarrow from '../../../assets/images/rightarrow.png'
 import avatarbutton from '../../../assets/images/avatarbutton.png'
 
 import {
@@ -51,7 +49,6 @@ const Recomend = () => {
       else{
           return setIsModalVisible(!isModalVisible)
   };}
-
   
   return (
    <SafeAreaView
