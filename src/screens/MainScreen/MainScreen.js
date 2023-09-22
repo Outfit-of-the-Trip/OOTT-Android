@@ -5,6 +5,7 @@ import {Avatar} from '@rneui/themed';
 import axios from 'axios';
 import more from '../../assets/images/more.png';
 import {AuthContext} from '../../utils/Auth';
+
 import FirstLogin from '../../components/FirstLogin';
 
 import {
@@ -46,7 +47,7 @@ const MainScreen = () => {
   
 
   useEffect(() => { //사용자 친구 데이터
-    axios.get('http://10.0.2.2:8000/api/friends/myFriends?userId=정성욱')
+    axios.get('http://10.0.2.2:3000/api/friends/myFriends?userId=정성욱')
       .then(function (response) {
         setfriend(response.data.length)
       })
@@ -57,7 +58,7 @@ const MainScreen = () => {
 
 
   useEffect(() => { //사용자 데이터 
-    axios.get(`http://10.0.2.2:8000/api/test/getUserTable`)
+    axios.get(`http://10.0.2.2:3000/api/test/getUserTable`)
       .then(function (response) {
         setDbUsrname(response.data);
         setfirstlogin(response.data.usrUpdateAt)
@@ -70,7 +71,7 @@ const MainScreen = () => {
 
 
   useEffect(() => { //여행정보 데이터
-    axios.get('http://10.0.2.2:8000/api/travel/getMyTravelInfo?userId=정성욱')
+    axios.get('http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=정성욱')
       .then(function (response) {
         settravelea(response.data.length)
         setData(response.data);

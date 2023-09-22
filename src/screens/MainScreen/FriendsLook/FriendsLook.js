@@ -6,7 +6,10 @@ import {
     SafeAreaView,
     Image,
     TouchableOpacity,
-    useWindowDimensions
+    useWindowDimensions,
+    Modal,
+    CollapseBody,
+    FlatList
   } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import React,{useState} from 'react';

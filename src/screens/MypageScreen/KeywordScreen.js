@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,8 @@ import Goodheartfilled from '../../assets/images/goodheartfilled-240.png';
 import Goodheart from '../../assets/images/goodheart.png';
 import {useNavigation} from '@react-navigation/native';
 import {Avatar} from '@rneui/themed';
+import {AuthContext} from '../../utils/Auth';
+import {useWindowDimensions} from 'react-native';
 import axios from 'axios'
 
 const layouts = [
@@ -201,8 +203,33 @@ const KeywordScreen = () => {
   const [likedKeywords, setLikedKeywords] = useState([]);
   const [likesCount, setLikesCount] = useState(1);
   const [ispost,setpost] = useState(false);
+  const {userInfo} = useContext(AuthContext);
+  const width = useWindowDimensions().width; //기기 넓이
+  let today = new Date();
+  let hours = ('0' + today.getHours()).slice(-2); //시
+  let minutes = ('0' + today.getMinutes()).slice(-2); //분
+  let seconds = ('0' + today.getSeconds()).slice(-2); //초
+  let year = today.getFullYear(); //년
+  let month = ('0' + (today.getMonth() + 1)).slice(-2); //월
+  let day = ('0' + today.getDate()).slice(-2); //일
+  let dateString = year + '-' + month  + '-' + day + ' ';
+  let timeString = hours + ':' + minutes  + ':' + seconds;
+
+  const setUserInfo = async () =>{
+    try{const response = await axios.post('http://10.0.2.2:3000/api/users/setUserInfo',{
+      usrId : `${userInfo.nickname}`,
+      usrGender :`M`,
+      usrAge : 1,
+      usrProfileURL : `${userInfo.profileImageUrl}`,
+      usrCreateAt : "2023-08-11 12:41:10"
+      
+  }); console.log(response.data);
+      }catch(e){console.log(`${e.error}`)}
+  } 
+
 
   const handleNextKeyword = () => {
+
     if (currentKeywordIndex < layouts.length - 1) {
       const nextKeywordIndex = currentKeywordIndex + 1;
       setCurrentKeywordIndex(nextKeywordIndex);
@@ -227,7 +254,8 @@ const KeywordScreen = () => {
     if (likedKeywords.includes(keyword)) { //좋아요 해제되었을 때
       setLikedKeywords(likedKeywords.filter(kw => kw !== keyword));
       setLikesCount(likesCount - 1);
-       /* const response = await axios.post(apiURL/{likesCount}) 
+      console.log(userInfo);
+       /* const response = await axios.post(apiURL/) 
         */
     } else {
       if (likedKeywords.length < 3) { // 좋아요 눌렸을 때
@@ -237,7 +265,7 @@ const KeywordScreen = () => {
         console.log(likesCount); //
         const updateStyle =`usrStyle${likesCount.toString()}` //태그칼럼명맞추기
         console.log(updateStyle)
-        /* const response = await axios.post(apiURL/{likesCount},{
+        /* const response = await axios.post(apiURL/,{
            : keyword
         });  */
         
@@ -263,68 +291,65 @@ const KeywordScreen = () => {
 
   return (
     <View style={styles.all}>
-      <View style={styles.textContainer}>
-        <Avatar
-          size={50}/>
-        <Text style={[styles.text,{marginLeft:'5%'}]}>
-          맘에 드는 키워드를 3개까지 선택해 보세요!
-        </Text>
-      </View>
+      <View style={[styles.textContainer,{marginHorizontal:width-(width-20)}]}>
+        <View
+          style={{flexDirection:'row',alignItems:'center'}}>
+          <Avatar
+            size={35}
+            rounded
+            source={{
+              uri:userInfo.profileImageUrl}}/>
+          <Text
+            style={{fontSize:20,marginLeft:5}}>{userInfo.nickname}</Text>
+        </View>
+            <TouchableOpacity
+            onPress={setUserInfo}>
+            <Text style={styles.doneBtnText}>완료</Text>
+          </TouchableOpacity>
+      </View> 
 
       <View style={styles.layout1}>
-        <View style={styles.keywordContainer}>
-          <Text style={styles.keyword}>#{keyword}</Text>
-        </View>
-
-        <View style={styles.ImgContainer}>
           {/* Pass the currentImageIndex to the ImageSwiper */}
           <ImageSwiper
             images={keywordImages}
             currentImageIndex={currentImageIndex}
           />
-        </View>
       </View>
 
-      <View style={styles.bottom}>
-        <View style={styles.ControlView}>
+      <View style={[styles.bottom,{marginHorizontal:width-(width-20)}]}>
+        <View
+          style={{flexDirection:'row'}}>
           <TouchableOpacity
-            onPress={handleBeforeKeyword}
-            style={styles.beforeButton}>
+              onPress={handleLikeToggle}
+              style={{marginRight:10}}>
+              <Image
+                source={
+                  likedKeywords.includes(keyword) ? Goodheartfilled : Goodheart
+                }
+                style={styles.heartIcon}
+              />
+            </TouchableOpacity>
+        </View>
+        <View
+          style={{flexDirection:'row',alignItems:"center",justifyContent:'space-between'}}>
+          <Text
+              style={{fontSize:32,color:'#4949E8',fontFamily:'오뮤_다예쁨체'}}>#{keyword}</Text>
+          <Text style={styles.text}>
+            키워드를 선택해주세요
+          </Text>
+        </View>
+          <View
+          style={{flexDirection:'row',justifyContent:'space-between'}}>
+          <TouchableOpacity
+            onPress={handleBeforeKeyword}>
             <Text style={styles.beforeBtn}>이전</Text>
           </TouchableOpacity>
-
           <TouchableOpacity
-            onPress={handleLikeToggle}
-            style={styles.likeButton}>
-            <Image
-              source={
-                likedKeywords.includes(keyword) ? Goodheartfilled : Goodheart
-              }
-              style={styles.heartIcon}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={handleNextKeyword}
-            style={styles.nextButton}>
+            onPress={handleNextKeyword}>
             <Text style={styles.nextBtn}>다음</Text>
           </TouchableOpacity>
-        </View>
-        <View style={styles.doneBtnView}>
-          <TouchableOpacity
-            onPress={() =>
-              Alert.alert('패션 키워드 설정을 완료하시겠습니까?', '', [
-                {
-                  text: '예',
-                  onPress: () => navigation.navigate('SendInfoScreen'),
-                },
-                {text: '아니오', onPress: () => console.log('No')},
-              ])
-            }
-            style={styles.doneBtn}>
-            <Text style={styles.doneBtnText}>완료</Text>
-          </TouchableOpacity>
-        </View>
+          </View>
+
       </View>
     </View>
   );
@@ -339,7 +364,7 @@ const styles = StyleSheet.create({
     flex: 0.1,
     flexDirection:'row',
     alignItems: 'center',
-    alignContent:'center'
+    justifyContent:'space-between'
   },
   text: {
     fontFamily:'오뮤_다예쁨체',
@@ -364,7 +389,7 @@ const styles = StyleSheet.create({
   ImgContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 0.5,
+    flex: 1,
   },
   slide: {
     flex: 1,
@@ -373,54 +398,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bottom: {
-    flex: 0.1,
-    flexDirection: 'column',
-  },
-  ControlView: {
-    flex: 0.5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    flex: 0.2,
   },
   heartIcon: {
     width: 30,
     height: 30,
-    marginTop: 10,
     tintColor: 'red', // 설정하지 않으면 이미지의 기본 색상 유지
   },
-  beforeButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5,
-  },
   beforeBtn: {
-    fontSize: 25,
-    fontWeight: 'bold',
+    fontSize: 24,
+    fontFamily:'오뮤_다예쁨체',
     color: '#000000',
-  },
-  nextButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5,
   },
   nextBtn: {
-    fontSize: 25,
-    fontWeight: 'bold',
+    fontSize: 24,
+    fontFamily:'오뮤_다예쁨체',
     color: '#000000',
   },
-  doneBtnView: {
-    flex: 0.5,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-  },
-  doneBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5,
-  },
   doneBtnText: {
-    fontSize: 25,
-    fontWeight: 'bold',
+    fontSize: 24,
+    fontFamily:'오뮤_다예쁨체',
     color: '#000000',
   },
 });
