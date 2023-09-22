@@ -1,20 +1,17 @@
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import {
     View,
-    FlatList,
     StyleSheet,
     Text,
     SafeAreaView,
     Image,
     TouchableOpacity,
-    Modal,
     useWindowDimensions
   } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import SwiperFlatList from 'react-native-swiper-flatlist';
 import React,{useState} from 'react';
-import {CollapseBody} from 'accordion-collapse-react-native';
 import Swiper from 'react-native-swiper'
+import { Avatar } from '@rneui/themed';
 
 const FriendsLook = () => {
     const [isModalVisible, setModalVisible] = useState(false); // 모달 on/off
@@ -49,6 +46,8 @@ const FriendsLook = () => {
 
         return nameArray.map((name, index) => (
             <View key={index} style={{flexDirection:'row'}}>
+            <Avatar
+                size={30}/>
             <TouchableOpacity onPress={() => handleNameClick(name)}>
                 <Text style={styles.topshowname}>{name}</Text>
             </TouchableOpacity>
@@ -60,8 +59,10 @@ const FriendsLook = () => {
         <SafeAreaView
             style={styles.allconatiner}>
         <View
-            style={styles.firstcontainer}>
-            <View style={styles.topshowcontainer}>  
+            style={[styles.firstcontainer,{marginHorizontal:width-(width-20)}]}>
+            <View style={styles.topshowcontainer}>
+            <Avatar
+                size={20}/>  
             <Text
                 style={styles.toptext}>{traveldate} with </Text>
            <TouchableOpacity
@@ -90,7 +91,6 @@ const FriendsLook = () => {
             
             </View>
         </View>
-        <View style={styles.bottomline}/>
         <View
             style={styles.secondcontainer}>
             <Swiper
@@ -110,9 +110,8 @@ const FriendsLook = () => {
         ))}
      </Swiper>
         </View>
-        <View style={styles.bottomline}/>
         <View
-            style={styles.thirdcontainer}>
+            style={[styles.thirdcontainer,{marginHorizontal:width-(width-20)}]}>
             <Text
                 style={styles.bottomtext}>
                 #수트 #블레이저 #슬랙스
@@ -131,18 +130,18 @@ allconatiner:{
      backgroundColor:'white'
 },
 firstcontainer:{
-    flex:0.3,
+    flex:0.2,
     flexDirection:'row',
-    justifyContent:'center',
-    alignItems:"center"
+    justifyContent:'flex-start',
+    alignItems:"center",
 },
 toptext:{
-    fontSize:24,
+    fontSize:20,
     color:'black',
     fontFamily:'오뮤_다예쁨체'
 },
 friendtoptext:{
-    fontSize:24,
+    fontSize:20,
     color:'#4848E8',
     fontFamily:'오뮤_다예쁨체'
 },
@@ -168,9 +167,9 @@ secondcontainer:{
     flex:3,
 },
 thirdcontainer:{
-    flex:0.5,
+    flex:0.3,
     justifyContent:'center',
-    alignItems:'center'
+    alignItems:'flex-start'
 },
 bottomtext:{
     fontSize:24,
