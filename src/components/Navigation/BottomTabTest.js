@@ -7,6 +7,7 @@ import TravelScreen from '../../screens/PhotozoneScreen/PhotozoneScreen';
 import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
 import FriendScreen from '../../screens/FriendScreen/FriendScreen';
 import MypageScreen from '../../screens/MypageScreen/MypageScreen';
+import RecomendSceen from '../../screens/OOTTScreen/RecomendSceen/RecomendSceen';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const Tabs = SlickTabBarNavigator()
@@ -72,7 +73,7 @@ export default () => (
 
         <Tabs.Screen
             name="OOTT"
-            component={OOTTScreen}
+            component={RecomendSceen}
             options={{
                 tabBarIcon: ({focused, color}) => (
                     <TabBarIcon

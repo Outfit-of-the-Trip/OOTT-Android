@@ -1,8 +1,5 @@
 import React, { useState,useRef, } from 'react';
 import { useWindowDimensions, Modal } from 'react-native';
-import SwiperFlatList from 'react-native-swiper-flatlist';
-import leftarrow from '../../../assets/images/leftarrow.png'
-import rightarrow from '../../../assets/images/rightarrow.png'
 import avatarbutton from '../../../assets/images/avatarbutton.png'
 
 import {
@@ -13,6 +10,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+
 import { useRoute } from '@react-navigation/native';
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import { useNavigation } from '@react-navigation/native';

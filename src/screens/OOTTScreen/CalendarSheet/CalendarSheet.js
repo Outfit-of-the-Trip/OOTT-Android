@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { Calendar } from "react-native-calendars";
 import { useSetRecoilState } from "recoil";
-import { firstDateState, lastDateState } from '../../../states/atoms';
+import { dateState } from '../../../states/atoms';
 
 import {
     View,
@@ -19,8 +19,7 @@ import ActionSheet, {
 const CalendarSheet = (props) => {
 
     const [date, setDate] = useState([]);
-    const setfirstDate = useSetRecoilState(firstDateState)
-    const setLastDate = useSetRecoilState(lastDateState)
+    const setAllDate = useSetRecoilState(dateState)
     const [dateMarker, setDateMarker] = useState({})
     
     const addDate = async (data) => {
@@ -32,8 +31,7 @@ const CalendarSheet = (props) => {
 
         setDate(copy.sort())
 
-        setfirstDate(copy[0])
-        setLastDate(copy[copy.length - 1])
+        setAllDate(copy)
     }
     
     useEffect(()=>{
