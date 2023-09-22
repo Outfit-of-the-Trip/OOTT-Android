@@ -16,6 +16,7 @@ import {Avatar} from '@rneui/themed';
 import {AuthContext} from '../../utils/Auth';
 import {useWindowDimensions} from 'react-native';
 import axios from 'axios'
+import { Input } from 'native-base';
 
 const layouts = [
   {
@@ -196,33 +197,37 @@ const layouts = [
   },
 ];
 
+
 const KeywordScreen = () => {
   const navigation = useNavigation();
   const [currentKeywordIndex, setCurrentKeywordIndex] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // Add this state
   const [likedKeywords, setLikedKeywords] = useState([]);
   const [likesCount, setLikesCount] = useState(1);
-  const [ispost,setpost] = useState(false);
+  const [count, setCount] = useState();
+  const [input,setInput] = useState([
+    {
+      id:1,
+      userStyle : 'null'
+     },
+     {
+      id:2,
+      userStyle : 'null'
+     },
+     {
+      id:3,
+      userStyle : 'null'
+     },
+    ]);
   const {userInfo} = useContext(AuthContext);
   const width = useWindowDimensions().width; //기기 넓이
-  let today = new Date();
-  let hours = ('0' + today.getHours()).slice(-2); //시
-  let minutes = ('0' + today.getMinutes()).slice(-2); //분
-  let seconds = ('0' + today.getSeconds()).slice(-2); //초
-  let year = today.getFullYear(); //년
-  let month = ('0' + (today.getMonth() + 1)).slice(-2); //월
-  let day = ('0' + today.getDate()).slice(-2); //일
-  let dateString = year + '-' + month  + '-' + day + ' ';
-  let timeString = hours + ':' + minutes  + ':' + seconds;
 
-  const setUserInfo = async () =>{
+  const setUserInfo = async () =>{ //유저 정보 post
     try{const response = await axios.post('http://10.0.2.2:3000/api/users/setUserInfo',{
-      usrId : `${userInfo.nickname}`,
-      usrGender :`M`,
-      usrAge : 1,
-      usrProfileURL : `${userInfo.profileImageUrl}`,
-      usrCreateAt : "2023-08-11 12:41:10"
-      
+      "usrId" : "admin",
+      "usrGender" :"M",
+      "usrAge" : 22,
+      "usrProfileURL" : "http://imgtest.png",
   }); console.log(response.data);
       }catch(e){console.log(`${e.error}`)}
   } 
@@ -253,26 +258,33 @@ const KeywordScreen = () => {
   const handleLikeToggle =  () => {
     if (likedKeywords.includes(keyword)) { //좋아요 해제되었을 때
       setLikedKeywords(likedKeywords.filter(kw => kw !== keyword));
+      var findIndex = input.findIndex(input => input.id === likesCount); //인덱스 찾기
       setLikesCount(likesCount - 1);
-      console.log(userInfo);
-       /* const response = await axios.post(apiURL/) 
-        */
+       console.log(findIndex)
+       let copiedinput = [...input];
+       copiedinput[findIndex].userStyle = "null";
+       console.log(copiedinput)
+       setInput(copiedinput);
+       console.log(setInput);
+       console.log('unclick-------------');
     } else {
       if (likedKeywords.length < 3) { // 좋아요 눌렸을 때
         setLikedKeywords([...likedKeywords, keyword]);
         setLikesCount(likesCount + 1);
         /* console.log(keyword); // 키워드 */ 
-        console.log(likesCount); //
+       /*  console.log(likesCount); */ //
         const updateStyle =`usrStyle${likesCount.toString()}` //태그칼럼명맞추기
-        console.log(updateStyle)
-        /* const response = await axios.post(apiURL/,{
-           : keyword
-        });  */
-        
+      console.log(likesCount);
+       var findIndex = input.findIndex(input => input.id === likesCount); //인덱스 찾기
+       console.log(findIndex)
+       let copiedinput = [...input];
+       copiedinput[findIndex].userStyle = keyword;
+       console.log(copiedinput)
+       setInput(copiedinput);
+       console.log(setInput);
+       console.log('click-------------');
       } else {
-        // Show a message or handle the case where the user tries to like more than 3 keywords
-        // You can display a toast, alert, or disable the like button here.
-        console.log('You can only like up to 3 keywords.');
+        console.log('키워드 선택은 3개까지');
       }
     }
   };
