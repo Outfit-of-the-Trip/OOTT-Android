@@ -73,7 +73,7 @@ export default () => (
 
         <Tabs.Screen
             name="OOTT"
-            component={RecomendSceen}
+            component={OOTTScreen}
             options={{
                 tabBarIcon: ({focused, color}) => (
                     <TabBarIcon
