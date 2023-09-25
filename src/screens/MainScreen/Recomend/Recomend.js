@@ -49,7 +49,7 @@ const Recomend = () => {
       else{
           return setIsModalVisible(!isModalVisible)
   };}
-
+  
   return (
    <SafeAreaView
    style={styles.conatiner}>

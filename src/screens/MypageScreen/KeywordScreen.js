@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {
   View,
   Text,
@@ -12,10 +12,15 @@ import Swiper from 'react-native-swiper';
 import Goodheartfilled from '../../assets/images/goodheartfilled-240.png';
 import Goodheart from '../../assets/images/goodheart.png';
 import {useNavigation} from '@react-navigation/native';
+import {Avatar} from '@rneui/themed';
+import {AuthContext} from '../../utils/Auth';
+import {useWindowDimensions} from 'react-native';
+import axios from 'axios'
+import { Input } from 'native-base';
 
 const layouts = [
   {
-    keyword: '#포말',
+    keyword: 'formal',
     images: [
       'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
       'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
@@ -26,7 +31,7 @@ const layouts = [
     ],
   },
   {
-    keyword: '#댄디',
+    keyword: 'dandy',
     images: [
       'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
       'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
@@ -37,7 +42,7 @@ const layouts = [
     ],
   },
   {
-    keyword: '#캐주얼',
+    keyword: 'casual',
     images: [
       'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
       'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
@@ -48,7 +53,7 @@ const layouts = [
     ],
   },
   {
-    keyword: '#스트릿',
+    keyword: 'street',
     images: [
       'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
       'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
@@ -70,7 +75,7 @@ const layouts = [
     ],
   },
   {
-    keyword: '#빈티지',
+    keyword: 'sporty',
     images: [
       'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
       'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
@@ -81,7 +86,62 @@ const layouts = [
     ],
   },
   {
-    keyword: '#모던',
+    keyword: 'vintage',
+    images: [
+      'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.nkvH3Uds4vJtH1AmYxhwVAHaHa?w=209&h=209&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.TEZ5mKQHg3pvFztiGv9yOgHaHa?w=195&h=195&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
+      // Add more image URLs here.
+    ],
+  },
+  {
+    keyword: 'modern',
+    images: [
+      'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.nkvH3Uds4vJtH1AmYxhwVAHaHa?w=209&h=209&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.TEZ5mKQHg3pvFztiGv9yOgHaHa?w=195&h=195&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
+      // Add more image URLs here.
+    ],
+  },
+  {
+    keyword: 'feminine',
+    images: [
+      'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.nkvH3Uds4vJtH1AmYxhwVAHaHa?w=209&h=209&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.TEZ5mKQHg3pvFztiGv9yOgHaHa?w=195&h=195&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
+      // Add more image URLs here.
+    ],
+  },
+  {
+    keyword: 'minimalism',
+    images: [
+      'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.nkvH3Uds4vJtH1AmYxhwVAHaHa?w=209&h=209&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.TEZ5mKQHg3pvFztiGv9yOgHaHa?w=195&h=195&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
+      // Add more image URLs here.
+    ],
+  },
+  {
+    keyword: 'Amekazi',
+    images: [
+      'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.nkvH3Uds4vJtH1AmYxhwVAHaHa?w=209&h=209&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.TEZ5mKQHg3pvFztiGv9yOgHaHa?w=195&h=195&c=7&r=0&o=5&pid=1.7',
+      'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
+      // Add more image URLs here.
+    ],
+  },
+  {
+    keyword: 'classic',
     images: [
       'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
       'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
@@ -137,14 +197,44 @@ const layouts = [
   },
 ];
 
+
 const KeywordScreen = () => {
   const navigation = useNavigation();
   const [currentKeywordIndex, setCurrentKeywordIndex] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // Add this state
   const [likedKeywords, setLikedKeywords] = useState([]);
-  const [likesCount, setLikesCount] = useState(0);
+  const [likesCount, setLikesCount] = useState(1);
+  const [count, setCount] = useState();
+  const [input,setInput] = useState([
+    {
+      id:1,
+      userStyle : 'null'
+     },
+     {
+      id:2,
+      userStyle : 'null'
+     },
+     {
+      id:3,
+      userStyle : 'null'
+     },
+    ]);
+  const {userInfo} = useContext(AuthContext);
+  const width = useWindowDimensions().width; //기기 넓이
+
+  const setUserInfo = async () =>{ //유저 정보 post
+    try{const response = await axios.post('http://10.0.2.2:3000/api/users/setUserInfo',{
+      "usrId" : "admin",
+      "usrGender" :"M",
+      "usrAge" : 22,
+      "usrProfileURL" : "http://imgtest.png",
+  }); console.log(response.data);
+      }catch(e){console.log(`${e.error}`)}
+  } 
+
 
   const handleNextKeyword = () => {
+
     if (currentKeywordIndex < layouts.length - 1) {
       const nextKeywordIndex = currentKeywordIndex + 1;
       setCurrentKeywordIndex(nextKeywordIndex);
@@ -165,18 +255,36 @@ const KeywordScreen = () => {
   const keyword = layouts[currentKeywordIndex].keyword;
   const keywordImages = layouts[currentKeywordIndex].images;
 
-  const handleLikeToggle = () => {
-    if (likedKeywords.includes(keyword)) {
+  const handleLikeToggle =  () => {
+    if (likedKeywords.includes(keyword)) { //좋아요 해제되었을 때
       setLikedKeywords(likedKeywords.filter(kw => kw !== keyword));
+      var findIndex = input.findIndex(input => input.id === likesCount); //인덱스 찾기
       setLikesCount(likesCount - 1);
+       console.log(findIndex)
+       let copiedinput = [...input];
+       copiedinput[findIndex].userStyle = "null";
+       console.log(copiedinput)
+       setInput(copiedinput);
+       console.log(setInput);
+       console.log('unclick-------------');
     } else {
-      if (likedKeywords.length < 3) {
+      if (likedKeywords.length < 3) { // 좋아요 눌렸을 때
         setLikedKeywords([...likedKeywords, keyword]);
         setLikesCount(likesCount + 1);
+        /* console.log(keyword); // 키워드 */ 
+       /*  console.log(likesCount); */ //
+        const updateStyle =`usrStyle${likesCount.toString()}` //태그칼럼명맞추기
+      console.log(likesCount);
+       var findIndex = input.findIndex(input => input.id === likesCount); //인덱스 찾기
+       console.log(findIndex)
+       let copiedinput = [...input];
+       copiedinput[findIndex].userStyle = keyword;
+       console.log(copiedinput)
+       setInput(copiedinput);
+       console.log(setInput);
+       console.log('click-------------');
       } else {
-        // Show a message or handle the case where the user tries to like more than 3 keywords
-        // You can display a toast, alert, or disable the like button here.
-        console.log('You can only like up to 3 keywords.');
+        console.log('키워드 선택은 3개까지');
       }
     }
   };
@@ -195,66 +303,65 @@ const KeywordScreen = () => {
 
   return (
     <View style={styles.all}>
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>
-          맘에 드는 키워드를 3개까지 선택해 보세요!
-        </Text>
-      </View>
+      <View style={[styles.textContainer,{marginHorizontal:width-(width-20)}]}>
+        <View
+          style={{flexDirection:'row',alignItems:'center'}}>
+          <Avatar
+            size={35}
+            rounded
+            source={{
+              uri:userInfo.profileImageUrl}}/>
+          <Text
+            style={{fontSize:20,marginLeft:5}}>{userInfo.nickname}</Text>
+        </View>
+            <TouchableOpacity
+            onPress={setUserInfo}>
+            <Text style={styles.doneBtnText}>완료</Text>
+          </TouchableOpacity>
+      </View> 
 
       <View style={styles.layout1}>
-        <View style={styles.keywordContainer}>
-          <Text style={styles.keyword}>{keyword}</Text>
-        </View>
-
-        <View style={styles.ImgContainer}>
           {/* Pass the currentImageIndex to the ImageSwiper */}
           <ImageSwiper
             images={keywordImages}
             currentImageIndex={currentImageIndex}
           />
-        </View>
       </View>
 
-      <View style={styles.bottom}>
-        <View style={styles.ControlView}>
+      <View style={[styles.bottom,{marginHorizontal:width-(width-20)}]}>
+        <View
+          style={{flexDirection:'row'}}>
           <TouchableOpacity
-            onPress={handleBeforeKeyword}
-            style={styles.beforeButton}>
+              onPress={handleLikeToggle}
+              style={{marginRight:10}}>
+              <Image
+                source={
+                  likedKeywords.includes(keyword) ? Goodheartfilled : Goodheart
+                }
+                style={styles.heartIcon}
+              />
+            </TouchableOpacity>
+        </View>
+        <View
+          style={{flexDirection:'row',alignItems:"center",justifyContent:'space-between'}}>
+          <Text
+              style={{fontSize:32,color:'#4949E8',fontFamily:'오뮤_다예쁨체'}}>#{keyword}</Text>
+          <Text style={styles.text}>
+            키워드를 선택해주세요
+          </Text>
+        </View>
+          <View
+          style={{flexDirection:'row',justifyContent:'space-between'}}>
+          <TouchableOpacity
+            onPress={handleBeforeKeyword}>
             <Text style={styles.beforeBtn}>이전</Text>
           </TouchableOpacity>
-
           <TouchableOpacity
-            onPress={handleLikeToggle}
-            style={styles.likeButton}>
-            <Image
-              source={
-                likedKeywords.includes(keyword) ? Goodheartfilled : Goodheart
-              }
-              style={styles.heartIcon}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={handleNextKeyword}
-            style={styles.nextButton}>
+            onPress={handleNextKeyword}>
             <Text style={styles.nextBtn}>다음</Text>
           </TouchableOpacity>
-        </View>
-        <View style={styles.doneBtnView}>
-          <TouchableOpacity
-            onPress={() =>
-              Alert.alert('패션 키워드 설정을 완료하시겠습니까?', '', [
-                {
-                  text: '예',
-                  onPress: () => navigation.navigate('SendInfoScreen'),
-                },
-                {text: '아니오', onPress: () => console.log('No')},
-              ])
-            }
-            style={styles.doneBtn}>
-            <Text style={styles.doneBtnText}>완료</Text>
-          </TouchableOpacity>
-        </View>
+          </View>
+
       </View>
     </View>
   );
@@ -262,29 +369,27 @@ const KeywordScreen = () => {
 
 const styles = StyleSheet.create({
   all: {
-    flex: 1,
+    flex: 3,
     backgroundColor: '#FFFFFF',
   },
   textContainer: {
-    backgroundColor: '#FFFFFF',
     flex: 0.1,
-    justifyContent: 'center',
+    flexDirection:'row',
     alignItems: 'center',
+    justifyContent:'space-between'
   },
   text: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: 16,
-    fontWeight: 'normal',
+    fontFamily:'오뮤_다예쁨체',
+    fontSize: 20,
   },
   layout1: {
     flex: 1,
   },
   keywordContainer: {
-    borderBlockColor: '#FFFFFF',
     flex: 0.1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor:'red'
   },
   keyword: {
     justifyContent: 'center',
@@ -305,56 +410,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bottom: {
-    backgroundColor: '#FFFFFF',
-    flex: 0.3,
-    flexDirection: 'column',
-  },
-  ControlView: {
-    flex: 0.5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    flex: 0.2,
   },
   heartIcon: {
     width: 30,
     height: 30,
-    marginTop: 10,
     tintColor: 'red', // 설정하지 않으면 이미지의 기본 색상 유지
   },
-  beforeButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5,
-  },
   beforeBtn: {
-    fontSize: 25,
-    fontWeight: 'bold',
+    fontSize: 24,
+    fontFamily:'오뮤_다예쁨체',
     color: '#000000',
-  },
-  nextButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5,
   },
   nextBtn: {
-    fontSize: 25,
-    fontWeight: 'bold',
+    fontSize: 24,
+    fontFamily:'오뮤_다예쁨체',
     color: '#000000',
   },
-  doneBtnView: {
-    flex: 0.5,
-    backgroundColor: '#FFFFFF',
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-  },
-  doneBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5,
-  },
   doneBtnText: {
-    fontSize: 25,
-    fontWeight: 'bold',
+    fontSize: 24,
+    fontFamily:'오뮤_다예쁨체',
     color: '#000000',
   },
 });
