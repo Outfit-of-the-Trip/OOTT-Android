@@ -34,3 +34,8 @@ export const categoryState = atom({
   key: "categoryState",
   default: ""
 })
+
+export const isUserFirstLogin = atom({
+  key: "isUserFirstLogin",
+  default:null
+})
