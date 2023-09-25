@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useEffect, useState, useContext, useRef} from 'react';
 import {
   View,
   Text,
@@ -16,7 +16,9 @@ import {Avatar} from '@rneui/themed';
 import {AuthContext} from '../../utils/Auth';
 import {useWindowDimensions} from 'react-native';
 import axios from 'axios'
-import { Input } from 'native-base';
+import { useRecoilState } from 'recoil';
+import { isUserFirstLogin } from '../../states/atoms';
+
 
 const layouts = [
   {
@@ -54,17 +56,6 @@ const layouts = [
   },
   {
     keyword: 'street',
-    images: [
-      'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.nkvH3Uds4vJtH1AmYxhwVAHaHa?w=209&h=209&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.TEZ5mKQHg3pvFztiGv9yOgHaHa?w=195&h=195&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
-      // Add more image URLs here.
-    ],
-  },
-  {
-    keyword: '#스포티',
     images: [
       'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
       'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
@@ -151,60 +142,15 @@ const layouts = [
       // Add more image URLs here.
     ],
   },
-  {
-    keyword: '#페미닌',
-    images: [
-      'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.nkvH3Uds4vJtH1AmYxhwVAHaHa?w=209&h=209&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.TEZ5mKQHg3pvFztiGv9yOgHaHa?w=195&h=195&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
-      // Add more image URLs here.
-    ],
-  },
-  {
-    keyword: '#미니멀리즘',
-    images: [
-      'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.nkvH3Uds4vJtH1AmYxhwVAHaHa?w=209&h=209&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.TEZ5mKQHg3pvFztiGv9yOgHaHa?w=195&h=195&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
-      // Add more image URLs here.
-    ],
-  },
-  {
-    keyword: '#아메카지',
-    images: [
-      'https://th.bing.com/th/id/OIP.J4xQSd6q1zZU0Eol_YwXOgHaJP?w=158&h=198&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.nkvH3Uds4vJtH1AmYxhwVAHaHa?w=209&h=209&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.TEZ5mKQHg3pvFztiGv9yOgHaHa?w=195&h=195&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
-      // Add more image URLs here.
-    ],
-  },
-  {
-    keyword: '#클래식',
-    images: [
-      'https://th.bing.com/th/id/OIP.gCF3nMpf8DYR6UGuMnfP6wAAAA?w=176&h=202&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.Zm9ydEHQtSYe4Gqv4tq90gHaIp?w=153&h=180&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.nkvH3Uds4vJtH1AmYxhwVAHaHa?w=209&h=209&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.TEZ5mKQHg3pvFztiGv9yOgHaHa?w=195&h=195&c=7&r=0&o=5&pid=1.7',
-      'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
-      // Add more image URLs here.
-    ],
-  },
 ];
 
 
 const KeywordScreen = () => {
-  const navigation = useNavigation();
+  const [isFirstLogin,setIsFirstLogin] = useRecoilState(isUserFirstLogin)
   const [currentKeywordIndex, setCurrentKeywordIndex] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // Add this state
   const [likedKeywords, setLikedKeywords] = useState([]);
-  const [likesCount, setLikesCount] = useState(1);
-  const [count, setCount] = useState();
+  const [likesCount, setLikesCount] = useState(0);
   const [input,setInput] = useState([
     {
       id:1,
@@ -223,14 +169,40 @@ const KeywordScreen = () => {
   const width = useWindowDimensions().width; //기기 넓이
 
   const setUserInfo = async () =>{ //유저 정보 post
+    if(isFirstLogin!==false){ //처음 로그인이라면 
     try{const response = await axios.post('http://10.0.2.2:3000/api/users/setUserInfo',{
-      "usrId" : "admin",
-      "usrGender" :"M",
-      "usrAge" : 22,
-      "usrProfileURL" : "http://imgtest.png",
-  }); console.log(response.data);
+      usrId : "iop",
+      usrGender :"M",
+      usrAge : 25,
+      usrProfileURL : "http://imgtest.png",
+      usrStyle1 :input[0].userStyle,
+      usrStyle2 : input[1].userStyle,
+      usrStyle3 : input[2].userStyle,
+  })
+  console.log(response.data);
+  setIsFirstLogin(true)
       }catch(e){console.log(`${e.error}`)}
+  }else{ //처음 로그인이 아니라면
+    try{
+      const response = await axios.patch('http://10.0.2.2:3000/api/users/updateUserInfo/?userId=admin',{
+        userStyle1 : input[0].userStyle,
+        userStyle2 : input[1].userStyle,
+        userStyle3 : input[2].userStyle,
+      })
+      
+    }catch(e){console.log(e)}
   } 
+}
+
+  const getUserInfo = () =>{
+    axios.get('http://10.0.2.2:3000/api/users/getUserInfo?userId=iop')
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  }
 
 
   const handleNextKeyword = () => {
@@ -257,37 +229,47 @@ const KeywordScreen = () => {
 
   const handleLikeToggle =  () => {
     if (likedKeywords.includes(keyword)) { //좋아요 해제되었을 때
-      setLikedKeywords(likedKeywords.filter(kw => kw !== keyword));
-      var findIndex = input.findIndex(input => input.id === likesCount); //인덱스 찾기
-      setLikesCount(likesCount - 1);
-       console.log(findIndex)
-       let copiedinput = [...input];
-       copiedinput[findIndex].userStyle = "null";
-       console.log(copiedinput)
-       setInput(copiedinput);
-       console.log(setInput);
-       console.log('unclick-------------');
-    } else {
+      setLikedKeywords(likedKeywords.filter(kw => kw !== keyword)); 
+      setLikesCount(prevLikesCount => {
+      const updateLikesCount = prevLikesCount - 1;
+      /* console.log("좋아요해제",updateLikesCount);
+      console.log("좋아요해제배열",input) */
+      setInput(data => { //좋아요된 키워드 선택 
+        return data.map(inputItem =>{ 
+          if(inputItem.id === updateLikesCount){ 
+            return {...inputItem, userStyle: "empty"};
+          }
+          return inputItem
+        })
+      });
+      return updateLikesCount})}
+     else {
       if (likedKeywords.length < 3) { // 좋아요 눌렸을 때
         setLikedKeywords([...likedKeywords, keyword]);
-        setLikesCount(likesCount + 1);
-        /* console.log(keyword); // 키워드 */ 
-       /*  console.log(likesCount); */ //
-        const updateStyle =`usrStyle${likesCount.toString()}` //태그칼럼명맞추기
-      console.log(likesCount);
-       var findIndex = input.findIndex(input => input.id === likesCount); //인덱스 찾기
-       console.log(findIndex)
-       let copiedinput = [...input];
-       copiedinput[findIndex].userStyle = keyword;
-       console.log(copiedinput)
-       setInput(copiedinput);
-       console.log(setInput);
-       console.log('click-------------');
-      } else {
+        setLikesCount(prevLikesCount =>{
+        if(prevLikesCount < 3){
+          const updatedLikesCount = prevLikesCount + 1;
+          /* console.log("좋아요",updatedLikesCount);
+          console.log("좋아요배열",input) */
+          setInput(data => {
+          return data.map(inputItem =>{
+            if(inputItem.id === updatedLikesCount){
+              console.log(inputItem);
+              return {...inputItem, userStyle: keyword};
+            }
+            return inputItem;
+          })
+      });
+        return updatedLikesCount}else{
+          console.log('키워드 선택은 3개까지')
+          return prevLikesCount;
+        }})
+      }
+       else {
         console.log('키워드 선택은 3개까지');
       }
     }
-  };
+  }
 
   const ImageSwiper = ({images, currentImageIndex}) => {
     return (
@@ -315,13 +297,12 @@ const KeywordScreen = () => {
             style={{fontSize:20,marginLeft:5}}>{userInfo.nickname}</Text>
         </View>
             <TouchableOpacity
-            onPress={setUserInfo}>
+            onPress={getUserInfo}>
             <Text style={styles.doneBtnText}>완료</Text>
           </TouchableOpacity>
       </View> 
 
       <View style={styles.layout1}>
-          {/* Pass the currentImageIndex to the ImageSwiper */}
           <ImageSwiper
             images={keywordImages}
             currentImageIndex={currentImageIndex}
