@@ -9,7 +9,7 @@ import Recomend from '../../screens/MainScreen/Recomend/Recomend';
 import RecomendTop from '../../screens/OOTTScreen/RecomendSceen/DetailRecomend/RecomendTop';
 import RecomendBottom from '../../screens/OOTTScreen/RecomendSceen/DetailRecomend/RecomendBottom';
 import RecomendShose from '../../screens/OOTTScreen/RecomendSceen/DetailRecomend/RecomendShose';
-import RecomendOutter from '../../screens/OOTTScreen/RecomendSceen/DetailRecomend/RecomendOutter';
+import RecomendDetail from '../../screens/OOTTScreen/RecomendSceen/RecomendDetail';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
 import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
 // import FriendInfoScreen from '../../screens/FriendScreen/FriendInfoScreen';
@@ -72,8 +72,8 @@ const Navigation = () => {
               options={{headerShown: true}}
             />
             <Stack.Screen
-              name="RecomendOutter"
-              component={RecomendOutter}
+              name="RecomendDetail"
+              component={RecomendDetail}
               options={{headerShown: true}}
             />
             <Stack.Screen

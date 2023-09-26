@@ -2,7 +2,7 @@ import React, {useState, useEffect } from 'react'
 import Swiper from 'react-native-swiper'
 import { RecomendGarmet } from '../../../../constants/RecomendGarmet';
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
-import { userInfoState, dateState, searchState, reasonState, friendsState, categoryState } from '../../../../states/atoms';
+import { recommendDetailStates, userInfoState, dateState, searchState, reasonState, friendsState, categoryState } from '../../../../states/atoms';
 import { Modal, NativeBaseProvider, Button } from "native-base";
 import Icon  from 'react-native-vector-icons/Ionicons';
 import Horizontal from './Horizontal';
@@ -20,11 +20,13 @@ const ModalButton = (props) => {
     const [placement, setPlacement] = useState(undefined);
     const [open, setOpen] = useState(false);
     const [select, setSelect] = useState(false);
+
   
     const openModal = placement => {
       setOpen(true);
       setPlacement(placement);
     };
+
   
     return(
         <NativeBaseProvider>
@@ -62,17 +64,15 @@ const ModalButton = (props) => {
             </Modal>
         </NativeBaseProvider>
     )
-  };
+};
 
 const Vertical = () => {
-   
+
+    const recommendClothes = useRecoilValue(recommendDetailStates)
 
     const place = useRecoilValue(searchState);
     const date = useRecoilValue(dateState);
     const [clothes, setClothes] = useState({})
-
-    const clothesArray = RecomendGarmet.map(item => item.clothes);
-    const flattenedClothesArray = clothesArray.flat();
 
     return(
         <Swiper 
@@ -80,7 +80,7 @@ const Vertical = () => {
             horizontal={false} 
             activeDotColor="black"
         >
-            {RecomendGarmet.map((item, index) =>(
+            {recommendClothes.map((item, index) =>(
                 <View style={styles.root} key={index}>
 
                     <View style={styles.header}>

@@ -29,3 +29,8 @@ export const categoryState = atom({
   key: "categoryState",
   default: ""
 })
+
+export const recommendDetailStates = atom({
+  key: "recommendDetailStates",
+  default: null
+})

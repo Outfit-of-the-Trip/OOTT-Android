@@ -1,11 +1,11 @@
 import React, {  useEffect, useState } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { RecomendGarmet } from '../../../../constants/RecomendGarmet';
+import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import { Divider } from '@rneui/themed';
 
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
-import { userInfoState, dateState, searchState, reasonState, friendsState, categoryState } from '../../../../states/atoms';
+import { recommendDetailStates, userInfoState, dateState, searchState, reasonState, friendsState, categoryState } from '../../../states/atoms';
 
 import {
     View,
@@ -15,10 +15,16 @@ import {
     Image,
     TouchableOpacity,
     FlatList,
+    Linking
 } from 'react-native';
 
 
-const RecomendOutter = () => {
+const RecomendDetail = ({ route }) => {
+
+    const openExternalURL = (url) => {
+        Linking.openURL(url)
+          .catch((err) => console.error('URL 열기 오류:', err));
+    };
 
     const place = useRecoilValue(searchState);
     const date = useRecoilValue(dateState);
@@ -26,6 +32,8 @@ const RecomendOutter = () => {
     const friend = useRecoilValue(friendsState);
     const category = useRecoilValue(categoryState);
     const userInfo = useRecoilValue(userInfoState);
+
+    const recommendClothes = useRecoilValue(recommendDetailStates)
 
     const travelData = {
         "userId": userInfo.nickname,
@@ -40,9 +48,6 @@ const RecomendOutter = () => {
     const navigation = useNavigation();
     const width = useWindowDimensions().width; //기기 폭 값
 
-    const gotoTop = () => {
-        navigation.navigate('RecomendTop')
-    }
 
     return(
 
@@ -74,17 +79,21 @@ const RecomendOutter = () => {
 
                     <View style={styles.slider}>
                         <FlatList
-                            data={RecomendGarmet}
+                            data={route.params.detail.commercial}
                             showsHorizontalScrollIndicator={false}
                             horizontal={true}
                             renderItem={({item,index}) =>{
                                 return(
-                                    <View style={styles.sliderContent}>
+                                    <TouchableOpacity 
+                                        activeOpacity={0.8}
+                                        style={styles.sliderContent}
+                                        onPress={()=>openExternalURL(item.link)}
+                                    >
                                         <Image
                                             source={{uri: item.img}}
                                             style={styles.image}
                                         />
-                                    </View>
+                                    </TouchableOpacity>
                                 )
                             }}
                         />
@@ -107,7 +116,7 @@ const RecomendOutter = () => {
 
                     <View style={styles.slider}>
                         <FlatList
-                            data={RecomendGarmet}
+                            data={route.params.detail.commercial}
                             showsHorizontalScrollIndicator={false}
                             horizontal={true}
                             renderItem={({item,index}) =>(
@@ -131,7 +140,6 @@ const RecomendOutter = () => {
 
 }
 
-export default RecomendOutter
 
 const styles = StyleSheet.create({
     rootContainer:{
@@ -192,3 +200,6 @@ const styles = StyleSheet.create({
     }
 
 })
+
+
+export default RecomendDetail

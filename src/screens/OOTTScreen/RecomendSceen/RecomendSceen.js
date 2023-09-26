@@ -1,11 +1,13 @@
 import React, {useState, useEffect, useRef } from 'react'
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
-import { userInfoState, dateState, searchState, reasonState, friendsState, categoryState } from '../../../states/atoms';
+import { recommendDetailStates, userInfoState, dateState, searchState, reasonState, friendsState, categoryState } from '../../../states/atoms';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import { testURL } from '../../../constants/url';
 import LodingSpineer from '../../../components/Spinner';
 import { useWindowDimensions } from 'react-native';
+
+import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 
 import Vertical from './Components/Vertical';
 
@@ -34,6 +36,9 @@ const RecomendSceen = () => {
     const category = useRecoilValue(categoryState);
     const userInfo = useRecoilValue(userInfoState);
 
+    const [recommendClothes, setRecommendClothes] = useRecoilState(recommendDetailStates)
+
+
     const [test, setTest] = useState(null)
 
     const [isLoding, setIsLoding] = useState(true);
@@ -60,7 +65,7 @@ const RecomendSceen = () => {
             });
         }
         getRecommendedDate()
-        
+        setRecommendClothes(RecomendGarmet)        
     }, [])
             
 

@@ -1,6 +1,9 @@
 import React, {useState, useEffect } from 'react'
 import Swiper from 'react-native-swiper'
 import { useNavigation } from '@react-navigation/native';
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
+
+import { recommendDetailStates } from '../../../../states/atoms';
 
 
 import {
@@ -15,8 +18,8 @@ const Horizontal = ({clothes}) => {
 
     const navigation = useNavigation();
 
-    const gotoOutter = () => {
-      return navigation.navigate('RecomendOutter');
+    const gotoDetail = (outter) => {
+      return navigation.navigate('RecomendDetail', {detail: outter});
     };
     const gotoTop = () => {
         return navigation.navigate('RecomendTop');
@@ -40,10 +43,10 @@ const Horizontal = ({clothes}) => {
 
 
                     <View style={styles.outterContainer}>
-                        <TouchableOpacity onPress={gotoOutter}>
+                        <TouchableOpacity onPress={()=>gotoDetail(item.outter.detail)}>
                             <Image
                                 style={styles.outter}
-                                source={{uri: item.outter}}
+                                source={{uri: item.outter.img}}
                             />
                         </TouchableOpacity>
                     </View>
@@ -53,7 +56,7 @@ const Horizontal = ({clothes}) => {
                         <TouchableOpacity onPress={()=>console.log("top")}>
                             <Image
                                 style={styles.top}
-                                source={{uri: item.top}}
+                                source={{uri: item.top.img}}
                             />
                         </TouchableOpacity>
                         
@@ -61,7 +64,7 @@ const Horizontal = ({clothes}) => {
                         <TouchableOpacity onPress={()=>{console.log("bottom")}}>
                             <Image
                                 style={styles.bottom}
-                                source={{uri: item.bottom}}
+                                source={{uri: item.bottom.img}}
                             />
                         </TouchableOpacity>
 
@@ -69,7 +72,7 @@ const Horizontal = ({clothes}) => {
                         <TouchableOpacity onPress={()=>console.log("shoes")}>
                             <Image
                                 style={styles.shoes}
-                                source={{uri: item.shoes}}
+                                source={{uri: item.shoes.img}}
                             />
                         </TouchableOpacity>
 
