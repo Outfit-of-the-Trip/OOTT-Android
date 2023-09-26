@@ -15,6 +15,7 @@ import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
 // import FriendInfoScreen from '../../screens/FriendScreen/FriendInfoScreen';
 import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
 
+import MypageScreen from '../../screens/MypageScreen/MypageScreen';
 
 import {AuthContext} from '../../utils/Auth';
 import KeywordScreen from '../../screens/MypageScreen/KeywordScreen';
@@ -42,7 +43,7 @@ const Navigation = () => {
   // 삼항연산자 사용. 만약 userInfo.id의 값이 존재한다면 MainScreen 랜더링
   return (
     <NavigationContainer>
-       <Stack.Navigator
+      <Stack.Navigator
         screenOptions={{
           animation: 'fade_from_bottom',
           tabBarShowLabel: false,
@@ -132,6 +133,12 @@ const Navigation = () => {
               component={AbataScreen}
               options={{headerShown: true}}
             />
+            <Stack.Screen
+              name="MypageScreen"
+              component={MypageScreen}
+              options={{headerShown: true}}
+            />
+
             {/* <Stack.Screen
               name="SendInfoScreen"
               component={SendInfoScreen}

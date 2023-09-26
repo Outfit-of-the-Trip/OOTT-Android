@@ -1,6 +1,7 @@
-import {Icon, Text} from 'native-base';
 import React from 'react';
-import {Modal, Pressable, View, StyleSheet} from 'react-native';
+import {Modal, Pressable, View, StyleSheet, Image, Text} from 'react-native';
+import Camera from '../../../../assets/images/camera.png';
+
 const Gallery = ({visible, onClose, onLaunchImageLibrary}) => {
   return (
     <Modal
@@ -10,23 +11,6 @@ const Gallery = ({visible, onClose, onLaunchImageLibrary}) => {
       onRequestClose={onClose}>
       <Pressable style={styles.background} onPress={onClose}>
         <View style={styles.whiteBox}>
-          {/* <Pressable
-            style={styles.actionButton}
-            android_ripple={{
-              color: '#eee',
-            }}
-            onPress={() => {
-              onLaunchCamera();
-              onClose();
-            }}>
-            <Icon
-              name="camera-alt"
-              color="#757575"
-              size={24}
-              style={styles.icon}
-            />
-            <Text>카메라로 촬영하기</Text>
-          </Pressable> */}
           <Pressable
             style={styles.actionButton}
             android_ripple={{color: '#eee'}}
@@ -34,7 +18,7 @@ const Gallery = ({visible, onClose, onLaunchImageLibrary}) => {
               onLaunchImageLibrary();
               onClose();
             }}>
-            <Icon name="photo" color="#757575" size={24} style={styles.icon} />
+            <Image source={Camera} style={styles.icon} />
             <Text style={styles.actionText}>사진 선택하기</Text>
           </Pressable>
         </View>
@@ -52,10 +36,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   whiteBox: {
-    width: 300,
+    width: '50%',
+    height: '20%',
     backgroundColor: 'white',
     borderRadius: 4,
     elevation: 2,
+    justifyContent: 'center',
   },
   actionButton: {
     padding: 16,
@@ -63,7 +49,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    marginRight: 8,
+    resizeMode: 'contain',
+    width: '40%',
   },
   text: {
     fontSize: 26,
