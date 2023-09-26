@@ -34,6 +34,7 @@ export const categoryState = atom({
 export const recommendDetailStates = atom({
   key: "recommendDetailStates",
   default: null
+})
 
 export const isUserFirstLogin = atom({
   key: "isUserFirstLogin",
