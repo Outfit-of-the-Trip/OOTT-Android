@@ -1,25 +1,30 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { AuthContext,  } from '../../utils/Auth';
+
+import {useNavigation, NavigationContainer} from '@react-navigation/native';
+import {AuthContext} from '../../utils/Auth';
+
 import axios from 'axios';
-import { backendURL } from '../../constants/url';
-import { NativeBaseProvider, Pressable, HamburgerIcon, Menu, Box } from "native-base";
+import {backendURL} from '../../constants/url';
+import {
+  NativeBaseProvider,
+  Pressable,
+  HamburgerIcon,
+  Menu,
+  Box,
+} from 'native-base';
 import ClosetScreen from './ClosetScreen/ClosetScreen';
 import KeywordScreen from './KeywordScreen';
 
-
 import {
-  View, 
-  TouchableOpacity, 
-  Text, 
-  StyleSheet, 
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
   Image,
   Button,
 } from 'react-native';
 
-
 const MypageScreen = () => {
-
   const navigation = useNavigation();
 
   const gotoTravelPlace = () => {
@@ -29,43 +34,42 @@ const MypageScreen = () => {
   const {userInfo} = useContext(AuthContext);
   const {logout} = useContext(AuthContext);
 
-  const MenuSlide = () => {  
-    return(
+  const MenuSlide = () => {
+    return (
       <Box h="10%" w="10%" alignItems="flex-start">
-      <Menu w="170" trigger={triggerProps => {
-        return <Pressable {...triggerProps}>
-                <HamburgerIcon size={30}/>
-              </Pressable>;
-      }}>
+        <Menu
+          w="170"
+          trigger={triggerProps => {
+            return (
+              <Pressable {...triggerProps}>
+                <HamburgerIcon size={30} />
+              </Pressable>
+            );
+          }}>
           <Menu.Item onPress={gotoTravelPlace}>패션 키워드 설정</Menu.Item>
-          <Menu.Item onPress={()=>console.log("아바타")}>아바타 설정</Menu.Item>
+          <Menu.Item onPress={() => console.log('아바타')}>
+            아바타 설정
+          </Menu.Item>
           <Menu.Item onPress={logout}>로그아웃</Menu.Item>
         </Menu>
-        </Box>
-    )
-  }
+      </Box>
+    );
+  };
 
   return (
     <NativeBaseProvider>
       <View style={styles.rootContainer}>
-        
         <View style={styles.menuContainer}>
-            <MenuSlide />
+          <MenuSlide />
         </View>
-       
-
         <View style={styles.profileContainer}>
-
-
           <View style={styles.porfImgContainer}>
             <Image
               style={styles.profileImage}
               source={{uri: userInfo.profileImageUrl}}
             />
           </View>
-
           <View style={styles.profileList}>
-
             <View style={styles.userProfileContainer}>
               <Text style={styles.category}>Name </Text>
               <Text style={styles.usrvalues}>{userInfo.nickname}</Text>
@@ -80,32 +84,24 @@ const MypageScreen = () => {
               <Text style={styles.category}>선호 스타일</Text>
               <Text style={styles.usrvalues}>와이드 키치</Text>
             </View>
-
           </View>
-
         </View>
-
 
         <View style={styles.closetContainer}>
-          <ClosetScreen/>
+          <ClosetScreen />
         </View>
-
-
-        </View>
+      </View>
     </NativeBaseProvider>
-    
-   
-
   );
 };
 
 const styles = StyleSheet.create({
-  rootContainer:{
-    backgroundColor: "white",
-    flex:1,
+  rootContainer: {
+    backgroundColor: 'white',
+    flex: 1,
   },
 
-  menuContainer:{
+  menuContainer: {
     flex: 0.5,
     justifyContent: 'center',
     alignItems: 'flex-end',
@@ -122,7 +118,7 @@ const styles = StyleSheet.create({
 
   menuButton: {
     margin: 10,
-    backgroundColor: "skyblue"
+    backgroundColor: 'skyblue',
   },
 
   ModalScreen: {
