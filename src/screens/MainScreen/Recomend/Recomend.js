@@ -10,6 +10,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+
 import { useRoute } from '@react-navigation/native';
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import { useNavigation } from '@react-navigation/native';

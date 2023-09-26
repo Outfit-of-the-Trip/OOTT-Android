@@ -5,7 +5,7 @@ import axios from 'axios';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import {useNavigation} from '@react-navigation/native';
 import { Divider } from '@rneui/themed';
-import { backendURL } from '../../../constants/url';
+import { backendURL, testURL } from '../../../constants/url';
 
 import {
   StyleSheet,
@@ -31,7 +31,7 @@ const TravelFriends = () => {
 
     useEffect(() => {
         const getUserFriedns = async () => {
-            axios.get(backendURL+'/api/friends/myFriends?userId='+userInfo[0].nickname)
+            axios.get(testURL+'/api/friends/myFriends?userId='+userInfo[0].nickname)
             .then(function (res) {
                 const proccessedData = res.data.map(item=>{
                     const isClicked = false
