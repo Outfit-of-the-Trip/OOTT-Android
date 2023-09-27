@@ -13,7 +13,7 @@ import React, {  useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { RecomendGarmet } from '../../../constants/RecomendGarmet';
+import { RecomendGarmet } from '../../../../constants/RecomendGarmet';
 
 const RecomendBottom = () => {
     const navigation = useNavigation();

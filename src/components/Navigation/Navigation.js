@@ -73,17 +73,12 @@ const Navigation = () => {
               options={{headerShown: true}}
             />
             <Stack.Screen
-              name="RecomendOutter"
-              component={RecomendOutter}
+              name="RecomendDetail"
+              component={RecomendDetail}
               options={{
                 headerShown: true,
                 headerTitleAlign:'center'
               }}
-            />
-            <Stack.Screen
-              name="RecomendDetail"
-              component={RecomendDetail}
-              options={{headerShown: true}}
             />
             <Stack.Screen
               name="RecomendTop"
