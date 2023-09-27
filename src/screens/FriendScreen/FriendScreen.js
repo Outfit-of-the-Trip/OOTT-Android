@@ -6,15 +6,15 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
-  ImageBackground,
   ScrollView,
+  TextInput,
+  Image,
 } from 'react-native';
 
 import {Avatar} from 'react-native-paper';
 import {AuthContext} from '../../utils/Auth';
-import FamilyTravle from '../../assets/images/familytravel.jpg';
-import EmptyImg from '../../assets/images/emptyImg.png';
-import MyPage from '../../assets/images/mypage.png';
+import Glass from '../../assets/images/glass.png';
+
 const FriendScreen = () => {
   // await AsyncStorage.getItem('userInfo') 현재 로그인한 계정의 데이터를 가져올 수 있음.
   const {userInfo} = useContext(AuthContext);
@@ -22,43 +22,18 @@ const FriendScreen = () => {
 
   const [friendName, setFriendName] = useState('');
   const [findFriendInfo, setFindFriendInfo] = useState([]);
+  const [friendTravleInfo, setFriendTravleInfo] = useState([]);
 
   //친구 추가
-  const addingFriend = async () => {
+  const addingFriend = async friend => {
     console.log(userInfo.nickname);
-    console.log(friendName.usrId);
+    console.log(friend.usrId);
     try {
       const response = await axios.post(
         'http://10.0.2.2:3000/api/friends/addFriends',
         {
           reqUser: `${userInfo.nickname}`,
-          resUser: `${friendName.usrId}`,
-        },
-      );
-      console.log(response.data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  //위 화면으로 데이터 가져오기
-  const dataUpFnc = data => {
-    setFriendName(data);
-  };
-  useEffect(() => {
-    // console.log(friendName);
-  }, []);
-
-  //친구 삭제
-  const deletingFriend = async username => {
-    console.log(userInfo.nickname);
-    console.log(username.usrId);
-    try {
-      const response = await axios.post(
-        'http://10.0.2.2:3000/api/friends/deleteFriend',
-        {
-          reqUser: `${userInfo.nickname}`,
-          resUser: `${username.usrId}`,
+          resUser: `${friend.usrId}`,
         },
       );
       console.log(response.data);
@@ -75,7 +50,7 @@ const FriendScreen = () => {
           'http://10.0.2.2:3000/api/test/getUserTable',
         );
         setFindFriendInfo(response.data);
-        // console.log(findFriendInfo);
+        console.log(findFriendInfo);
       } catch (e) {
         console.log(e);
       }
@@ -83,37 +58,48 @@ const FriendScreen = () => {
     getFriendInfo();
   }, []);
 
+  // 여행 계획 가져오기
+  useEffect(() => {
+    const getMyTravelInfo = async () => {
+      const response = await axios.get(
+        `http://10.0.2.2:3000/api/test/getTravelTable`,
+      );
+      setFriendTravleInfo(response.data);
+      // console.log(response.data);
+    };
+    getMyTravelInfo();
+  }, []);
+
+  // 친구 여행 기록 가져오기
+  const countTravle = friendTravleInfo.filter(
+    item => friendName === item.usrId,
+  ).length;
+
+  //친구 이름 가져오기
+  const findFriendName = name => {
+    setFriendName(name);
+  };
+
+  //친구 이름 검색
+  const foundFriend = findFriendInfo.filter(item => {
+    if (item.usrId === friendName) {
+      console.log(item);
+      return item;
+    }
+  });
+
   return (
     <SafeAreaView style={styles.allContainer}>
-      {friendName.length === 0 ? (
-        <View>
-          <ImageBackground source={EmptyImg} style={styles.upperPart}>
-            <Text style={styles.nickname}>친구 이름</Text>
-            <Avatar.Image size={120} source={MyPage} />
-            <Text style={styles.fashionItem}>친구 스타일</Text>
-          </ImageBackground>
-          <TouchableOpacity style={styles.plusButtonContainer}>
-            <Text style={styles.plusButton}>+</Text>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <View>
-          <ImageBackground source={FamilyTravle} style={styles.upperPart}>
-            <Text style={styles.nickname}>{friendName.usrId}</Text>
-            <Avatar.Image size={120} source={{uri: friendName.usrProfileURL}} />
-            <Text style={styles.fashionItem}>{friendName.usrStyle1}</Text>
-          </ImageBackground>
-          <TouchableOpacity
-            style={styles.plusButtonContainer}
-            onPress={addingFriend}>
-            <Text style={styles.plusButton}>+</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      <View style={styles.InputContainer}>
+        <TextInput style={styles.InputBox} onChangeText={findFriendName} />
+        <Image style={styles.searchImg} source={Glass} />
+      </View>
 
-      <ScrollView style={styles.FriendsList}>
-        {findFriendInfo.map((item, i) => (
-          <TouchableOpacity key={i} onPress={() => dataUpFnc(item)}>
+      {friendName.length === 0 ? (
+        <View></View>
+      ) : (
+        foundFriend.map((item, i) => (
+          <ScrollView key={i}>
             <View style={styles.personRowContainer}>
               <View style={styles.row}>
                 <View style={styles.personColumnContainer}>
@@ -124,16 +110,21 @@ const FriendScreen = () => {
                   />
                 </View>
                 <View style={styles.personColumnContainer}>
-                  <Text style={styles.textfont}>ID : &nbsp;{item.usrId}</Text>
+                  <Text style={styles.textfont}>&nbsp;{item.usrId}</Text>
                   <Text style={styles.textfont}>
-                    나이 : &nbsp;{item.usrAge}
+                    {countTravle} fashion items
                   </Text>
                 </View>
               </View>
+              <TouchableOpacity
+                style={styles.plusButtonContainer}
+                onPress={() => addingFriend(item)}>
+                <Text style={styles.plusButton}>+</Text>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+          </ScrollView>
+        ))
+      )}
     </SafeAreaView>
   );
 };
@@ -161,14 +152,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   plusButtonContainer: {
-    alignItems: 'flex-end',
+    justifyContent: 'center',
   },
   plusButton: {
-    bottom: 20,
-    marginRight: 20,
-    width: 50,
+    width: 40,
     textAlign: 'center',
-    fontSize: 35,
+    fontSize: 25,
     color: '#FFFFFF',
     backgroundColor: '#9F81F7',
     borderRadius: 60,
@@ -176,21 +165,28 @@ const styles = StyleSheet.create({
   InputContainer: {
     flexDirection: 'row',
     width: 'auto',
+    justifyContent: 'space-between',
     alignItems: 'center',
     borderRadius: 10,
-    borderWidth: 2,
-    borderColor: '#9F81F7',
-    margin: 5,
+    borderBottomWidth: 2,
+    borderColor: 'gray',
+    margin: 3,
     backgroundColor: '#FFFFFF',
+  },
+  InputBox: {
+    alignItems: 'center',
+    width: '80%',
+    fontFamily: '오뮤_다예쁨체',
+    fontSize: 20,
+    color: '#000000',
+    marginLeft: 10,
   },
   searchImg: {
     alignItems: 'center',
     justifyContent: 'center',
     width: 40,
     height: 40,
-    borderRightWidth: 5,
     marginRight: 5,
-    marginLeft: 5,
   },
   thumbnail: {
     width: '20%',
@@ -202,13 +198,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderColor: '#7401DF',
   },
-  InputBox: {
-    alignItems: 'center',
-    width: '80%',
-    fontFamily: '오뮤_다예쁨체',
-    fontSize: 20,
-    color: '#000000',
-  },
+
   searchName: {
     margin: 5,
     fontFamily: '오뮤_다예쁨체',
@@ -217,7 +207,7 @@ const styles = StyleSheet.create({
   },
   personRowContainer: {
     alignSelf: 'center',
-    width: '85%',
+    width: '90%',
     margin: 5,
     padding: 4,
     marginTop: 5,
@@ -238,8 +228,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   avatarContainer: {
-    borderRadius: 10,
-    backgroundColor: '#F2F2F2',
+    borderRadius: 30,
+    borderColor: 'undefined',
   },
   userId: {
     textAlign: 'center',
@@ -264,5 +254,11 @@ const styles = StyleSheet.create({
     borderWidth: 1.7,
     fontSize: 15,
     borderRadius: 10,
+  },
+  whitePage: {
+    width: '100%',
+    height: '60%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

@@ -6,15 +6,16 @@ import {Button, Image, Text, TouchableOpacity} from 'react-native';
 import HomeScreen from '../../screens/HomeScreen/HomeScreen';
 import MainScreen from '../../screens/MainScreen/MainScreen';
 import Recomend from '../../screens/MainScreen/Recomend/Recomend';
-import RecomendTop from '../../screens/MainScreen/DetailRecomend/RecomendTop';
-import RecomendBottom from '../../screens/MainScreen/DetailRecomend/RecomendBottom';
-import RecomendShose from '../../screens/MainScreen/DetailRecomend/RecomendShose';
-import RecomendOutter from '../../screens/MainScreen/DetailRecomend/RecomendOutter';
+import RecomendTop from '../../screens/OOTTScreen/RecomendSceen/DetailRecomend/RecomendTop';
+import RecomendBottom from '../../screens/OOTTScreen/RecomendSceen/DetailRecomend/RecomendBottom';
+import RecomendShose from '../../screens/OOTTScreen/RecomendSceen/DetailRecomend/RecomendShose';
+import RecomendDetail from '../../screens/OOTTScreen/RecomendSceen/RecomendDetail';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
 import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
 // import FriendInfoScreen from '../../screens/FriendScreen/FriendInfoScreen';
 import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
 
+import MypageScreen from '../../screens/MypageScreen/MypageScreen';
 
 import {AuthContext} from '../../utils/Auth';
 import KeywordScreen from '../../screens/MypageScreen/KeywordScreen';
@@ -42,7 +43,7 @@ const Navigation = () => {
   // 삼항연산자 사용. 만약 userInfo.id의 값이 존재한다면 MainScreen 랜더링
   return (
     <NavigationContainer>
-       <Stack.Navigator
+      <Stack.Navigator
         screenOptions={{
           animation: 'fade_from_bottom',
           tabBarShowLabel: false,
@@ -78,6 +79,11 @@ const Navigation = () => {
                 headerShown: true,
                 headerTitleAlign:'center'
               }}
+            />
+            <Stack.Screen
+              name="RecomendDetail"
+              component={RecomendDetail}
+              options={{headerShown: true}}
             />
             <Stack.Screen
               name="RecomendTop"
@@ -135,6 +141,12 @@ const Navigation = () => {
               component={AbataScreen}
               options={{headerShown: true}}
             />
+            <Stack.Screen
+              name="MypageScreen"
+              component={MypageScreen}
+              options={{headerShown: true}}
+            />
+
             {/* <Stack.Screen
               name="SendInfoScreen"
               component={SendInfoScreen}

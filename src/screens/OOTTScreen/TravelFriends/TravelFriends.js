@@ -5,7 +5,9 @@ import axios from 'axios';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import {useNavigation} from '@react-navigation/native';
 import { Divider } from '@rneui/themed';
-import { backendURL } from '../../../constants/url';
+import { backendURL, testURL } from '../../../constants/url';
+import LodingSpineer from '../../../components/Spinner';
+
 
 import {
   StyleSheet,
@@ -29,9 +31,11 @@ const TravelFriends = () => {
         gotoTravelCategory()
     }
 
+    const [isLoding, setIsLoding] = useState(true);
+
     useEffect(() => {
         const getUserFriedns = async () => {
-            axios.get(backendURL+'/api/friends/myFriends?userId='+userInfo[0].nickname)
+            axios.get(testURL+'/api/friends/myFriends?userId='+userInfo[0].nickname)
             .then(function (res) {
                 const proccessedData = res.data.map(item=>{
                     const isClicked = false
@@ -82,7 +86,6 @@ const TravelFriends = () => {
 
   const userInfo = useRecoilState(userInfoState);
   const [friendsData, setFriendsData] = useState({});
-  const [isLoding, setIsLoding] = useState(true);
 
   const renderFriends = ({item, index}) => {
     const clickedColor = item.isClicked ? 'black' : 'grey';
@@ -111,7 +114,11 @@ const TravelFriends = () => {
         </View>
 
         <View style={styles.styleContainer}>
-          <Text>#스타일</Text>
+          <Text style={{color: clickedColor, fontSize: 13}}>
+            {item.usrStyle1 && "# "+item.usrStyle1}{'\n'}
+            {item.usrStyle2 && "# "+item.usrStyle12}{'\n'}
+            {item.usrStyle3 && "# "+item.usrStyle3}
+          </Text>
         </View>
 
         <View style={styles.buttonContainer}>
@@ -144,7 +151,7 @@ const TravelFriends = () => {
       </View>
 
       <View style={styles.littleText}>
-        <Text style={{margin: 3}}>친구 {friendsData.length}</Text>
+        <Text style={{margin: 3}}>{isLoding? <LodingSpineer /> : "친구: " + friendsData.length}</Text>
       </View>
       <View style={styles.friendListContainer}>
         <FlatList
@@ -205,7 +212,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: 'row',
     borderColor: 'black',
-    height: 75,
+    height: 80,
   },
   profile: {
     height: 35,
@@ -231,7 +238,7 @@ const styles = StyleSheet.create({
   styleContainer: {
     flex: 5,
     justifyContent: 'center',
-    marginLeft: 20,
+    marginLeft: 5,
   },
   checkBox: {
     marginHorizontal: 20,
