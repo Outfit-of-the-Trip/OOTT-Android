@@ -6,20 +6,13 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
-  ImageBackground,
   ScrollView,
-  Modal,
-  Pressable,
   TextInput,
   Image,
 } from 'react-native';
 
-import RecomendOOTT from '../../assets/images/recomendOOTT.png';
-
 import {Avatar} from 'react-native-paper';
 import {AuthContext} from '../../utils/Auth';
-import FamilyTravle from '../../assets/images/familytravel.jpg';
-import MyPage from '../../assets/images/mypage.png';
 import Glass from '../../assets/images/glass.png';
 
 const FriendScreen = () => {
@@ -162,9 +155,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   plusButton: {
-    width: 50,
+    width: 40,
     textAlign: 'center',
-    fontSize: 35,
+    fontSize: 25,
     color: '#FFFFFF',
     backgroundColor: '#9F81F7',
     borderRadius: 60,
