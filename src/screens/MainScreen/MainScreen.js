@@ -45,7 +45,6 @@ const MainScreen = () => {
     return input;
   }
   
-
   useEffect(() => { //사용자 친구 데이터
     axios.get('http://10.0.2.2:3000/api/friends/myFriends?userId=정성욱')
       .then(function (response) {
@@ -68,6 +67,7 @@ const MainScreen = () => {
         console.log(err);
       });
   }, []);
+
 
 
   useEffect(() => { //여행정보 데이터
