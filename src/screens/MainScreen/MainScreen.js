@@ -1,42 +1,40 @@
-import React, {useState,useEffect,useContext} from 'react';
+import React, {useState, useEffect, useContext, useLayoutEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import { useWindowDimensions } from 'react-native';
-import { Avatar } from '@rneui/themed';
+import {ImageBackground, useWindowDimensions} from 'react-native';
+import {Avatar} from '@rneui/themed';
 import axios from 'axios';
-
-import profileImg from '../../assets/images/profileImg.png';
 import more from '../../assets/images/more.png';
-import { AuthContext } from '../../utils/Auth';
-import dateairplane from '../../assets/images/dateairplane.png';
-import TravelInfo from '../../constants/TravelInfo';
+import {AuthContext} from '../../utils/Auth';
+import FirstLogin from '../../components/FirstLogin';
+import ShowLog from '../../components/ShowLog';
 
 import {
   View,
   StyleSheet,
   Text,
   SafeAreaView,
-  ScrollView,
   Image,
   TouchableOpacity,
-  FlatList
+  FlatList,
+  ScrollView,
 } from 'react-native';
 import EmptyScreen from '../../components/EmptyScreen';
-
+import EmptyImg from '../../assets/images/emptyImg.png';
 
 const MainScreen = () => {
-  const{userInfo} = useContext(AuthContext);
-  console.log(userInfo);
+  const {userInfo} = useContext(AuthContext);
   const navigation = useNavigation();
   const width = useWindowDimensions().width; //기기 넓이
 
-  const [data,setData] = useState([]);
-  const [traveldate, settraveldate] = useState(); //여행 날짜
+  const [data, setData] = useState([]);
   const [travelea, settravelea] = useState(); //등록된 여행 개수
-  const [friend,setfriend] = useState();
+  const [friend, setfriend] = useState();
+  const [dbUsrname, setDbUsrname] = useState([]);
+  const [friendsInfo, setFriendsInfo] = useState([]);
+  const [isfirstlogin,setfirstlogin] = useState();
 
   const gotoRecomend = (travledata) => {
-    //console.log(travledata)
-    navigation.navigate('Recomend', travledata);
+    navigation.navigate('Recomend', travledata,userInfo);
   };
   const gotoFrineds = () =>{
     return navigation.navigate('친구')
@@ -47,41 +45,12 @@ const MainScreen = () => {
     var input = data.substring(0,10);
     return input;
   }
-
-  const Showlog = () =>{
-     if(travelea>0){
-      return <View>
-          <FlatList
-            data={data}
-            renderItem={({ item,index }) => (
-              <View key={index} style={styles.recomendconatiner}>
-              <View
-                style={styles.recotopcontainer}>
-                <View style={[styles.viewcontainer,{marginHorizontal:width-(width-10),marginBottom:width-(width-10)}]}>
-                  <Text style={styles.datetext}>{translate(item.travlDate)} to {item.travlPlace}</Text>
-                </View>
-                <TouchableOpacity onPress={() => gotoRecomend(item)}>
-                  <Image source={more} />
-                </TouchableOpacity>
-              </View>
-              <View style={[styles.viewcontainer,{marginHorizontal:width-(width-10)}]}>
-              <Text style={styles.tagtext}>태그</Text>
-              </View>
-            </View>
-              )}
-            keyExtractor={(item) => item.usrID} // Use a unique identifier as the key
-            />
-        </View>
-    }else{
-      return <EmptyScreen/>
-    }
-  }
+  
 
   useEffect(() => { //사용자 친구 데이터
-    axios.get('http://10.0.2.2:8000/api/friends/myFriends?userId=a')
+    axios.get('http://10.0.2.2:3000/api/friends/myFriends?userId=정성욱')
       .then(function (response) {
         setfriend(response.data.length)
-        console.log(response.data.length)
       })
       .catch(function (err) {
         console.log(err);
@@ -90,100 +59,91 @@ const MainScreen = () => {
 
 
   useEffect(() => { //사용자 데이터 
-    axios.get('http://10.0.2.2:8000/api/users/getUserInfo?userId=admin')
+    axios.get(`http://10.0.2.2:3000/api/test/getUserTable`)
       .then(function (response) {
-        setusrname(response.data.usrId);
-
+        setDbUsrname(response.data);
+        setfirstlogin(response.data.usrUpdateAt)
+        console.log(isfirstlogin);
       })
       .catch(function (err) {
         console.log(err);
       });
   }, []);
+
 
   useEffect(() => { //여행정보 데이터
-    axios.get('http://10.0.2.2:8000/api/travel/getMyTravelInfo?userId=a')
+    axios.get('http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=정성욱')
       .then(function (response) {
-        console.log(response.data);
-        var data = String(response.data.travlDate);
-        var input = data.substring(0,10);
-        settraveldate(input)
         settravelea(response.data.length)
         setData(response.data);
-        console.log(response.data);
       })
       .catch(function (err) {
         console.log(err);
       });
   }, []);
+
 
   return (
     <SafeAreaView style={styles.container}>
-        <View style={styles.profile}>
+    <ScrollView>
+    <View style={styles.profile}> 
+    <ImageBackground
+        source={EmptyImg}
+        style={{ width: "100%", height: "100%" ,justifyContent:"flex-end"}}
+        resizeMode='cover'>
+        <View
+          style={styles.profileimgconatiner}>
+          <Text
+            style={styles.profileimgename}>
+            {userInfo.nickname}
+          </Text>
           <View
-            style={styles.profileimgconatiner}>
+            style={{marginVertical:5}}>
             <Avatar
-              size={80}
+              size={130}
               rounded
               source={{
                 uri:userInfo.profileImageUrl}} />
-            <Text
-              style={styles.profileimgename}>
-              {userInfo.nickname}
-            </Text>
           </View>
-          <View
-            style={styles.profileinfoconatiner}>
-            <View
-              style={styles.profiletextcontainer}>
-              <Text style={styles.profilebigtext}>{travelea}</Text>
-              <Text style={styles.profiletext}>mylog</Text>
-            </View>
-            <View
-              style={styles.profiletextcontainer}>
-              <TouchableOpacity
-                onPress={gotoFrineds}>
-                <View
-                  style={{alignItems:"center"}}>
-                <Text style={styles.profilebigtext}>
-                  {friend}
-                </Text>
-                <Text style={styles.profiletext}>Friend</Text>
-                </View>
-              </TouchableOpacity> 
-              </View>
-          </View>
+          <Text style={styles.profilebigtext}>{travelea} travel log</Text>
         </View>
-        <View style={styles.bottomline} />
-        <View
-          style={{flex:4.6}}>
-        <Showlog/>
-        </View>
-    </SafeAreaView>
-  );
+        </ImageBackground>
+    </View>
+    <View style={styles.bottomline} />
+    <View
+      style={{flex:2}}>
+    {isfirstlogin ==!null ?(
+      <FirstLogin/>):(
+      <ShowLog tr={travelea}/>
+    )} 
+    </View>
+    </ScrollView>
+  </SafeAreaView>);
 };
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 5,
     backgroundColor:'white'
   },
   profile: {
-    flex: 1,
-    flexDirection: 'row',
-    marginTop: 20,
+    flex: 3,
+    flexDirection: 'column',
+    justifyContent:'flex-end',
+    alignContent:'center',
   },
   profileimgename:{
     color: 'black',
     fontSize: 24,
-    fontFamily: '오뮤_다예쁨체',
+    fontFamily: 'SCDream5',
   },
   profileimgconatiner:{
-    flex: 0.5,
     alignItems: 'center',
+    justifyContent:"flex-start",
+    padding:10,
   },
   recomendconatiner: {
     flex: 1,
-    marginTop: "5%",
+    marginTop: "3%",
     elevation:10,
     backgroundColor:"white",
     borderRadius:10,
@@ -203,18 +163,6 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: 'contain',
   },
-  profileinfoconatiner:{
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignContent: 'center',
-  },
-  profiletextcontainer:{
-    flex: 0.5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignContent:'center'
-  },
   recoimgae: {
     flex: 1,
     resizeMode: 'contain',
@@ -226,12 +174,12 @@ const styles = StyleSheet.create({
   tagtext: {
     color: 'black',
     fontSize: 24,
-    fontFamily: '오뮤_다예쁨체',
+    fontFamily: 'SCDream5',
   },
   datetext: {
     color: 'black',
     fontSize: 24,
-    fontFamily: '오뮤_다예쁨체',
+    fontFamily: 'SCDream4',
   },
   bottomline: {
     borderBottomColor: 'gray',
@@ -246,12 +194,7 @@ const styles = StyleSheet.create({
   profilebigtext: {
     color: 'black',
     fontSize: 32,
-    fontFamily: '오뮤_다예쁨체',
-  },
-  profiletext: {
-    color: 'black',
-    fontSize: 24,
-    fontFamily: '오뮤_다예쁨체',
+    fontFamily: 'SCDream3',
   },
 });
 
