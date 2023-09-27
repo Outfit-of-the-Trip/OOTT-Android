@@ -41,9 +41,15 @@ const Closet = () => {
       } else if (response.error) {
         console.log('Image picker error: ', response.error);
       } else {
+
         setSelectedImg(response.assets[0].uri);
         if (selectedImg !== '') {
           setData(data => [...data, selectedImg]);
+
+        const ImgUri = response.assets[0].uri;
+        setSelectedImg(ImgUri);
+        if (selectedImg !== '') {
+          setData(data => [...data, ImgUri]);
         }
       }
     });

@@ -5,8 +5,7 @@ import {SheetProvider, SheetManager} from 'react-native-actions-sheet';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {
   searchState,
-  firstDateState,
-  lastDateState,
+  dateState,
   reasonState,
 } from '../../states/atoms';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -26,13 +25,14 @@ const OOTTScreen = () => {
   };
 
   const place = useRecoilValue(searchState);
-  const firstDate = useRecoilValue(firstDateState);
-  const lastDate = useRecoilValue(lastDateState);
+  const date = useRecoilValue(dateState);
+  const firstDate = date[0]
+  const lastDate = date[date.length -1]
   const [reason, setReason] = useRecoilState(reasonState);
 
   const [isLoding, setIsLoding] = useState(null);
 
-  const [popData] = useState(['관광', '호캉스', '배낭여행', '비즈니스']);
+  const [popData] = useState(['배낭여행', '레저여행', '캠핑', '엠티', '호캉스', '핫플레이스', '인생샷', '출장', '워크숍', '학회']);
 
   const buttonColor = place && firstDate && reason ? 'black' : 'grey';
 
@@ -212,13 +212,13 @@ const styles = StyleSheet.create({
     alignContent: 'center',
   },
   reasonContainer: {
-    flex: 4,
+    flex: 6,
     margin: 15,
     marginTop: '15%',
   },
 
   nextButton: {
-    flex: 4,
+    flex: 2,
     justifyContent: 'center',
     margin: 10,
   },
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonGroup: {
-    flex: 1,
+    flex: 3,
     marginTop: 20,
     alignItems: 'center',
   },

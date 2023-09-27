@@ -24,7 +24,7 @@ const TravelCategory = () => {
 
     const saveCategorysData = useSetRecoilState(categoryState)
 
-    const [categoryIdx, setcategoryIdx] = useState(0)
+    const [categoryIdx, setcategoryIdx] = useState("")
 
 
 
@@ -51,7 +51,7 @@ const TravelCategory = () => {
                     inactiveItemOpacity={0.5} // 비활성 아이템의 투명도
                     inactiveItemOffset={30} // 비활성 아이템 표시 넓이
                     onItemIndexChange={item=>{
-                        setcategoryIdx(item)
+                        setcategoryIdx(category[item])
                     }}
                     onItemRender={(item, index) => (
                         
