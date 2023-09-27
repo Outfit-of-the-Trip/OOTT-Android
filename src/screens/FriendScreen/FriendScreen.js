@@ -6,20 +6,13 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
-  ImageBackground,
   ScrollView,
-  Modal,
-  Pressable,
   TextInput,
   Image,
 } from 'react-native';
 
-import RecomendOOTT from '../../assets/images/recomendOOTT.png';
-
 import {Avatar} from 'react-native-paper';
 import {AuthContext} from '../../utils/Auth';
-import FamilyTravle from '../../assets/images/familytravel.jpg';
-import MyPage from '../../assets/images/mypage.png';
 import Glass from '../../assets/images/glass.png';
 
 const FriendScreen = () => {
