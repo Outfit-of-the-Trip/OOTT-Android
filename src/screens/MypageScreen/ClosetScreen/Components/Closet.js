@@ -35,17 +35,13 @@ const Closet = () => {
       maxHeight: 512,
       includeBase64: Platform.OS === 'android',
     };
+
     launchImageLibrary(options, response => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
         console.log('Image picker error: ', response.error);
       } else {
-
-        setSelectedImg(response.assets[0].uri);
-        if (selectedImg !== '') {
-          setData(data => [...data, selectedImg]);
-
         const ImgUri = response.assets[0].uri;
         setSelectedImg(ImgUri);
         if (selectedImg !== '') {
