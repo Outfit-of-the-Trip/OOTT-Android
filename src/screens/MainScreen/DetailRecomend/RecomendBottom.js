@@ -7,16 +7,19 @@ import {
     Image,
     TouchableOpacity,
     FlatList,
+    ScrollView,
   } from 'react-native';
 import React, {  useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
+import { Flex } from 'native-base';
 
 const RecomendBottom = () => {
     const navigation = useNavigation();
     const width = useWindowDimensions().width; //기기 폭 값
+    const height = useWindowDimensions().height; //기기 높이 값
     const {params: data} = useRoute(); //여행 데이터 받아오기
     const traveldate = String(data.travlDate).substring(0,10); //날짜 글자 필터링
     const gotoShose = () => {
@@ -27,73 +30,70 @@ const RecomendBottom = () => {
         <SafeAreaView
             style={style.container}>
             <View
+                style={{flex:0.2,marginHorizontal:width-(width-15),marginVertical:height-(height-10)}}>
+                <Text
+                    style={style.toptext}>
+                Customized OOTT
+                </Text>
+                <Text
+                    style={style.toptext}>
+                that reflects your preference
+                </Text>
+            </View>
+            <View
                 style={{flex:0.2,marginHorizontal:width-(width-15)}}>
                     <View
                         style={style.firsttextcontainer}>
-                            <View style={{flexDirection:'row'}}>
                                     <Text style={style.traveldatetext}>{traveldate}</Text>
                                     <Text style={style.traveldatetext}> to {data.travlPlace}</Text>
-                            </View> 
                         </View>
                     </View>
-                <View
-                    style={[style.cardcontainer,{marginHorizontal:width-(width-15)}]}>
-                      <View style={{flex:0.2}}>
+                <ScrollView
+                    style={{flex:2.5}}>    
+                    <View style={{flex:0.1,marginHorizontal:width-(width-20)}}>
                             <Text style={style.cardtextcontainer}>
-                               {data.usrId}님에게 하의 추천하는
+                                AI Recommendation
                             </Text>
                         </View>
                 <View
-                    style={{flex:1}}>
+                    style={[style.cardcontainer,{marginHorizontal:width-(width-15)}]}>
+                <View
+                    style={{height:200}}>
                     <FlatList
                         data={RecomendGarmet}
                         showsHorizontalScrollIndicator={false}
                         renderItem={({item,index}) =>(
                             <View
                                 style={style.cardimagecontainer}>
+                            <View
+                                style={{flex:1}}>
+                            <View
+                                style={{justifyContent:'flex-start',zIndex:5,alignItems:'flex-start'}}>
                                 <Image
                                 source={item.img}
-                                style={[style.cardimg,{marginHorizontal: width-(width-15)}]}/>
+                                style={[style.cardimg,{marginHorizontal: width-(width-10)}]}/>
+                            </View>
+                            <View
+                                style={{backgroundColor:'red',marginHorizontal: width-(width-10)}}>
+                                <Text>#hip #Street</Text>
+                                <Text>제품명</Text>
+                            </View>
+                            </View>
                             </View>)}
                         horizontal={true}/>
                     </View>
-                        <View style={{flex:0.2,flexDirection:"row",width:"100%",justifyContent:"center"}}>
-                            <TouchableOpacity>
-                                <Text
-                                    style={style.categorytext}>
-                                    #낮은 가격순
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity>
-                                <Text
-                                    style={style.categorytext}>
-                                     #높은 가격순
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity>
-                                <Text
-                                    style={style.categorytext}>
-                                    #선호 스타일순
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity>
-                                <Text
-                                    style={style.categorytext}>
-                                    #선호 브랜드순
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                </View>
+                </View> 
+                <View
+                    style={{flex:0.1,marginHorizontal:width-(width-20)}}>
+                    <Text style={style.cardtextcontainer}>
+                         옷장속에 있는 유사한 하의
+                    </Text>
+                    </View>
                <View
                     style={[style.cardcontainer,{marginHorizontal:width-(width-15)}]}>
+                   
                     <View
-                        style={{flex:0.1}}>
-                        <Text style={style.cardtextcontainer}>
-                            옷장속에 있는 유사한 하의
-                        </Text>
-                    </View>
-                    <View
-                    style={{flex:1}}>
+                    style={{height:200}}>
                     <FlatList
                         showsHorizontalScrollIndicator={false}
                         data={RecomendGarmet}
@@ -107,6 +107,7 @@ const RecomendBottom = () => {
                         horizontal={true}/>
                     </View>
                 </View>
+                </ScrollView>
             <View
                 style={[style.bottomcontainer,{marginHorizontal: width-(width-15)}]}>
                 <TouchableOpacity
@@ -132,21 +133,27 @@ const style = StyleSheet.create({
         height:'90%',
         resizeMode:'contain',
       },
+    toptext:{
+        color:'black',
+        fontSize:24
+    }, 
     firsttextcontainer:{
-        flex:0.8,
+        flex:0.5,
         flexDirection:'row',
-        justifyContent:"center",
-        alignItems:"center"
+        justifyContent:"flex-start",
+        alignItems:"center",
+        borderRadius:3,
+        borderWidth:10,
+        borderColor:'white',
+        elevation:5,
     },
     cardcontainer:{
-        flex:1,alignItems: 'center',
+        flex:1.5,
+        alignItems: 'flex-start',
         justifyContent: 'center',
-        elevation:10,
         backgroundColor:"white",
-        borderRadius:10,
-        borderWidth:2,
-        borderColor:'white',
         marginBottom:"3%",
+        backgroundColor:'blue'
     },
     cardtextcontainer:{
         fontFamily:'오뮤_다예쁨체',
@@ -155,15 +162,22 @@ const style = StyleSheet.create({
     },  
     cardimagecontainer:{
         flex: 1, 
-        alignItems: 'center', justifyContent: 'center'
+        alignItems: 'flex-start', 
+        justifyContent: 'center',
+        elevation:1,
+        borderRadius:5,
+        shadowColor:'white',
+        width:"20%",
+        zIndex:1
     },
     cardimg:{
         resizeMode: 'contain',
-        height:"100%"
+        height:"80%",
+        backgroundColor:"red"
     },
     traveldatetext:{
         fontSize:24,
-        color:'#4949E8',
+        color:'grey',
         fontFamily:'오뮤_다예쁨체',
       },
     categorytext:{
@@ -175,7 +189,6 @@ const style = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'space-between',
         marginTop:10,
-        zIndex:1,
     },
     datetext:{
         fontSize:24,

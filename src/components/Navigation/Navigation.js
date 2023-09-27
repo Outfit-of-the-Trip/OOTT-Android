@@ -33,7 +33,7 @@ import Bottomtab from './BottomTabTest';
 const Stack = createNativeStackNavigator();
 
 const mainLogo = () => {
-  return <Image style={{width: 72, height: 54}} source={Toplogo} />;
+  return <Image style={{width: 100, height: 54}} source={Toplogo} />;
 };
 const Navigation = () => {
   // Auth 에서 받은 userInfo 값
@@ -74,7 +74,10 @@ const Navigation = () => {
             <Stack.Screen
               name="RecomendOutter"
               component={RecomendOutter}
-              options={{headerShown: true}}
+              options={{
+                headerShown: true,
+                headerTitleAlign:'center'
+              }}
             />
             <Stack.Screen
               name="RecomendTop"
