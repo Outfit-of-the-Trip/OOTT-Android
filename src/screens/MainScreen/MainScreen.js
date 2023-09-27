@@ -1,11 +1,12 @@
-import React, {useState, useEffect, useContext, useLayoutEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useWindowDimensions} from 'react-native';
 import {Avatar} from '@rneui/themed';
 import axios from 'axios';
 import more from '../../assets/images/more.png';
 import {AuthContext} from '../../utils/Auth';
-
+import { useRecoilState } from 'recoil';
+import { isUserFirstLogin } from '../../states/atoms';
 import FirstLogin from '../../components/FirstLogin';
 
 import {
@@ -24,7 +25,7 @@ const MainScreen = () => {
   const {userInfo} = useContext(AuthContext);
   const navigation = useNavigation();
   const width = useWindowDimensions().width; //기기 넓이
-
+  const [isFirstLogin,setIsFirstLogin] = useRecoilState(isUserFirstLogin)
   const [data, setData] = useState([]);
   const [travelea, settravelea] = useState(); //등록된 여행 개수
   const [friend, setfriend] = useState();
@@ -151,7 +152,7 @@ const MainScreen = () => {
     <View style={styles.bottomline} />
     <View
       style={{flex:4.6}}>
-    {isfirstlogin==!null?(
+    {isFirstLogin!==false?(
       <Showlog/>):(
       <FirstLogin/>
     )}
