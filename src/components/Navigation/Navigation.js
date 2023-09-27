@@ -6,9 +6,7 @@ import {Button, Image, Text, TouchableOpacity} from 'react-native';
 import HomeScreen from '../../screens/HomeScreen/HomeScreen';
 import MainScreen from '../../screens/MainScreen/MainScreen';
 import Recomend from '../../screens/MainScreen/Recomend/Recomend';
-import RecomendTop from '../../screens/OOTTScreen/RecomendSceen/DetailRecomend/RecomendTop';
-import RecomendBottom from '../../screens/OOTTScreen/RecomendSceen/DetailRecomend/RecomendBottom';
-import RecomendShose from '../../screens/OOTTScreen/RecomendSceen/DetailRecomend/RecomendShose';
+
 import RecomendDetail from '../../screens/OOTTScreen/RecomendSceen/RecomendDetail';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
 import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
@@ -72,32 +70,10 @@ const Navigation = () => {
               component={Recomend}
               options={{headerShown: true}}
             />
-            <Stack.Screen
-              name="RecomendOutter"
-              component={RecomendOutter}
-              options={{
-                headerShown: true,
-                headerTitleAlign:'center'
-              }}
-            />
+
             <Stack.Screen
               name="RecomendDetail"
               component={RecomendDetail}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="RecomendTop"
-              component={RecomendTop}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="RecomendBottom"
-              component={RecomendBottom}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="RecomendShose"
-              component={RecomendShose}
               options={{headerShown: true}}
             />
             <Stack.Screen
