@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { Calendar } from "react-native-calendars";
 import { useSetRecoilState } from "recoil";
 import { dateState } from '../../../states/atoms';
+import { firstDateState, lastDateState } from '../../../states/atoms';
 
 import {
     View,
@@ -20,6 +21,8 @@ const CalendarSheet = (props) => {
 
     const [date, setDate] = useState([]);
     const setAllDate = useSetRecoilState(dateState)
+    const setfirstDate = useSetRecoilState(firstDateState)
+    const setLastDate = useSetRecoilState(lastDateState)
     const [dateMarker, setDateMarker] = useState({})
     
     const addDate = async (data) => {
@@ -32,6 +35,8 @@ const CalendarSheet = (props) => {
         setDate(copy.sort())
 
         setAllDate(copy)
+        setfirstDate(copy[0])
+        setLastDate(copy[copy.length - 1])
     }
     
     useEffect(()=>{

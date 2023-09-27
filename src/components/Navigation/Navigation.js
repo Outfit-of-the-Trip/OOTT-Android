@@ -68,6 +68,11 @@ const Navigation = () => {
               options={{headerShown: true}}
             />
             <Stack.Screen
+              name="OOTTScreen"
+              component={OOTTScreen}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
               name="Recomend"
               component={Recomend}
               options={{headerShown: true}}

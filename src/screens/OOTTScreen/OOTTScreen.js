@@ -6,6 +6,8 @@ import {useRecoilState, useRecoilValue} from 'recoil';
 import {
   searchState,
   dateState,
+  firstDateState,
+  lastDateState,
   reasonState,
 } from '../../states/atoms';
 import Icon from 'react-native-vector-icons/MaterialIcons';

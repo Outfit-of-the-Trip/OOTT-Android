@@ -163,19 +163,6 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: 'contain',
   },
-  recoimgae: {
-    flex: 1,
-    resizeMode: 'contain',
-  },
-  recotopcontainer:{
-    flexDirection: 'row', 
-    justifyContent: 'space-between'
-  },
-  tagtext: {
-    color: 'black',
-    fontSize: 24,
-    fontFamily: 'SCDream5',
-  },
   datetext: {
     color: 'black',
     fontSize: 24,
