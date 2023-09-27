@@ -13,7 +13,6 @@ import {
   Box,
 } from 'native-base';
 import ClosetScreen from './ClosetScreen/ClosetScreen';
-import KeywordScreen from './KeywordScreen';
 
 import {
   View,
@@ -28,7 +27,7 @@ const MypageScreen = () => {
   const navigation = useNavigation();
 
   const gotoTravelPlace = () => {
-    return navigation.navigate('KeywordScreen');
+    return navigation.navigate('');
   };
 
   const {userInfo} = useContext(AuthContext);
