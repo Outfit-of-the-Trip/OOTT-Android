@@ -4,12 +4,6 @@ import {Platform, View, FlatList, StyleSheet, Image} from 'react-native';
 import Gallery from './Gallery';
 import {launchImageLibrary} from 'react-native-image-picker';
 
-const imagePickerOptions = {
-  mediaType: 'photo',
-  maxWidth: 768,
-  maxHeight: 768,
-  includeBase64: Platform.OS === 'android',
-};
 const Closet = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [data] = useState([
@@ -32,16 +26,27 @@ const Closet = () => {
     );
   };
 
-  const onPickImage = res => {
-    if (res.didCancel || !res) {
-      return;
-    }
-    console.log('PickImage', res);
-  };
-
   //갤러리에서 사진 선택
-  const onLaunchImageLibrary = () => {
-    launchImageLibrary(imagePickerOptions, onPickImage);
+  const onLaunchImageLibrary = async () => {
+    const options = {
+      mediaType: 'photo',
+      maxWidth: 512,
+      maxHeight: 512,
+      includeBase64: Platform.OS === 'android',
+    };
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        const ImgUri = response.assets[0].uri;
+        setSelectedImg(ImgUri);
+        if (selectedImg !== '') {
+          setData(data => [...data, ImgUri]);
+        }
+      }
+    });
   };
 
   //Modal Open
