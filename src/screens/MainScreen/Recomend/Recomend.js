@@ -1,6 +1,7 @@
 import React, { useState,useRef, } from 'react';
 import { useWindowDimensions, Modal } from 'react-native';
-import SwiperFlatList from 'react-native-swiper-flatlist';
+import avatarbutton from '../../../assets/images/avatarbutton.png'
+
 import {
   View,
   StyleSheet,
@@ -9,20 +10,22 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+
 import { useRoute } from '@react-navigation/native';
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import { useNavigation } from '@react-navigation/native';
+import { Avatar } from '@rneui/themed';
+import Swiper from 'react-native-swiper'
 
 const Recomend = () => {
   const navigation = useNavigation();
-  const {params: data} = useRoute(); //여행 데이터 받아오기 
-  const traveldate = String(data.travlDate).substring(0,10); //날짜 글자 필터링
- 
+  const {params: traveldata,userdata} = useRoute(); //여행 데이터 받아오기 
+  const traveldate = String(traveldata.travlDate).substring(0,10); //날짜 글자 필터링
   const width = useWindowDimensions().width; //기기 폭 값
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false); //친구 모달창
 
   const scrollRef = useRef();
-
+/* travledata는 여행 날짜 데이터 변수 */
   const gotoRecomendOutter = (travledata) => {
     console.log(travledata)
     navigation.navigate('RecomendOutter',travledata);
@@ -40,9 +43,9 @@ const Recomend = () => {
     return navigation.navigate('RecomendShose',travledata);}
 
   const gotoFriendsLook = () =>{ 
-      if(data.travlFriends!=null){// 같이 가는 친구가 있다면 친구창으로 이동
-        console.log(data.travlFriend);
-        navigation.navigate('FriendsLook',data)
+      if(traveldata.travlFriends!=null){// 같이 가는 친구가 있다면 친구창으로 이동
+        console.log(traveldata.travlFriend);
+        navigation.navigate('FriendsLook',traveldata)
       }
       else{
           return setIsModalVisible(!isModalVisible)
@@ -57,63 +60,64 @@ const Recomend = () => {
           style={[styles.infosecondcontainer,{marginHorizontal:width-(width-12)}]}>
               <View
                 style={{justifyContent:'space-between',flexDirection:'row',width:'100%'}}>
+                <Avatar
+                  size={30}>
+
+                </Avatar>
                 <Text
                   style={styles.infodatetext}>
-                  {traveldate} Look to {data.travlPlace}
+                  {traveldate} ~ 22/07/19 Look to {traveldata.travlPlace}
                 </Text>
-                <View>
-                  <TouchableOpacity>
-                  <Text
-                    style={{fontFamily:'오뮤_다예쁨체',fontSize:16,color:'black'}}>아바타로 보기</Text>
+                  <TouchableOpacity
+                    style={{justifyContent:'center',alignItems:'center'}}>
+                    <Image source={avatarbutton}/>
                   </TouchableOpacity>
-                  <TouchableOpacity>
-                  <Text
-                     style={{fontFamily:'오뮤_다예쁨체',fontSize:16,color:'black'}}>일정선택</Text>
-                  </TouchableOpacity>
-                </View>
               </View>
         </View>
     </View>
-    <View style={styles.bottomline} />
     <View
       style={styles.showimgcontainer}>
-      <SwiperFlatList
-        ref={scrollRef}
-        paginationActiveColor='black'
-        paginationStyleItem={{height:10,width:10}}
-        data={RecomendGarmet}
-        renderItem={({item, index}) =>(
-          <View>
-            <Image
-            source={item.img}
-            style={[styles.showimg,{width:width}]}/>
-          </View>
-        )}/>
+      <Swiper
+        dotStyle={{backgroundColor:'grey',width:8}}
+        activeDotColor='#4949E8'
+        >
+        {RecomendGarmet.map((img,index) =>(
+          <View
+          key={index}>
+          <Image
+          source={img.img}
+          style={[styles.showimg,{width:width}]}/>
+        </View>
+        ))}
+     </Swiper>
     </View>
-    <View style={styles.bottomline} />
     <View
-      style={[styles.bottomfirstcontainer,{marginHorizontal:width-(width-70)}]}> 
+      style={[styles.bottomfirstcontainer,{marginHorizontal:width-(width-20)}]}> 
      <TouchableOpacity
-      onPress={() => gotoRecomendOutter(data)}>
+      onPress={() => gotoRecomendOutter(traveldata,userdata)}
+      style={{marginHorizontal:5}}>
         <Text style={styles.hashtagtext}>#아우터</Text>
     </TouchableOpacity>
     <TouchableOpacity
-      onPress={() => gotoRecomendTop(data)}>
+      onPress={() => gotoRecomendTop(traveldata,userdata)}
+      style={{marginHorizontal:5}}>
         <Text style={styles.hashtagtext}>#상의</Text>
     </TouchableOpacity>
     <TouchableOpacity
-       onPress={() => gotoRecomendBottom(data)}>
+       onPress={() => gotoRecomendBottom(traveldata,userdata)}
+       style={{marginHorizontal:5}}>
         <Text style={styles.hashtagtext}>#하의</Text>
     </TouchableOpacity>
     <TouchableOpacity
-       onPress={() => gotoRecomendShose(data)}>
+       onPress={() => gotoRecomendShose(traveldata,userdata)}
+       style={{marginHorizontal:5}}>
         <Text style={styles.hashtagtext}>#신발</Text>
     </TouchableOpacity>
     </View>
     <View
       style={[styles.bottomsecondcontainer,{marginHorizontal:width-(width-20)}]}>
         <TouchableOpacity
-          onPress={() => gotoFriendsLook(data)}>
+          onPress={() => gotoFriendsLook(traveldata)}>
           <Text
           style={styles.samedaystext}>같은 날 친구가 입는 옷은?</Text>
            {<Modal 팝업창
@@ -124,9 +128,9 @@ const Recomend = () => {
             >
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
-                <Text style={{fontFamily:'오뮤_다예쁨체',fontSize:24}}>같이 가는 친구가 없습니다</Text>
+                <Text style={styles.modaltext}>같이 가는 친구가 없습니다</Text>
                 <TouchableOpacity onPress={gotoFriendsLook}>
-                  <Text style={{fontFamily:'오뮤_다예쁨체',fontSize:24}}>닫기</Text>
+                  <Text style={styles.modaltext}>닫기</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -143,8 +147,12 @@ export default Recomend;
       flex:5,
       backgroundColor:'white'
     },
+    modaltext:{
+      fontFamily:'오뮤_다예쁨체',
+      fontSize:24
+    },
     infocontainer:{
-      flex:0.5,
+      flex:0.3,
       alignItems:'flex-start',
       justifyContent:'center',
       alignContent:'flex-start',
@@ -165,10 +173,10 @@ export default Recomend;
     },
     infosecondcontainer:{
       flex:0.5,
-      flexDirection:'row'
+      flexDirection:'row',
     },
     infodatetext:{
-      fontSize:24,  
+      fontSize:20,  
       color:'black',
       flex:1,
       fontFamily:'오뮤_다예쁨체'
@@ -200,14 +208,14 @@ export default Recomend;
       resizeMode:'cover',
     },
     bottomfirstcontainer:{
-      marginTop:10,
+      marginTop:'2%',
       flexDirection:'row',
       flex:0.2,
-      justifyContent:'space-between'
+      justifyContent:'flex-start',
     },
     hashtagtext:{
       fontFamily:'오뮤_다예쁨체',
-      fontSize:24,
+      fontSize:20,
       color:'black'
     },
     bottomsecondcontainer:{
