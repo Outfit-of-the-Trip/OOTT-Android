@@ -5,7 +5,7 @@ import {Avatar} from '@rneui/themed';
 import axios from 'axios';
 import {AuthContext} from '../../utils/Auth';
 import FirstLogin from '../../components/FirstLogin';
-import ShowLog from '../../components/ShowLog';
+import ShowLog from '../../components/ShowLog.js';
 
 import {
   View,

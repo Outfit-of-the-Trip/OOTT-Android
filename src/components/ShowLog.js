@@ -10,7 +10,7 @@ import {
 import { useEffect,useState } from 'react';
 import { useWindowDimensions } from 'react-native';
 import EmptyScreen from './EmptyScreen';
-import EmptyImg from '../assets/images/emptyImg.png'
+import {useNavigation} from '@react-navigation/native';
 import more from '../assets/images/more.png'
 import recomend1 from '../assets/images/recomend1.png'
 import recomend2 from '../assets/images/recomend2.png'
@@ -22,6 +22,11 @@ import axios from 'axios';
 const Showlog = (trea) =>{
     const width = useWindowDimensions().width; //기기 넓이
     const [data, setData] = useState([]);
+    const navigation = useNavigation();
+    const gotoRecomend = () => {
+        navigation.navigate('Recomend');
+      };
+
     useEffect(() => { //여행정보 데이터
         axios.get('http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=정성욱')
           .then(function (response) {

@@ -2,6 +2,18 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "src/assets/fonts/Giants-Bold.ttf",
+      "sha1": "cd709a476759d6c4de8b327538afa3e04c19c802"
+    },
+    {
+      "path": "src/assets/fonts/Giants-Inline.ttf",
+      "sha1": "bedcfc1b1990c46f60e706e1bedb80de9819d4ab"
+    },
+    {
+      "path": "src/assets/fonts/Giants-Regular.ttf",
+      "sha1": "265fff269293e980e7e91caa095861173388aaaa"
+    },
+    {
       "path": "src/assets/fonts/SCDream1.otf",
       "sha1": "764ded6a6ab9be7b539064f79ac0227326da54ae"
     },

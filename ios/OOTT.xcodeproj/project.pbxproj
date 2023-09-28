@@ -25,6 +25,9 @@
 		CAB8D669DE1D43CAB259569E /* SCDream7.otf in Resources */ = {isa = PBXBuildFile; fileRef = 826F6AAF692743AD843B3EFC /* SCDream7.otf */; };
 		56FEC1A5D2204078855840E6 /* SCDream8.otf in Resources */ = {isa = PBXBuildFile; fileRef = F745F88B9D1541DC8F76C58B /* SCDream8.otf */; };
 		0B69863E4FFF4BAAA0BCFD6D /* SCDream9.otf in Resources */ = {isa = PBXBuildFile; fileRef = FA63260C464C44EAAF5722E5 /* SCDream9.otf */; };
+		5F4587BA6DAF402EBA94043E /* Giants-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 994C437D2C424F5A907A0A49 /* Giants-Bold.ttf */; };
+		D67B92C356FC42AEB8DC0B9E /* Giants-Inline.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55062203C8B34C61A6D9D38A /* Giants-Inline.ttf */; };
+		B4A3DA0088F84BB4B7B7F21C /* Giants-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8B04490717C643F49439CF16 /* Giants-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +69,9 @@
 		826F6AAF692743AD843B3EFC /* SCDream7.otf */ = {isa = PBXFileReference; name = "SCDream7.otf"; path = "../src/assets/fonts/SCDream7.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		F745F88B9D1541DC8F76C58B /* SCDream8.otf */ = {isa = PBXFileReference; name = "SCDream8.otf"; path = "../src/assets/fonts/SCDream8.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		FA63260C464C44EAAF5722E5 /* SCDream9.otf */ = {isa = PBXFileReference; name = "SCDream9.otf"; path = "../src/assets/fonts/SCDream9.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		994C437D2C424F5A907A0A49 /* Giants-Bold.ttf */ = {isa = PBXFileReference; name = "Giants-Bold.ttf"; path = "../src/assets/fonts/Giants-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		55062203C8B34C61A6D9D38A /* Giants-Inline.ttf */ = {isa = PBXFileReference; name = "Giants-Inline.ttf"; path = "../src/assets/fonts/Giants-Inline.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8B04490717C643F49439CF16 /* Giants-Regular.ttf */ = {isa = PBXFileReference; name = "Giants-Regular.ttf"; path = "../src/assets/fonts/Giants-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,6 +191,9 @@
 				826F6AAF692743AD843B3EFC /* SCDream7.otf */,
 				F745F88B9D1541DC8F76C58B /* SCDream8.otf */,
 				FA63260C464C44EAAF5722E5 /* SCDream9.otf */,
+				994C437D2C424F5A907A0A49 /* Giants-Bold.ttf */,
+				55062203C8B34C61A6D9D38A /* Giants-Inline.ttf */,
+				8B04490717C643F49439CF16 /* Giants-Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -297,6 +306,9 @@
 				CAB8D669DE1D43CAB259569E /* SCDream7.otf in Resources */,
 				56FEC1A5D2204078855840E6 /* SCDream8.otf in Resources */,
 				0B69863E4FFF4BAAA0BCFD6D /* SCDream9.otf in Resources */,
+				5F4587BA6DAF402EBA94043E /* Giants-Bold.ttf in Resources */,
+				D67B92C356FC42AEB8DC0B9E /* Giants-Inline.ttf in Resources */,
+				B4A3DA0088F84BB4B7B7F21C /* Giants-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
