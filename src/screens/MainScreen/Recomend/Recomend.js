@@ -1,4 +1,4 @@
-import React, { useState,useRef, } from 'react';
+import React, { useState,useRef,useContext } from 'react';
 import { useWindowDimensions, Modal } from 'react-native';
 import avatarbutton from '../../../assets/images/avatarbutton.png'
 
@@ -15,11 +15,13 @@ import { useRoute } from '@react-navigation/native';
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar } from '@rneui/themed';
+import {AuthContext} from '../../../utils/Auth';
 import Swiper from 'react-native-swiper'
 
 const Recomend = () => {
+  const {userInfo} = useContext(AuthContext);
   const navigation = useNavigation();
-  const {params: traveldata,userdata} = useRoute(); //여행 데이터 받아오기 
+  const {params: traveldata,userdata} = useRoute(); //여행 데이터 받아오기 */ 
   const traveldate = String(traveldata.travlDate).substring(0,10); //날짜 글자 필터링
   const width = useWindowDimensions().width; //기기 폭 값
   const [isModalVisible, setIsModalVisible] = useState(false); //친구 모달창
@@ -28,9 +30,9 @@ const Recomend = () => {
 /* travledata는 여행 날짜 데이터 변수 */
   const gotoRecomendOutter = (travledata) => {
     console.log(travledata)
-    navigation.navigate('RecomendOutter',travledata);
+    navigation.navigate('',travledata);
   };
-
+  console.log(userdata)
   const gotoRecomendTop = (travledata) => {
     return navigation.navigate('RecomendTop',travledata);
   };
@@ -61,8 +63,9 @@ const Recomend = () => {
               <View
                 style={{justifyContent:'space-between',flexDirection:'row',width:'100%'}}>
                 <Avatar
-                  size={30}>
-
+                  source={{ uri:userInfo.profileImageUrl}}
+                  rounded={true}
+                  size={50}>
                 </Avatar>
                 <Text
                   style={styles.infodatetext}>
@@ -80,6 +83,9 @@ const Recomend = () => {
       <Swiper
         dotStyle={{backgroundColor:'grey',width:8}}
         activeDotColor='#4949E8'
+        /* showsButtons 좌우 화살표 표시
+        nextButton={<Image style={{height:30}}source={rightarrow}/>}
+        prevButton={<Image style={{height:30}}source={leftarrow}/>} */
         >
         {RecomendGarmet.map((img,index) =>(
           <View
