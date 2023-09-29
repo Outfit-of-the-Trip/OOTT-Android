@@ -5,8 +5,10 @@ import {Avatar} from '@rneui/themed';
 import axios from 'axios';
 import {AuthContext} from '../../utils/Auth';
 import FirstLogin from '../../components/FirstLogin';
-import ShowLog from '../../components/ShowLog.js';
-
+import recomend1 from '../../assets/images/recomend1.png'
+import recomend2 from '../../assets/images/recomend2.png'
+import recomend3 from '../../assets/images/recomend3.png'
+import recomend4 from '../../assets/images/recomend4.png'
 import {
   View,
   StyleSheet,
@@ -24,32 +26,28 @@ const MainScreen = () => {
   const {userInfo} = useContext(AuthContext);
   const navigation = useNavigation();
   const width = useWindowDimensions().width; //기기 넓이
-
-  const [data, setData] = useState([]);
   const [travelea, settravelea] = useState(); //등록된 여행 개수
   const [friend, setfriend] = useState();
-  const [dbUsrname, setDbUsrname] = useState([]);
-  const [friendsInfo, setFriendsInfo] = useState([]);
-  const [isfirstlogin,setfirstlogin] = useState();
-
-  const gotoRecomend = (travledata) => {
-    navigation.navigate('Recomend', travledata,userInfo);
+  const [userdata, setuserdata] = useState();
+  const [data, setData] = useState([]);
+  const gotoRecomend = (traveldata) => {
+    console.log(traveldata)
+    return navigation.navigate('Recomend', traveldata);
   };
-  const gotoFrineds = () =>{
-    return navigation.navigate('친구')
-  }
-  
+
   const translate = (item) =>{ // 날짜 정리 메서드
     var data = String(item);
     var input = data.substring(0,10);
     return input;
   }
+
   
 
   useEffect(() => { //사용자 친구 데이터
-    axios.get('http://10.0.2.2:3000/api/friends/myFriends?userId=정성욱')
+    axios.get(`http://10.0.2.2:3000/api/friends/myFriends?userId=${userInfo.nickname}`)
       .then(function (response) {
         setfriend(response.data.length)
+
       })
       .catch(function (err) {
         console.log(err);
@@ -57,23 +55,22 @@ const MainScreen = () => {
   }, []);
 
 
-  useEffect(() => { //사용자 데이터 
-    axios.get(`http://10.0.2.2:3000/api/test/getUserTable`)
+  useEffect( () => { //사용자 데이터 
+     axios.get (`http://10.0.2.2:3000/api/users/getUserInfo?userId=${userInfo.nickname}`)
       .then(function (response) {
-        setDbUsrname(response.data);
-        setfirstlogin(response.data.usrUpdateAt)
-        console.log(isfirstlogin);
+        setuserdata(response.data);
       })
       .catch(function (err) {
         console.log(err);
       });
-  }, []);
+  },);
 
 
   useEffect(() => { //여행정보 데이터
-    axios.get('http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=정성욱')
+    axios.get(`http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`)
       .then(function (response) {
         settravelea(response.data.length)
+        console.log("여행일정개수",travelea)
         setData(response.data);
       })
       .catch(function (err) {
@@ -81,58 +78,110 @@ const MainScreen = () => {
       });
   }, []);
 
+  const Showlog = () =>{
+    if(travelea>0){
+     return(
+         <FlatList
+           data={data}
+           nestedScrollEnabled={true}
+           renderItem={({ item,index }) => (
+             <View key={index} style={styles.recomendconatiner}>
+             <View
+                style={{flex:1,flexDirection:"row",justifyContent:'space-between'}}>
+                <View
+                    style={{flex:1,margin:5}}>
+                    <Image
+                        source={recomend2}
+                        style={{width:'100%',margin:3,borderRadius:5}}
+                        resizeMode='stretch'/>
+                    <Image
+                        source={recomend1}
+                        style={{width:'100%',margin:3,borderRadius:5}}
+                        />
+                  </View>
+                <View
+                    style={{flex:1,margin:5}}>
+                    <Image 
+                        source={recomend3}
+                        resizeMode='stretch'
+                        style={{width:'100%',margin:3,borderRadius:5}}/>
+                    <Image
+                        source={recomend4}
+                        resizeMode='stretch'
+                        style={{width:'100%',margin:3,borderRadius:5}}/>
+
+                </View>
+             </View>
+            <View
+              style={{marginHorizontal:width-(width-10)}}>
+              <Text style={styles.datetext}>{translate(item.travlDate)} to {item.travlPlace}</Text>
+              <Text style={styles.tagtext}>태그</Text>
+              <View
+                style={{flexDirection:'row',justifyContent:"space-between"}}>
+                <Text style={styles.tagtext}>제품명</Text>
+                <TouchableOpacity
+                  onPress={() => gotoRecomend(item)}>
+                <Text style={styles.tagtext}>더보기</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+           </View>
+             )}
+           />);
+   }else{
+     return <EmptyScreen/>
+   }
+ }
 
   return (
     <SafeAreaView style={styles.container}>
-    <ScrollView>
-    <View style={styles.profile}> 
-    <ImageBackground
-        source={EmptyImg}
-        style={{ width: "100%", height: "100%" ,justifyContent:"flex-end"}}
-        resizeMode='cover'>
-        <View
-          style={styles.profileimgconatiner}>
-          <Text
-            style={styles.profileimgename}>
-            {userInfo.nickname}
-          </Text>
-          <View
-            style={{marginVertical:5}}>
-            <Avatar
-              size={130}
-              rounded
-              source={{
-                uri:userInfo.profileImageUrl}} />
+            <View style={styles.profile}> 
+            <ImageBackground
+                source={EmptyImg}
+                style={{ width: "100%", height: "100%" ,justifyContent:"flex-end"}}
+                resizeMode='cover'>
+                <View style={styles.profileimgconatiner}>
+                  <Text style={styles.profileimgename}>
+                    {userInfo.nickname}
+                  </Text>
+                  <View style={{marginVertical:3}}>
+                    <Avatar
+                      size={60}
+                      rounded
+                      source={{ uri:userInfo.profileImageUrl}} />
+                  </View>
+                  <Text style={styles.profilebigtext}>{travelea} travel log</Text>
+                </View>
+            </ImageBackground>
           </View>
-          <Text style={styles.profilebigtext}>{travelea} travel log</Text>
-        </View>
-        </ImageBackground>
-    </View>
-    <View style={styles.bottomline} />
-    <View
-      style={{flex:2}}>
-    {isfirstlogin ==!null ?(
-      <FirstLogin/>):(
-      <ShowLog tr={travelea}/>
-    )} 
-    </View>
-    </ScrollView>
-  </SafeAreaView>);
-};
+          <View style={styles.bottomline} />
+          <View
+            style={{flex:4}}>
+            {travelea < 0 ? (
+              <FirstLogin/>
+            ) : (
+              <Showlog/>
+            )} 
+          </View>
+          </SafeAreaView>)
+}
+
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 5,
     backgroundColor:'white'
   },
   profile: {
-    flex: 3,
+    flex: 1,
     flexDirection: 'column',
     justifyContent:'flex-end',
     alignContent:'center',
   },
   profileimgename:{
     color: 'black',
-    fontSize: 24,
+    fontSize: 16,
     fontFamily: 'SCDream5',
   },
   profileimgconatiner:{
@@ -168,19 +217,46 @@ const styles = StyleSheet.create({
     fontFamily: 'SCDream4',
   },
   bottomline: {
-    borderBottomColor: 'gray',
-    borderBottomWidth: 1,
+    borderBottomColor: 'black',
+    borderBottomWidth: 3,
     marginTop: 10,
     shadowColor: 'black',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.5,
     shadowRadius: 4,
-    elevation: 8,
   },
   profilebigtext: {
     color: 'black',
-    fontSize: 32,
+    fontSize: 16,
     fontFamily: 'SCDream3',
+  },
+  recotopcontainer:{
+    flexDirection: 'row', 
+    justifyContent: 'space-between'
+  },
+
+ recomendconatiner: {
+    flex: 2,
+    marginTop: "3%",
+    elevation:10,
+    backgroundColor:"white",
+    borderRadius:10,
+    borderWidth:3,
+    borderColor:'white',
+  },
+  viewcontainer:{
+    justifyContent:'flex-start' ,
+    alignItems: 'flex-start',
+  },
+  datetext: {
+    color: 'black',
+    fontSize: 24,
+    fontFamily: 'SCDream4',
+  },
+  tagtext: {
+    color: 'black',
+    fontSize: 16,
+    fontFamily: 'SCDream5',
   },
 });
 

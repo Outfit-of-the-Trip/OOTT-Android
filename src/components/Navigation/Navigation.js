@@ -37,35 +37,28 @@ const mainLogo = () => {
   return <Image style={{width: 100, height: 54}} source={Toplogo} />;
 };
 const Navigation = () => {
-  const [isfirstlogin,setfirstlogin] = useState();
+  const [isfirstlogin,setfirstlogin] = useState(false);
   // Auth 에서 받은 userInfo 값
   const {userInfo} = useContext(AuthContext);
-  useEffect(() =>{
-    requestGet();
-  },[]);
 
-  const requestGet = async () =>{
-    try{
-      const response = await axios.get(`http://10.0.2.2:3000/api/users/getUserInfo?userId=${userInfo.nickname}`)
-      setfirstlogin(response.data.usrCreateAt)
-      console.log("새로운",response.data.usrCreateAt)
-    }catch(e){
-      console.error(e)
-    }
-  }
 
-/*   useEffect(() => { //사용자 데이터 
-    axios.get(`http://10.0.2.2:3000/api/users/getUserInfo?userId=${userInfo.nickname}`)
-      .then(function (response) {
-        setfirstlogin(response.data.usrCreateAt)
-        data = response.data.usrCreateAt
-        console.log("ㄷㅇㅌ",data)
-        console.log("왜안먹어",isfirstlogin);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  }, []); */
+  useEffect( () => { //사용자 데이터 
+    axios.get (`http://10.0.2.2:3000/api/users/getUserInfo?userId=${userInfo.nickname}`)
+     .then(function (response) {
+       setfirstlogin( () => {
+         let data = response.data.usrCreateAt
+         if(data == null){
+           return true
+         }else{
+           return false
+         }
+       })
+     })
+     .catch(function (err) {
+       console.log(err);
+     });
+ }, [isfirstlogin]);
+
 
   // 삼항연산자 사용. 만약 userInfo.id의 값이 존재한다면 MainScreen 랜더링
   return (
@@ -79,13 +72,87 @@ const Navigation = () => {
         }}>
         {userInfo.id ? (
           <>
-          {isfirstlogin === null ? (
+          {isfirstlogin ? ( 
           <>
           <Stack.Screen
               name="IsFirstLoginScreen"
               component={IsFirstLoginScreen}
               options={{headerShown: false}}
             />
+             <Stack.Screen
+               name="Bottomtab"
+               component={Bottomtab}
+               options={{headerShown: false}}
+             />
+              <Stack.Screen
+              name="MainScreen"
+              component={MainScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="OOTTScreen"
+              component={OOTTScreen}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="Recomend"
+              component={Recomend}
+              options={{headerShown: true}}
+            />
+
+            <Stack.Screen
+              name="RecomendDetail"
+              component={RecomendDetail}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="FriendsLook"
+              component={FriendsLook}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen name="ShoppingList" component={ShoppingList} />
+            <Stack.Screen
+              name="RecomendSceen"
+              component={RecomendSceen}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="TravelPlace"
+              component={TravelPlace}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="TravelFriends"
+              component={TravelFriends}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="TravelCategory"
+              component={TravelCategory}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="KeywordScreen"
+              component={KeywordScreen}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="ClosetScreen"
+              component={ClosetScreen}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="AbataScreen"
+              component={AbataScreen}
+              options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="MypageScreen"
+              component={MypageScreen}
+              options={{headerShown: true}}
+            />
+            </>) : (
+            <>
              <Stack.Screen
                name="Bottomtab"
                component={Bottomtab}
@@ -158,83 +225,9 @@ const Navigation = () => {
               component={MypageScreen}
               options={{headerShown: true}}
             />
-            </> ) : (
-             <>
-             <Stack.Screen
-               name="Root"
-               component={Bottomtab}
-               options={{headerShown: true}}
-             />
-            
-            <Stack.Screen
-              name="MainScreen"
-              component={MainScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="OOTTScreen"
-              component={OOTTScreen}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="Recomend"
-              component={Recomend}
-              options={{headerShown: true}}
-            />
-
-            <Stack.Screen
-              name="RecomendDetail"
-              component={RecomendDetail}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="FriendsLook"
-              component={FriendsLook}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen name="ShoppingList" component={ShoppingList} />
-            <Stack.Screen
-              name="RecomendSceen"
-              component={RecomendSceen}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="TravelPlace"
-              component={TravelPlace}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="TravelFriends"
-              component={TravelFriends}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="TravelCategory"
-              component={TravelCategory}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="KeywordScreen"
-              component={KeywordScreen}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="ClosetScreen"
-              component={ClosetScreen}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="AbataScreen"
-              component={AbataScreen}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="MypageScreen"
-              component={MypageScreen}
-              options={{headerShown: true}}
-            />
             </>)}
-          </>
+         
+            </>
         ) : (
           <Stack.Screen
             name="HomeScreen"
