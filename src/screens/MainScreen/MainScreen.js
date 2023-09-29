@@ -1,13 +1,11 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useLayoutEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {useWindowDimensions} from 'react-native';
+import {ImageBackground, useWindowDimensions} from 'react-native';
 import {Avatar} from '@rneui/themed';
 import axios from 'axios';
-import more from '../../assets/images/more.png';
 import {AuthContext} from '../../utils/Auth';
-import { useRecoilState } from 'recoil';
-import { isUserFirstLogin } from '../../states/atoms';
 import FirstLogin from '../../components/FirstLogin';
+import ShowLog from '../../components/ShowLog.js';
 
 import {
   View,
@@ -17,15 +15,16 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  ScrollView,
 } from 'react-native';
 import EmptyScreen from '../../components/EmptyScreen';
-
+import EmptyImg from '../../assets/images/emptyImg.png';
 
 const MainScreen = () => {
   const {userInfo} = useContext(AuthContext);
   const navigation = useNavigation();
   const width = useWindowDimensions().width; //기기 넓이
-  const [isFirstLogin,setIsFirstLogin] = useRecoilState(isUserFirstLogin)
+
   const [data, setData] = useState([]);
   const [travelea, settravelea] = useState(); //등록된 여행 개수
   const [friend, setfriend] = useState();
@@ -46,6 +45,7 @@ const MainScreen = () => {
     return input;
   }
   
+
   useEffect(() => { //사용자 친구 데이터
     axios.get('http://10.0.2.2:3000/api/friends/myFriends?userId=정성욱')
       .then(function (response) {
@@ -70,7 +70,6 @@ const MainScreen = () => {
   }, []);
 
 
-
   useEffect(() => { //여행정보 데이터
     axios.get('http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=정성욱')
       .then(function (response) {
@@ -83,107 +82,63 @@ const MainScreen = () => {
   }, []);
 
 
-
-  const Showlog = () =>{
-    if(travelea>0){
-     return <View>
-         <FlatList
-           data={data}
-           renderItem={({ item,index }) => (
-             <View key={index} style={styles.recomendconatiner}>
-             <View
-               style={styles.recotopcontainer}>
-               <View style={[styles.viewcontainer,{marginHorizontal:width-(width-10),marginBottom:width-(width-10)}]}>
-                 <Text style={styles.datetext}>{translate(item.travlDate)} to {item.travlPlace}</Text>
-               </View>
-               <TouchableOpacity onPress={() => gotoRecomend(item)}>
-                 <Image source={more} />
-               </TouchableOpacity>
-             </View>
-             <View style={[styles.viewcontainer,{marginHorizontal:width-(width-10)}]}>
-             <Text style={styles.tagtext}>태그</Text>
-             </View>
-           </View>
-             )}
-           />
-       </View>
-   }else{
-     return <EmptyScreen/>
-   }
- }
-
   return (
     <SafeAreaView style={styles.container}>
-    <View style={styles.profile}>
-      <View
-        style={styles.profileimgconatiner}>
-        <Avatar
-          size={80}
-          rounded
-          source={{
-            uri:userInfo.profileImageUrl}} />
-        <Text
-          style={styles.profileimgename}>
-          {userInfo.nickname}
-        </Text>
-      </View>
-      <View
-        style={styles.profileinfoconatiner}>
+    <ScrollView>
+    <View style={styles.profile}> 
+    <ImageBackground
+        source={EmptyImg}
+        style={{ width: "100%", height: "100%" ,justifyContent:"flex-end"}}
+        resizeMode='cover'>
         <View
-          style={styles.profiletextcontainer}>
-          <Text style={styles.profilebigtext}>{travelea}</Text>
-          <Text style={styles.profiletext}>mylog</Text>
-        </View>
-        <View
-          style={styles.profiletextcontainer}>
-          <TouchableOpacity
-            onPress={gotoFrineds}>
-            <View
-              style={{alignItems:"center"}}>
-            <Text style={styles.profilebigtext}>
-              {friend}
-            </Text>
-            <Text style={styles.profiletext}>Friend</Text>
-            </View>
-          </TouchableOpacity> 
+          style={styles.profileimgconatiner}>
+          <Text
+            style={styles.profileimgename}>
+            {userInfo.nickname}
+          </Text>
+          <View
+            style={{marginVertical:5}}>
+            <Avatar
+              size={130}
+              rounded
+              source={{
+                uri:userInfo.profileImageUrl}} />
           </View>
-      </View>
+          <Text style={styles.profilebigtext}>{travelea} travel log</Text>
+        </View>
+        </ImageBackground>
     </View>
     <View style={styles.bottomline} />
     <View
-      style={{flex:4.6}}>
-    {isFirstLogin!==false?(
-      <Showlog/>):(
-      <FirstLogin/>
-    )}
+      style={{flex:2}}>
+    {isfirstlogin ==!null ?(
+      <FirstLogin/>):(
+      <ShowLog tr={travelea}/>
+    )} 
     </View>
+    </ScrollView>
   </SafeAreaView>);
-
 };
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 5,
     backgroundColor:'white'
   },
   profile: {
-    flex: 1,
-    flexDirection: 'row',
-    marginTop: 20,
-  },
-  modalfont:{
-    fontFamily:'오뮤_다예쁨체',
-    fontSize:24,
-    color:'#4949E8'
+    flex: 3,
+    flexDirection: 'column',
+    justifyContent:'flex-end',
+    alignContent:'center',
   },
   profileimgename:{
     color: 'black',
     fontSize: 24,
-    fontFamily: '오뮤_다예쁨체',
+    fontFamily: 'SCDream5',
   },
   profileimgconatiner:{
-    flex: 0.5,
     alignItems: 'center',
+    justifyContent:"flex-start",
+    padding:10,
   },
   recomendconatiner: {
     flex: 1,
@@ -207,35 +162,10 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: 'contain',
   },
-  profileinfoconatiner:{
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignContent: 'center',
-  },
-  profiletextcontainer:{
-    flex: 0.5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignContent:'center'
-  },
-  recoimgae: {
-    flex: 1,
-    resizeMode: 'contain',
-  },
-  recotopcontainer:{
-    flexDirection: 'row', 
-    justifyContent: 'space-between'
-  },
-  tagtext: {
-    color: 'black',
-    fontSize: 24,
-    fontFamily: '오뮤_다예쁨체',
-  },
   datetext: {
     color: 'black',
     fontSize: 24,
-    fontFamily: '오뮤_다예쁨체',
+    fontFamily: 'SCDream4',
   },
   bottomline: {
     borderBottomColor: 'gray',
@@ -250,12 +180,7 @@ const styles = StyleSheet.create({
   profilebigtext: {
     color: 'black',
     fontSize: 32,
-    fontFamily: '오뮤_다예쁨체',
-  },
-  profiletext: {
-    color: 'black',
-    fontSize: 24,
-    fontFamily: '오뮤_다예쁨체',
+    fontFamily: 'SCDream3',
   },
 });
 
