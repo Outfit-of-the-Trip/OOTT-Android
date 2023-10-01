@@ -11,7 +11,7 @@ import IsFirstLoginScreen from '../../screens/IsFirstLoginScreen/IsFirstLoginScr
 import RecomendDetail from '../../screens/OOTTScreen/RecomendSceen/RecomendDetail';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
 import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
-// import FriendInfoScreen from '../../screens/FriendScreen/FriendInfoScreen';
+import FirstSetting from '../../screens/FirstSetting/FirstSetting';
 import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
 
 import MypageScreen from '../../screens/MypageScreen/MypageScreen';
@@ -43,7 +43,7 @@ const Navigation = () => {
 
 
   useEffect( () => { //사용자 데이터 
-    axios.get (`http://10.0.2.2:3000/api/users/getUserInfo?userId=${userInfo.nickname}`)
+    axios.get (`http://10.0.2.2:3000/api/users/getUserInfo?userId=admin`)
      .then(function (response) {
        setfirstlogin( () => {
          let data = response.data.usrCreateAt
@@ -74,11 +74,6 @@ const Navigation = () => {
           <>
           {isfirstlogin ? ( 
           <>
-          <Stack.Screen
-              name="IsFirstLoginScreen"
-              component={IsFirstLoginScreen}
-              options={{headerShown: false}}
-            />
              <Stack.Screen
                name="Bottomtab"
                component={Bottomtab}
@@ -153,6 +148,16 @@ const Navigation = () => {
             />
             </>) : (
             <>
+              <Stack.Screen
+              name="IsFirstLoginScreen"
+              component={IsFirstLoginScreen}
+              options={{headerShown: false}}
+             />
+             <Stack.Screen
+               name="FirstSetting"
+               component={FirstSetting}
+               options={{headerShown: false}}
+             />
              <Stack.Screen
                name="Bottomtab"
                component={Bottomtab}
