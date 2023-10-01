@@ -11,11 +11,7 @@ import {
 
 const FirstLogin = () => { 
   const width = useWindowDimensions().width; //기기 폭 값
-  const navigation = useNavigation(); // 
 
-  const gotoOOTT = () =>{
-    return navigation.navigate('OOTTScreen')
-  }
     return (
       <View
           style={{flex:1,alignContent:'center',alignItems:'center',justifyContent:'center'}}>
@@ -28,14 +24,7 @@ const FirstLogin = () => {
             <View
               style={{flex:0.2,justifyContent:'center',alignItems:'center'}}>
               <Text
-                style={styles.fontblack}>환영합니다 ! 처음 로그인하시네요</Text>
-              <Text
-              style={styles.fontblack}>기본 정보를 등록하시고 OOTT를 사용하세요!</Text>
-                <TouchableOpacity
-                    onPress={gotoOOTT}>
-                  <Text
-                    style={styles.fontmove}>이동하기</Text>
-                </TouchableOpacity>
+                style={styles.fontblack}>게시물 없음</Text>
               </View>
         </View>
     )
@@ -50,26 +39,11 @@ const FirstLogin = () => {
       alignItems:'center',
       flex:2
     },
-    firstcontainertext:{
-      fontFamily:'오뮤_다예쁨체',
-      fontSize:24,
-      color:'black'
-    },
-    recomendhashtagtext:{
-      fontFamily:'오뮤_다예쁨체',
-      fontSize:16,
-      color:'black'
-    },
     fontblack:{
-      fontFamily:'오뮤_다예쁨체',
+      fontFamily:'SCDream4',
       fontSize:24,
       color:'black'
     },
-    fontmove:{
-      fontFamily:'오뮤_다예쁨체',
-      fontSize:20,
-      color:'#4949E8'
-    }
 
   })
 

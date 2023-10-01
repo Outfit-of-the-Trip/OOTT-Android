@@ -10,7 +10,7 @@ const IsFirstLoginScreen = () => {
     const navigation = useNavigation();
     
     const gotoSetFavorite = () => {
-        navigation.navigate('Bottomtab');
+        navigation.navigate('FirstSetting');
       };
 
   return (

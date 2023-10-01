@@ -16,11 +16,11 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
-  FlatList,
-  ScrollView,
+  FlatList
 } from 'react-native';
 import EmptyScreen from '../../components/EmptyScreen';
 import EmptyImg from '../../assets/images/emptyImg.png';
+
 
 const MainScreen = () => {
   const {userInfo} = useContext(AuthContext);
@@ -31,7 +31,6 @@ const MainScreen = () => {
   const [userdata, setuserdata] = useState();
   const [data, setData] = useState([]);
   const gotoRecomend = (traveldata) => {
-    console.log(traveldata)
     return navigation.navigate('Recomend', traveldata);
   };
 
@@ -59,6 +58,7 @@ const MainScreen = () => {
      axios.get (`http://10.0.2.2:3000/api/users/getUserInfo?userId=${userInfo.nickname}`)
       .then(function (response) {
         setuserdata(response.data);
+        console.log(response.data);
       })
       .catch(function (err) {
         console.log(err);
@@ -67,10 +67,9 @@ const MainScreen = () => {
 
 
   useEffect(() => { //여행정보 데이터
-    axios.get(`http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`)
+    axios.get(`http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=admin`)
       .then(function (response) {
         settravelea(response.data.length)
-        console.log("여행일정개수",travelea)
         setData(response.data);
       })
       .catch(function (err) {
@@ -79,8 +78,10 @@ const MainScreen = () => {
   }, []);
 
   const Showlog = () =>{
+    
     if(travelea>0){
      return(
+      <View>
          <FlatList
            data={data}
            nestedScrollEnabled={true}
@@ -109,7 +110,6 @@ const MainScreen = () => {
                         source={recomend4}
                         resizeMode='stretch'
                         style={{width:'100%',margin:3,borderRadius:5}}/>
-
                 </View>
              </View>
             <View
@@ -126,8 +126,8 @@ const MainScreen = () => {
               </View>
             </View>
            </View>
-             )}
-           />);
+            )}
+           /></View>);
    }else{
      return <EmptyScreen/>
    }
@@ -156,13 +156,13 @@ const MainScreen = () => {
           </View>
           <View style={styles.bottomline} />
           <View
-            style={{flex:4}}>
-            {travelea < 0 ? (
-              <FirstLogin/>
-            ) : (
+              style={{flex:4}}>
+            {travelea < 0 ?(
+              <FirstLogin/> )
+             : (
               <Showlog/>
-            )} 
-          </View>
+            )}
+            </View> 
           </SafeAreaView>)
 }
 
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     padding:10,
   },
   recomendconatiner: {
-    flex: 1,
+    flex: 4,
     marginTop: "3%",
     elevation:10,
     backgroundColor:"white",

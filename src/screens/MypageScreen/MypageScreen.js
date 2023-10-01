@@ -27,7 +27,7 @@ const MypageScreen = () => {
   const navigation = useNavigation();
 
   const gotoTravelPlace = () => {
-    return navigation.navigate('');
+    return navigation.navigate('KeywordScreen');
   };
 
   const {userInfo} = useContext(AuthContext);
