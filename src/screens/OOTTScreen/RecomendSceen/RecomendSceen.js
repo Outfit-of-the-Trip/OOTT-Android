@@ -63,10 +63,9 @@ const RecomendSceen = () => {
                 console.log(error);
             });
         }
-        setInterval(()=>{
-            getRecommendedDate()
-            setRecommendClothes(RecomendGarmet)   
-        }, 5000)
+        
+        getRecommendedDate()
+        setRecommendClothes(RecomendGarmet)   
      
     }, [])
             
