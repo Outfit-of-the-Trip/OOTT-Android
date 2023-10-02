@@ -21,6 +21,8 @@ import Swiper from 'react-native-swiper'
 const Recomend = () => {
   const {userInfo} = useContext(AuthContext);
   const navigation = useNavigation();
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [images, setImages] = useState([]);
   const {params: traveldata,userdata} = useRoute(); //여행 데이터 받아오기 */ 
   const traveldate = String(traveldata.travlDate).substring(0,10); //날짜 글자 필터링
   const width = useWindowDimensions().width; //기기 폭 값
@@ -53,6 +55,33 @@ const Recomend = () => {
           return setIsModalVisible(!isModalVisible)
   };}
   
+  useEffect(() => {
+    // Fetch images based on the selectedDate from your API
+    const fetchImages = async () => {
+      if (selectedDate) {
+        try {
+          const response = await fetchImagesByDate(selectedDate);
+          setImages(response.data); // Assuming the response.data contains an array of image URLs
+        } catch (error) {
+          console.error('Error fetching images: ', error);
+        }
+      }
+    };
+
+    fetchImages();
+  }, [selectedDate]);
+
+  const handleDateSelection = (date) => {
+    // Update the selectedDate when a date is selected
+    setSelectedDate(date);
+  };
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity onPress={() => handleImageSelection(item)}>
+      <Image source={{ uri: item.url }} style={{ width: 100, height: 100 }} />
+    </TouchableOpacity>
+  );
+
   return (
    <SafeAreaView
    style={styles.conatiner}>
@@ -66,15 +95,16 @@ const Recomend = () => {
                     TodayLook to {traveldata.travlPlace}
                 </Text>
               </View>
+
               <View
-                style={{flexDirection:"row"}}>
+                style={{width:'100%',flexDirection:"row",alignItems:'space-between',justifyContent:"space-between"}}>
                 <Text
                   style={styles.selectdatetext}>Select Date</Text>
               <View
                 style={{flexDirection:'row'}}>
                 <TouchableOpacity>
                   <Image
-                    style={{width:30,height:30}}
+                    style={{marginRight:5,width:30,height:30}}
                     source={frinedbtn}/>
                 </TouchableOpacity>
                 <TouchableOpacity>
@@ -88,22 +118,7 @@ const Recomend = () => {
     </View>
     <View
       style={styles.showimgcontainer}>
-      <Swiper
-        dotStyle={{backgroundColor:'grey',width:8}}
-        activeDotColor='#4949E8'
-        /* showsButtons 좌우 화살표 표시
-        nextButton={<Image style={{height:30}}source={rightarrow}/>}
-        prevButton={<Image style={{height:30}}source={leftarrow}/>} */
-        >
-        {RecomendGarmet.map((img,index) =>(
-          <View
-          key={index}>
-          <Image
-          source={img.img}
-          style={[styles.showimg,{width:width}]}/>
-        </View>
-        ))}
-     </Swiper>
+      
     </View>
     <View
       style={[styles.bottomfirstcontainer,{marginHorizontal:width-(width-20)}]}> 
@@ -186,7 +201,7 @@ export default Recomend;
      fontFamily:'오뮤_다예쁨체'
     },
     infosecondcontainer:{
-      flex:0.7,
+      flex:1,
     },
     infodatetext:{
       fontSize:24,  
