@@ -103,7 +103,7 @@ const Vertical = () => {
 
 
                     <View style={styles.horizontalContainer}>
-                        <Horizontal clothes={item.clothes} date={date}/>
+                        <Horizontal clothes={item.clothes} date={item.date}/>
                     </View>
 
 

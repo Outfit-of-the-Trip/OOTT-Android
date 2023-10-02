@@ -19,7 +19,7 @@ const Horizontal = ({clothes}) => {
     const navigation = useNavigation();
 
     const gotoDetail = (outter) => {
-      return navigation.navigate('RecomendDetail', {detail: outter});
+      return navigation.navigate('RecomendDetail', { detail: outter });
     };
 
 
@@ -43,7 +43,7 @@ const Horizontal = ({clothes}) => {
 
                     <View style={styles.container}>
 
-                        <TouchableOpacity onPress={()=>console.log("top")}>
+                        <TouchableOpacity onPress={()=>console.log()}>
                             <Image
                                 style={styles.top}
                                 source={{uri: item.top.img}}

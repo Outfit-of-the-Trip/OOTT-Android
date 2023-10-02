@@ -1,11 +1,6 @@
 import React, {  useEffect, useState } from 'react';
-import { useWindowDimensions } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { RecomendGarmet } from '../../../constants/RecomendGarmet';
-import { Divider } from '@rneui/themed';
-
-import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
-import { recommendDetailStates, userInfoState, dateState, searchState, reasonState, friendsState, categoryState } from '../../../states/atoms';
+import { useRecoilValue } from 'recoil';
+import { recommendDetailStates, searchState } from '../../../states/atoms';
 
 import {
     View,
@@ -23,32 +18,10 @@ const logo = require('../../../assets/images/logo.png')
 const RecomendDetail = ({ route }) => {
 
     const openExternalURL = (url) => {
-        Linking.openURL(url)
-          .catch((err) => console.error('URL 열기 오류:', err));
+        Linking.openURL(url).catch((err) => console.error('URL 열기 오류:', err));
     };
 
     const place = useRecoilValue(searchState);
-    const date = useRecoilValue(dateState);
-    const reason = useRecoilValue(reasonState);
-    const friend = useRecoilValue(friendsState);
-    const category = useRecoilValue(categoryState);
-    const userInfo = useRecoilValue(userInfoState);
-
-    const recommendClothes = useRecoilValue(recommendDetailStates)
-
-    const travelData = {
-        "userId": userInfo.nickname,
-        "gender": userInfo.gender,
-        "place": place,
-        "date": date,
-        "reason": reason,
-        "friend": friend,
-        "category": category,
-    };
-
-    const navigation = useNavigation();
-    const width = useWindowDimensions().width; //기기 폭 값
-
 
     return(
 
@@ -70,7 +43,7 @@ const RecomendDetail = ({ route }) => {
                         flex: 8,
                         marginVertical: 15,
                     }}>
-                        <Text style={styles.dateText}>0000-00-00 to {travelData.place}</Text>
+                        <Text style={styles.dateText}>0000-00-00 to {place}</Text>
                     </View>
 
                     <View style={{
@@ -101,7 +74,7 @@ const RecomendDetail = ({ route }) => {
                             data={route.params.detail.commercial}
                             showsHorizontalScrollIndicator={false}
                             horizontal={true}
-                            renderItem={({item,index}) =>{
+                            renderItem={({item, index}) =>{
                                 return(
 
                                     <TouchableOpacity 
