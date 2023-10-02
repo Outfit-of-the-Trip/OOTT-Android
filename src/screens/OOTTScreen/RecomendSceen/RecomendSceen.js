@@ -4,9 +4,8 @@ import { recommendDetailStates, userInfoState, dateState, searchState, reasonSta
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import { testURL } from '../../../constants/url';
-import LodingSpineer from '../../../components/Spinner';
 import { useWindowDimensions } from 'react-native';
-
+import SplashVideo from '../../../components/SplashVideo';
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 
 import Vertical from './Components/Vertical';
@@ -55,7 +54,7 @@ const RecomendSceen = () => {
 
     useEffect(() => {
         const getRecommendedDate= async () => {
-            axios.post(BaseURL+'/api/recommend/getData', travelData)
+            axios.post(BaseURL+'/api/recommend/getRecommend', travelData)
             .then(function (res) {
                 setIsLoding(false)
                 setTest(res.data)
@@ -64,14 +63,17 @@ const RecomendSceen = () => {
                 console.log(error);
             });
         }
-        getRecommendedDate()
-        setRecommendClothes(RecomendGarmet)        
+        setInterval(()=>{
+            getRecommendedDate()
+            setRecommendClothes(RecomendGarmet)   
+        }, 5000)
+     
     }, [])
             
 
     return(
         <View style={styles.rootContainer}>
-            {isLoding ? (<LodingSpineer />) : 
+            {isLoding ? (<SplashVideo />) : 
             (
                 <Vertical />
             )}
