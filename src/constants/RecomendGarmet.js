@@ -1,6 +1,6 @@
 export const RecomendGarmet = [
     {
-        date: "2023/09/20",
+        date: "2023-09-20",
         clothes: [
             {
                 outter: {
