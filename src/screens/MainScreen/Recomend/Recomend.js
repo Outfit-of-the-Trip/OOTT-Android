@@ -1,7 +1,7 @@
 import React, { useState,useRef,useContext } from 'react';
 import { useWindowDimensions, Modal } from 'react-native';
-import avatarbutton from '../../../assets/images/avatarbutton.png'
-
+import avatarbtn from '../../../assets/images/avatarbtn.png'
+import frinedbtn from '../../../assets/images/frinedbtn.png'
 import {
   View,
   StyleSheet,
@@ -60,21 +60,29 @@ const Recomend = () => {
       style={styles.infocontainer}>
         <View
           style={[styles.infosecondcontainer,{marginHorizontal:width-(width-12)}]}>
-              <View
-                style={{justifyContent:'space-between',flexDirection:'row',width:'100%'}}>
-                <Avatar
-                  source={{ uri:userInfo.profileImageUrl}}
-                  rounded={true}
-                  size={50}>
-                </Avatar>
+              <View>
                 <Text
                   style={styles.infodatetext}>
-                  {traveldate} ~ 22/07/19 Look to {traveldata.travlPlace}
+                    TodayLook to {traveldata.travlPlace}
                 </Text>
-                  <TouchableOpacity
-                    style={{justifyContent:'center',alignItems:'center'}}>
-                    <Image source={avatarbutton}/>
-                  </TouchableOpacity>
+              </View>
+              <View
+                style={{flexDirection:"row"}}>
+                <Text
+                  style={styles.selectdatetext}>Select Date</Text>
+              <View
+                style={{flexDirection:'row'}}>
+                <TouchableOpacity>
+                  <Image
+                    style={{width:30,height:30}}
+                    source={frinedbtn}/>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image
+                    style={{width:30,height:30}} 
+                    source={avatarbtn}/>
+                </TouchableOpacity>
+              </View>
               </View>
         </View>
     </View>
@@ -178,14 +186,19 @@ export default Recomend;
      fontFamily:'오뮤_다예쁨체'
     },
     infosecondcontainer:{
-      flex:0.5,
-      flexDirection:'row',
+      flex:0.7,
     },
     infodatetext:{
-      fontSize:20,  
+      fontSize:24,  
       color:'black',
       flex:1,
-      fontFamily:'오뮤_다예쁨체'
+      fontFamily:'SCDream5'
+    },
+    selectdatetext:{
+      fontSize:16,  
+      color:'black',
+      flex:1,
+      fontFamily:'SCDream5'
     },
     choseavatartext:{
       fontSize:24,  

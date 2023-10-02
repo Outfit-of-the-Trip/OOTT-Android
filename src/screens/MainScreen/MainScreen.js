@@ -6,9 +6,8 @@ import axios from 'axios';
 import {AuthContext} from '../../utils/Auth';
 import FirstLogin from '../../components/FirstLogin';
 import recomend1 from '../../assets/images/recomend1.png'
-import recomend2 from '../../assets/images/recomend2.png'
-import recomend3 from '../../assets/images/recomend3.png'
-import recomend4 from '../../assets/images/recomend4.png'
+import moreb from '../../assets/images/moreb.png'
+
 import {
   View,
   StyleSheet,
@@ -29,7 +28,14 @@ const MainScreen = () => {
   const [travelea, settravelea] = useState(); //등록된 여행 개수
   const [friend, setfriend] = useState();
   const [userdata, setuserdata] = useState();
+  const [userHashTag,setUserHashtag] = useState([
+    { id : 1, usrstyle: "코멘트"},
+    { id : 2, usrstyle: "는"},
+    { id : 3, usrstyle: "없다"},
+    ]);
   const [data, setData] = useState([]);
+  const [travelClothes,setTravelClothes] = useState([]); 
+  const [imageurl,setImageUrl] = useState([]); //여행별 추천 옷 url
   const gotoRecomend = (traveldata) => {
     return navigation.navigate('Recomend', traveldata);
   };
@@ -40,7 +46,7 @@ const MainScreen = () => {
     return input;
   }
 
-  
+const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 합치기
 
   useEffect(() => { //사용자 친구 데이터
     axios.get(`http://10.0.2.2:3000/api/friends/myFriends?userId=${userInfo.nickname}`)
@@ -53,17 +59,22 @@ const MainScreen = () => {
       });
   }, []);
 
+  
 
   useEffect( () => { //사용자 데이터 
-     axios.get (`http://10.0.2.2:3000/api/users/getUserInfo?userId=${userInfo.nickname}`)
+     axios.get (`http://10.0.2.2:3000/api/users/getUserInfo?userId=admin`)
       .then(function (response) {
         setuserdata(response.data);
-        console.log(response.data);
+        /* 
+          setUSerHashtag[0] = response.data.usrstyle1
+          setUser
+        
+        */
       })
       .catch(function (err) {
         console.log(err);
       });
-  },);
+  },[]);
 
 
   useEffect(() => { //여행정보 데이터
@@ -77,57 +88,60 @@ const MainScreen = () => {
       });
   }, []);
 
+  useEffect(() => { //TRAVEL_CLOTHES
+    axios.get(`http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=admin`)
+      .then(function (response) {
+       /*  setTravelClothes(response.data);
+        console.log(response.data); */
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => { //EXAMPLE
+    axios.get(`http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=admin`)
+      .then(function (response) {
+        //api 완성되면 travelClothes에서 배열 값 사용해서 옷 이미지 경로 불러오기
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  }, []);
+
   const Showlog = () =>{
     
     if(travelea>0){
      return(
-      <View>
          <FlatList
            data={data}
            nestedScrollEnabled={true}
            renderItem={({ item,index }) => (
              <View key={index} style={styles.recomendconatiner}>
-             <View
-                style={{flex:1,flexDirection:"row",justifyContent:'space-between'}}>
-                <View
-                    style={{flex:1,margin:5}}>
-                    <Image
-                        source={recomend2}
-                        style={{width:'100%',margin:3,borderRadius:5}}
-                        resizeMode='stretch'/>
-                    <Image
-                        source={recomend1}
-                        style={{width:'100%',margin:3,borderRadius:5}}
-                        />
-                  </View>
-                <View
-                    style={{flex:1,margin:5}}>
-                    <Image 
-                        source={recomend3}
-                        resizeMode='stretch'
-                        style={{width:'100%',margin:3,borderRadius:5}}/>
-                    <Image
-                        source={recomend4}
-                        resizeMode='stretch'
-                        style={{width:'100%',margin:3,borderRadius:5}}/>
-                </View>
-             </View>
-            <View
+               <View
               style={{marginHorizontal:width-(width-10)}}>
               <Text style={styles.datetext}>{translate(item.travlDate)} to {item.travlPlace}</Text>
-              <Text style={styles.tagtext}>태그</Text>
               <View
                 style={{flexDirection:'row',justifyContent:"space-between"}}>
-                <Text style={styles.tagtext}>제품명</Text>
+                <Text style={styles.tagtext}>태그</Text>
                 <TouchableOpacity
                   onPress={() => gotoRecomend(item)}>
-                <Text style={styles.tagtext}>더보기</Text>
+                <Image
+                  style={{width:30,height:20,resizeMode:'center'}}
+                  source={moreb}/>
                 </TouchableOpacity>
               </View>
             </View>
+             <View
+                style={{flexDirection:"row"}}>
+                <Image
+                        source={recomend1}
+                        style={{width:'100%',margin:3,borderRadius:5}}/>
+             </View>
+           
            </View>
             )}
-           /></View>);
+           />);
    }else{
      return <EmptyScreen/>
    }
@@ -135,34 +149,30 @@ const MainScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-            <View style={styles.profile}> 
-            <ImageBackground
-                source={EmptyImg}
-                style={{ width: "100%", height: "100%" ,justifyContent:"flex-end"}}
-                resizeMode='cover'>
-                <View style={styles.profileimgconatiner}>
-                  <Text style={styles.profileimgename}>
-                    {userInfo.nickname}
-                  </Text>
-                  <View style={{marginVertical:3}}>
+            <View
+              style={{flexDirection:'row', marginHorizontal:width-(width-20),marginTop:5}}>
                     <Avatar
-                      size={60}
+                      size={80}
                       rounded
-                      source={{ uri:userInfo.profileImageUrl}} />
-                  </View>
+                      source={{ uri:userInfo.profileImageUrl}}/>
+                    <View
+                      style={{marginLeft:5}}>
+                      <Text style={styles.profileimgename}>
+                          {userInfo.nickname}
+                      </Text>
                   <Text style={styles.profilebigtext}>{travelea} travel log</Text>
-                </View>
-            </ImageBackground>
+                  <Text style={styles.profilebigtext}>{combinedStyles}</Text>
+                  </View>
           </View>
           <View style={styles.bottomline} />
           <View
-              style={{flex:4}}>
+            style={{flex:4}}>
             {travelea < 0 ?(
               <FirstLogin/> )
              : (
               <Showlog/>
             )}
-            </View> 
+            </View>
           </SafeAreaView>)
 }
 
@@ -173,21 +183,11 @@ const styles = StyleSheet.create({
     flex: 5,
     backgroundColor:'white'
   },
-  profile: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent:'flex-end',
-    alignContent:'center',
-  },
+
   profileimgename:{
     color: 'black',
-    fontSize: 16,
+    fontSize: 24,
     fontFamily: 'SCDream5',
-  },
-  profileimgconatiner:{
-    alignItems: 'center',
-    justifyContent:"flex-start",
-    padding:10,
   },
   recomendconatiner: {
     flex: 4,
@@ -197,6 +197,7 @@ const styles = StyleSheet.create({
     borderRadius:10,
     borderWidth:2,
     borderColor:'white',
+    height:'1'
   },
   viewcontainer:{
     flexDirection: 'row',
@@ -228,7 +229,7 @@ const styles = StyleSheet.create({
   profilebigtext: {
     color: 'black',
     fontSize: 16,
-    fontFamily: 'SCDream3',
+    fontFamily: 'SCDream4',
   },
   recotopcontainer:{
     flexDirection: 'row', 
