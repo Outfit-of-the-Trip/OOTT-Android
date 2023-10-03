@@ -15,9 +15,7 @@ import {
 
 const logo = require('../../../assets/images/logo.png')
 
-const RecomendDetail = ({route}) => {
-    console.log("details", route.params.detail.closet);
-    const {detail, selecteddate} = route.params;
+const RecommendDetail = ({route}) => {
 
     const openExternalURL = (url) => {
         Linking.openURL(url).catch((err) => console.error('URL 열기 오류:', err));
@@ -45,7 +43,7 @@ const RecomendDetail = ({route}) => {
                         flex: 8,
                         marginVertical: 15,
                     }}>
-                        <Text style={styles.dateText}>{route.params.selecteddate} to {place}</Text>
+                        <Text style={styles.dateText}>{route.params.date} to {route.params.place}</Text>
                     </View>
 
                     <View style={{
@@ -228,4 +226,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default RecomendDetail
+export default RecommendDetail
