@@ -7,6 +7,8 @@ import TravelScreen from '../../screens/PhotozoneScreen/PhotozoneScreen';
 import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
 import FriendScreen from '../../screens/FriendScreen/FriendScreen';
 import MypageScreen from '../../screens/MypageScreen/MypageScreen';
+import RecommendScreen from '../../screens/OOTTScreen/RecomendSceen/RecommendScreen';
+
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const Tabs = SlickTabBarNavigator()
