@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {AuthContext} from '../../utils/Auth';
 import { ImageBackground } from 'react-native';
-import launch_screen from '../../assets/images/launch_screen.jpg'
+import launch_screen from '../../assets/images/launch_screen_dark.png'
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 
 const HomeScreen = () => {
