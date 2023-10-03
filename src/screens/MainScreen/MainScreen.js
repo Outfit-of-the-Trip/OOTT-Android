@@ -46,7 +46,6 @@ const MainScreen = () => {
   }
 
 const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 합치기
-
   useEffect(() => { //사용자 친구 데이터
     axios.get(`http://10.0.2.2:3000/api/friends/myFriends?userId=${userInfo.nickname}`)
       .then(function (response) {
@@ -61,14 +60,10 @@ const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 �
   
 
   useEffect( () => { //사용자 데이터 
-     axios.get (`http://10.0.2.2:3000/api/users/getUserInfo?userId=admin`)
+     axios.get (`http://10.0.2.2:3000/api/users/getUserInfo?userId=kfc`)
       .then(function (response) {
         setuserdata(response.data);
-        /* 
-          setUSerHashtag[0] = response.data.usrstyle1
-          setUser
-        
-        */
+        console.log("kfc",response.data);
       })
       .catch(function (err) {
         console.log(err);
@@ -88,7 +83,7 @@ const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 �
   }, []);
 
   useEffect(() => { //TRAVEL_CLOTHES
-    axios.get(`http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=admin`)
+    axios.get(`http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`)
       .then(function (response) {
        /*  setTravelClothes(response.data);
         console.log(response.data); */
@@ -156,7 +151,7 @@ const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 �
                     <View
                       style={{marginLeft:10}}>
                       <Text style={styles.profileimgename}>
-                          {userInfo.nickname}
+                       {userdata ?  (`${userdata.usrId}`) : ("아이디값 가져오는중")}
                       </Text>
                   <Text style={styles.profilebigtext}>{travelea} travel log</Text>
                   <Text style={styles.profilebigtext}>{combinedStyles}</Text>

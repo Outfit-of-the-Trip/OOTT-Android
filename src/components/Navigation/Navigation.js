@@ -6,9 +6,8 @@ import axios from 'axios';
 
 import HomeScreen from '../../screens/HomeScreen/HomeScreen';
 import MainScreen from '../../screens/MainScreen/MainScreen';
-import Recomend from '../../screens/MainScreen/Recomend/Recomend';
 import IsFirstLoginScreen from '../../screens/IsFirstLoginScreen/IsFirstLoginScreen'
-import RecomendDetail from '../../screens/OOTTScreen/RecomendSceen/RecomendDetail';
+import RecommendDetail from '../../screens/OOTTScreen/RecomendSceen/RecommendDetail';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
 import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
 import FirstSetting from '../../screens/FirstSetting/FirstSetting';
@@ -26,9 +25,9 @@ import Rest from '../../assets/images/rest.jpg';
 import TravelPlace from '../../screens/OOTTScreen/TravelPlace/TravelPlace';
 import TravelFriends from '../../screens/OOTTScreen/TravelFriends/TravelFriends';
 import TravelCategory from '../../screens/OOTTScreen/TravelCategory/TravelCategory';
-import RecomendSceen from '../../screens/OOTTScreen/RecomendSceen/RecomendSceen';
+import RecommendScreen from '../../screens/OOTTScreen/RecomendSceen/RecommendScreen';
 
-import Bottomtab from './BottomTabTest';
+import Bottomtab from './BottomTab';
 import { login } from '@react-native-seoul/kakao-login';
 
 const Stack = createNativeStackNavigator();
@@ -75,6 +74,16 @@ const Navigation = () => {
           <>
           {isfirstlogin ? ( 
           <>
+          <Stack.Screen
+              name="IsFirstLoginScreen"
+              component={IsFirstLoginScreen}
+              options={{headerShown: false}}
+             />
+             <Stack.Screen
+               name="FirstSetting"
+               component={FirstSetting}
+               options={{headerShown: false}}
+             />
              <Stack.Screen
                name="Bottomtab"
                component={Bottomtab}
@@ -90,15 +99,10 @@ const Navigation = () => {
               component={OOTTScreen}
               options={{headerShown: true}}
             />
-            <Stack.Screen
-              name="Recomend"
-              component={Recomend}
-              options={{headerShown: true}}
-            />
 
             <Stack.Screen
-              name="RecomendDetail"
-              component={RecomendDetail}
+              name="RecommendDetail"
+              component={RecommendDetail}
               options={{headerShown: true}}
             />
             <Stack.Screen
@@ -108,8 +112,8 @@ const Navigation = () => {
             />
             <Stack.Screen name="ShoppingList" component={ShoppingList} />
             <Stack.Screen
-              name="RecomendSceen"
-              component={RecomendSceen}
+              name="RecommendScreen"
+              component={RecommendScreen}
               options={{headerShown: true}}
             />
             <Stack.Screen
@@ -175,14 +179,8 @@ const Navigation = () => {
               options={{headerShown: true}}
             />
             <Stack.Screen
-              name="Recomend"
-              component={Recomend}
-              options={{headerShown: true}}
-            />
-
-            <Stack.Screen
-              name="RecomendDetail"
-              component={RecomendDetail}
+              name="RecommendDetail"
+              component={RecommendDetail}
               options={{headerShown: true}}
             />
             <Stack.Screen
@@ -192,8 +190,8 @@ const Navigation = () => {
             />
             <Stack.Screen name="ShoppingList" component={ShoppingList} />
             <Stack.Screen
-              name="RecomendSceen"
-              component={RecomendSceen}
+              name="RecommendScreen"
+              component={RecommendScreen}
               options={{headerShown: true}}
             />
             <Stack.Screen
