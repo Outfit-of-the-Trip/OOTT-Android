@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Button, Image, Text, TouchableOpacity} from 'react-native';
+import {Image} from 'react-native';
 
 import HomeScreen from '../../screens/HomeScreen/HomeScreen';
 import MainScreen from '../../screens/MainScreen/MainScreen';
@@ -12,17 +12,14 @@ import RecomendShose from '../../screens/OOTTScreen/RecomendSceen/DetailRecomend
 import RecomendDetail from '../../screens/OOTTScreen/RecomendSceen/RecomendDetail';
 import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
 import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
-// import FriendInfoScreen from '../../screens/FriendScreen/FriendInfoScreen';
 import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
 
 import MypageScreen from '../../screens/MypageScreen/MypageScreen';
 
 import {AuthContext} from '../../utils/Auth';
 import KeywordScreen from '../../screens/MypageScreen/KeywordScreen';
-import ClosetScreen from '../../screens/MypageScreen/ClosetScreen/ClosetScreen';
 import AbataScreen from '../../screens/MypageScreen/AbataScreen';
 import Toplogo from '../../assets/images/toplogo.png';
-import Rest from '../../assets/images/rest.jpg';
 
 import TravelPlace from '../../screens/OOTTScreen/TravelPlace/TravelPlace';
 import TravelFriends from '../../screens/OOTTScreen/TravelFriends/TravelFriends';
@@ -34,7 +31,7 @@ import Bottomtab from './BottomTabTest';
 const Stack = createNativeStackNavigator();
 
 const mainLogo = () => {
-  return <Image style={{width: 72, height: 54}} source={Toplogo} />;
+  return <Image style={{width: 100, height: 54}} source={Toplogo} />;
 };
 const Navigation = () => {
   // Auth 에서 받은 userInfo 값
@@ -121,11 +118,6 @@ const Navigation = () => {
             <Stack.Screen
               name="KeywordScreen"
               component={KeywordScreen}
-              options={{headerShown: true}}
-            />
-            <Stack.Screen
-              name="ClosetScreen"
-              component={ClosetScreen}
               options={{headerShown: true}}
             />
             <Stack.Screen

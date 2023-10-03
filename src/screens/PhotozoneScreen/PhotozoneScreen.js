@@ -45,8 +45,7 @@ const TravelScreen = () => {
         <WebView
           javaScriptEnabled={true}
           style={styles.webview}
-          source={{ uri: 'http://34.64.159.185:3000/' }}
-          //source={{uri: 'http://localhost:3000'}}
+          source={{uri: 'http://34.64.159.185:3001/'}}
           onMessage={handleOnMessage}
         />
         <BottomSheet

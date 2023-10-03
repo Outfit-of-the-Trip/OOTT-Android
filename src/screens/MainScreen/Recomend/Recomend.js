@@ -80,9 +80,6 @@ const Recomend = () => {
       <Swiper
         dotStyle={{backgroundColor:'grey',width:8}}
         activeDotColor='#4949E8'
-        /* showsButtons 좌우 화살표 표시
-        nextButton={<Image style={{height:30}}source={rightarrow}/>}
-        prevButton={<Image style={{height:30}}source={leftarrow}/>} */
         >
         {RecomendGarmet.map((img,index) =>(
           <View

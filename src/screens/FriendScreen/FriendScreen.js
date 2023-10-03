@@ -18,7 +18,6 @@ import Glass from '../../assets/images/glass.png';
 const FriendScreen = () => {
   // await AsyncStorage.getItem('userInfo') 현재 로그인한 계정의 데이터를 가져올 수 있음.
   const {userInfo} = useContext(AuthContext);
-  // console.log(userInfo);
 
   const [friendName, setFriendName] = useState('');
   const [findFriendInfo, setFindFriendInfo] = useState([]);
@@ -50,7 +49,7 @@ const FriendScreen = () => {
           'http://10.0.2.2:3000/api/test/getUserTable',
         );
         setFindFriendInfo(response.data);
-        console.log(findFriendInfo);
+        console.log(response.data);
       } catch (e) {
         console.log(e);
       }
@@ -61,11 +60,14 @@ const FriendScreen = () => {
   // 여행 계획 가져오기
   useEffect(() => {
     const getMyTravelInfo = async () => {
-      const response = await axios.get(
-        `http://10.0.2.2:3000/api/test/getTravelTable`,
-      );
-      setFriendTravleInfo(response.data);
-      // console.log(response.data);
+      try {
+        const response = await axios.get(
+          `http://10.0.2.2:3000/api/test/getTravelTable`,
+        );
+        setFriendTravleInfo(response.data);
+      } catch (e) {
+        console.log(e);
+      }
     };
     getMyTravelInfo();
   }, []);
@@ -83,7 +85,6 @@ const FriendScreen = () => {
   //친구 이름 검색
   const foundFriend = findFriendInfo.filter(item => {
     if (item.usrId === friendName) {
-      console.log(item);
       return item;
     }
   });
@@ -111,9 +112,7 @@ const FriendScreen = () => {
                 </View>
                 <View style={styles.personColumnContainer}>
                   <Text style={styles.textfont}>&nbsp;{item.usrId}</Text>
-                  <Text style={styles.textfont}>
-                    {countTravle} fashion items
-                  </Text>
+                  <Text style={styles.textfont}>{countTravle} Travle Plan</Text>
                 </View>
               </View>
               <TouchableOpacity
