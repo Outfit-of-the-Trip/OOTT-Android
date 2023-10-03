@@ -53,8 +53,19 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Tenada.ttf</string>
 		<string>오뮤_다예쁨체.ttf</string>
+		<string>SCDream1.otf</string>
+		<string>SCDream2.otf</string>
+		<string>SCDream3.otf</string>
+		<string>SCDream4.otf</string>
+		<string>SCDream5.otf</string>
+		<string>SCDream6.otf</string>
+		<string>SCDream7.otf</string>
+		<string>SCDream8.otf</string>
+		<string>SCDream9.otf</string>
+		<string>Giants-Bold.ttf</string>
+		<string>Giants-Inline.ttf</string>
+		<string>Giants-Regular.ttf</string>
 	</array>
 </dict>
 </plist>

@@ -19,16 +19,7 @@ const Horizontal = ({clothes}) => {
     const navigation = useNavigation();
 
     const gotoDetail = (outter) => {
-      return navigation.navigate('RecomendDetail', {detail: outter});
-    };
-    const gotoTop = () => {
-        return navigation.navigate('RecomendTop');
-    };
-    const gotoBottom = () => {
-        return navigation.navigate('RecomendBottom');
-    };
-    const gotoShoes = () => {
-        return navigation.navigate('RecomendShose');
+      return navigation.navigate('RecomendDetail', { detail: outter });
     };
 
 
@@ -41,9 +32,8 @@ const Horizontal = ({clothes}) => {
            {clothes.map((item, index) =>(
                 <View style={styles.root} key={index}>
 
-
                     <View style={styles.outterContainer}>
-                        <TouchableOpacity onPress={()=>gotoDetail(item.outter.detail)}>
+                        <TouchableOpacity onPress={()=>{gotoDetail(item.outter.detail)}}>
                             <Image
                                 style={styles.outter}
                                 source={{uri: item.outter.img}}
@@ -53,7 +43,7 @@ const Horizontal = ({clothes}) => {
 
                     <View style={styles.container}>
 
-                        <TouchableOpacity onPress={()=>console.log("top")}>
+                        <TouchableOpacity onPress={()=>console.log()}>
                             <Image
                                 style={styles.top}
                                 source={{uri: item.top.img}}

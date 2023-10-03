@@ -24,7 +24,7 @@ const TravelCategory = () => {
 
     const saveCategorysData = useSetRecoilState(categoryState)
 
-    const [categoryIdx, setcategoryIdx] = useState("")
+    const [categoryIdx, setcategoryIdx] = useState("핫플레이스")
 
 
 

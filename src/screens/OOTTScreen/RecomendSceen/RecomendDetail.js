@@ -1,64 +1,62 @@
 import React, {  useEffect, useState } from 'react';
-import { useWindowDimensions } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { RecomendGarmet } from '../../../constants/RecomendGarmet';
-import { Divider } from '@rneui/themed';
-
-import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
-import { recommendDetailStates, userInfoState, dateState, searchState, reasonState, friendsState, categoryState } from '../../../states/atoms';
+import { useRecoilValue } from 'recoil';
+import { recommendDetailStates, searchState } from '../../../states/atoms';
 
 import {
     View,
     StyleSheet,
     Text,
-    SafeAreaView,
     Image,
     TouchableOpacity,
     FlatList,
-    Linking
+    Linking,
+    ScrollView
 } from 'react-native';
 
+const logo = require('../../../assets/images/logo.png')
 
-const RecomendDetail = ({ route }) => {
+const RecomendDetail = ({route}) => {
+    console.log("details", route.params.detail.closet);
+    const {detail, selecteddate} = route.params;
 
     const openExternalURL = (url) => {
-        Linking.openURL(url)
-          .catch((err) => console.error('URL 열기 오류:', err));
+        Linking.openURL(url).catch((err) => console.error('URL 열기 오류:', err));
     };
 
     const place = useRecoilValue(searchState);
-    const date = useRecoilValue(dateState);
-    const reason = useRecoilValue(reasonState);
-    const friend = useRecoilValue(friendsState);
-    const category = useRecoilValue(categoryState);
-    const userInfo = useRecoilValue(userInfoState);
-
-    const recommendClothes = useRecoilValue(recommendDetailStates)
-
-    const travelData = {
-        "userId": userInfo.nickname,
-        "gender": userInfo.gender,
-        "place": place,
-        "date": date,
-        "reason": reason,
-        "friend": friend,
-        "category": category,
-    };
-
-    const navigation = useNavigation();
-    const width = useWindowDimensions().width; //기기 폭 값
-
 
     return(
 
         <View style={styles.rootContainer}>
 
-
+            <ScrollView style={styles.scrollView}>
 
             <View style={styles.headerContainer}>
                 <View style={styles.header}>
-                    <Text style={styles.text}>{travelData.date}</Text>
-                    <Text style={styles.text}> to {travelData.place}</Text>
+                    <Text style={styles.headerText}>Customized OOTT{'\n'}that reflects your preference</Text>
+                </View>
+            </View>
+
+
+
+            <View style={styles.infoContainer}>
+                <View style={styles.datePlace}>
+                    <View style={{
+                        flex: 8,
+                        marginVertical: 15,
+                    }}>
+                        <Text style={styles.dateText}>{route.params.selecteddate} to {place}</Text>
+                    </View>
+
+                    <View style={{
+                        flex: 2,
+                    }}>
+                        <Image
+                            style={styles.logo}
+                            source={logo}
+                        />
+                    </View>
+                    
                 </View>
             </View>
 
@@ -70,11 +68,7 @@ const RecomendDetail = ({ route }) => {
 
                 <View style={styles.contents}>
                     <View style={styles.title}>
-                        <Text style={styles.text}>{travelData.usrId}님에게 추천하는 아우터</Text>
-                    </View>
-
-                    <View style={styles.divider}>
-                        <Divider width={1.3} />
+                        <Text style={styles.titleText}>AI Recommendation</Text>
                     </View>
 
                     <View style={styles.slider}>
@@ -82,17 +76,24 @@ const RecomendDetail = ({ route }) => {
                             data={route.params.detail.commercial}
                             showsHorizontalScrollIndicator={false}
                             horizontal={true}
-                            renderItem={({item,index}) =>{
+                            renderItem={({item, index}) =>{
                                 return(
+
                                     <TouchableOpacity 
                                         activeOpacity={0.8}
                                         style={styles.sliderContent}
                                         onPress={()=>openExternalURL(item.link)}
                                     >
-                                        <Image
-                                            source={{uri: item.img}}
-                                            style={styles.image}
-                                        />
+                                        <View style={styles.imageContainer}>
+                                            <Image
+                                                source={{uri: item.img}}
+                                                style={styles.image}
+                                            />
+                                        </View>
+                                        
+                                        <View style={styles.recTextContainer}>
+                                            <Text style={styles.text}>#Hip #Street{'\n'}H&M 청자켓</Text>
+                                        </View>
                                     </TouchableOpacity>
                                 )
                             }}
@@ -100,23 +101,18 @@ const RecomendDetail = ({ route }) => {
                     </View>
                 </View>
 
-               
+                <Text></Text>
 
-            
 
                 <View style={styles.contents}>
                     <View style={styles.title}>
-                        <Text style={styles.text}>{travelData.usrId}님에게 추천하는 아우터</Text>
-                    </View>
-
-                    <View style={styles.divider}>
-                        <Divider width={1.3} />
+                        <Text style={styles.titleText}>similar witdh your closet</Text>
                     </View>
 
 
-                    <View style={styles.slider}>
+                    <View>
                         <FlatList
-                            data={route.params.detail.commercial}
+                            data={route.params.detail.closet}
                             showsHorizontalScrollIndicator={false}
                             horizontal={true}
                             renderItem={({item,index}) =>(
@@ -125,6 +121,9 @@ const RecomendDetail = ({ route }) => {
                                         source={{uri: item.img}}
                                         style={styles.image}
                                     />
+                                    <View style={styles.recTextContainer}>
+                                        <Text style={styles.text}>#Hip #Street{'\n'}H&M 청자켓</Text>
+                                    </View>
                                 </View>
                             )}
                         />
@@ -133,6 +132,7 @@ const RecomendDetail = ({ route }) => {
 
             </View>
 
+            </ScrollView>
 
 
         </View>
@@ -142,62 +142,88 @@ const RecomendDetail = ({ route }) => {
 
 
 const styles = StyleSheet.create({
+    scrollView: {
+    },
     rootContainer:{
-        flex:1,
-        backgroundColor:"white"
+        flex: 1,
+        backgroundColor:"#f2f2f2"
     },
     headerContainer:{
-        flex: 2,
+        marginTop: 25,
+        marginBottom: 10,
+        justifyContent: "center",
+    },
+    infoContainer:{
+        marginVertical: 15,
+        justifyContent: "center",
     },
     contentContainer:{
-        flex: 13,
-    },
-    footerContainer:{
-        flex:1,
+        marginVertical: 15,
     },
 
+    sliderContent:{
+        justifyContent: "center",
+        marginHorizontal: 15,
+        borderRadius: 10,
+        backgroundColor: "white"
+    },
 
-    contents:{
+    recTextContainer:{
+        marginVertical: 20,
+        marginLeft: 20,
+    },
+
+    datePlace:{
         flex:1,
+        flexDirection: 'row',
+        marginHorizontal: 10,
+        backgroundColor: 'white',
+        borderRadius: 10,
+    },
+    dateText:{
+        marginLeft: 20,
+        fontSize: 21,
+        color: 'black',
+        fontWeight: '400'
+    },
+    titleText:{
+        marginLeft: 10,
+        fontSize: 22,
+        color: 'black',
+        fontWeight: 'bold'
     },
 
 
     title:{
-        flex: 1,
-        marginTop: 20,
+        marginHorizontal: 5,
+        marginVertical: 20,
         justifyContent: "center",
-        alignItems: "flex-start",
+    },
+    headerText:{
+        fontSize: 23,
+        marginLeft: 10,
+        color: "black",
+        fontWeight: "bold"
     },
     text:{
-        fontSize: 20,
-        marginLeft: 5,
+        fontSize: 15,
         color: "black",
-
+        fontWeight: "300"
     },
 
-    slider:{
-        flex: 7,
-        margin: 5,
-        borderRadius: 10,
-    },
-    sliderContent:{
-        justifyContent: "center",
-        marginHorizontal: 10,
-    },
 
 
     image:{
-        width: 220,
-        height: 220,
-        borderRadius: 8,
+        width: 200,
+        height: 150,
+        borderRadius: 7,
     },
-
-    divider:{
-        flex: 0.2, 
-        marginHorizontal: 10,
-        justifyContent: "flex-end",
-
+    logo:{
+        width: 60,
+        height: 60
     }
+
+
 
 })
 

@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import {AuthContext} from '../../utils/Auth';
-
+import { ImageBackground } from 'react-native';
+import launch_screen from '../../assets/images/launch_screen_dark.png'
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 
 const HomeScreen = () => {
@@ -8,15 +9,25 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header} />
-
+      <ImageBackground
+      source={launch_screen}
+      style={{ width: "100%", height: "100%" ,justifyContent:"flex-end"}}
+      blurRadius={5}
+      resizeMode='cover'>
+      <View style={styles.header}>
+        <Text
+          style={{color:'white',fontFamily:'Giants-Regular'}}>사용자 맞춤형 코디 추천</Text>
+      </View>
+      <View
+        style={{backgroundColor:"red",}}>
+      </View>
       <View style={styles.landing}>
-        <Text style={styles.logoText}>#OOTT</Text>
-        <Text style={styles.text}>Outfit Of Today Travel</Text>
         <Image
           style={styles.tinyLogo}
           source={require('../../assets/images/logo.png')}
         />
+        <Text
+          style={{color:'white',fontFamily:'Giants-Bold'}}>OUTFIT OF THE TRAVEL</Text>
       </View>
 
       <View style={styles.kakaoLogin}>
@@ -26,34 +37,34 @@ const HomeScreen = () => {
             source={require('../../assets/images/kakao.png')}
           />
         </TouchableOpacity>
-        <Text>OOTT 둘러보기</Text>
       </View>
+      </ImageBackground>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 3,
     padding: 0,
     backgroundColor: 'white',
   },
 
   header: {
-    flex: 1,
-    backgroundColor: 'rgb(106, 96, 246)',
+    flex: 0.5,
   },
 
   landing: {
-    flex: 4,
-    backgroundColor: 'rgb(106, 96, 246)',
+    flex: 1,
     alignItems: 'center',
+    justifyContent:'center',
+    paddingLeft:10
   },
 
   kakaoLogin: {
-    flex: 2,
-    backgroundColor: 'rgb(106, 96, 246)',
+    flex: 1,
     alignItems: 'center',
+    justifyContent:'center'
   },
 
   tinyLogo: {
@@ -69,7 +80,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    color: 'skyblue',
+    color: '#09020A',
     fontWeight: 'bold',
     fontSize: 30,
   },
