@@ -18,7 +18,6 @@ import {
   FlatList
 } from 'react-native';
 import EmptyScreen from '../../components/EmptyScreen';
-import EmptyImg from '../../assets/images/emptyImg.png';
 
 
 const MainScreen = () => {
@@ -29,9 +28,9 @@ const MainScreen = () => {
   const [friend, setfriend] = useState();
   const [userdata, setuserdata] = useState();
   const [userHashTag,setUserHashtag] = useState([
-    { id : 1, usrstyle: "코멘트"},
-    { id : 2, usrstyle: "는"},
-    { id : 3, usrstyle: "없다"},
+    { id : 1, usrstyle: "#레트로"},
+    { id : 2, usrstyle: "#formal"},
+    { id : 3, usrstyle: "#하이틴"},
     ]);
   const [data, setData] = useState([]);
   const [travelClothes,setTravelClothes] = useState([]); 
@@ -78,7 +77,7 @@ const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 �
 
 
   useEffect(() => { //여행정보 데이터
-    axios.get(`http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=admin`)
+    axios.get(`http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`)
       .then(function (response) {
         settravelea(response.data.length)
         setData(response.data);
@@ -110,7 +109,6 @@ const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 �
   }, []);
 
   const Showlog = () =>{
-    
     if(travelea>0){
      return(
          <FlatList
@@ -156,7 +154,7 @@ const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 �
                       rounded
                       source={{ uri:userInfo.profileImageUrl}}/>
                     <View
-                      style={{marginLeft:5}}>
+                      style={{marginLeft:10}}>
                       <Text style={styles.profileimgename}>
                           {userInfo.nickname}
                       </Text>
@@ -188,6 +186,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 24,
     fontFamily: 'SCDream5',
+    marginBottom:2
   },
   recomendconatiner: {
     flex: 4,
@@ -219,9 +218,9 @@ const styles = StyleSheet.create({
   },
   bottomline: {
     borderBottomColor: 'black',
-    borderBottomWidth: 3,
+    borderBottomWidth: 2,
     marginTop: 10,
-    shadowColor: 'black',
+    shadowColor: 'grey',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.5,
     shadowRadius: 4,
@@ -230,6 +229,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 16,
     fontFamily: 'SCDream4',
+    marginBottom:3
   },
   recotopcontainer:{
     flexDirection: 'row', 

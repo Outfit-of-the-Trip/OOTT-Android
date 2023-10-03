@@ -69,6 +69,7 @@ const Navigation = () => {
           tabBarShowLabel: false,
           headerTitleAlign: 'center',
           headerTitle: mainLogo,
+          contentStyle:{borderBottomColor:'white'}
         }}>
         {userInfo.id ? (
           <>
@@ -77,7 +78,7 @@ const Navigation = () => {
              <Stack.Screen
                name="Bottomtab"
                component={Bottomtab}
-               options={{headerShown: false}}
+               options={{headerShown: true}}
              />
               <Stack.Screen
               name="MainScreen"

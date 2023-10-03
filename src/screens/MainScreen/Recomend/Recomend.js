@@ -1,4 +1,4 @@
-import React, { useState,useRef,useContext } from 'react';
+import React, { useState,useRef,useContext,useEffect } from 'react';
 import { useWindowDimensions, Modal } from 'react-native';
 import avatarbtn from '../../../assets/images/avatarbtn.png'
 import frinedbtn from '../../../assets/images/frinedbtn.png'
@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
+  FlatList
 } from 'react-native';
 
 import { useRoute } from '@react-navigation/native';
@@ -17,34 +18,42 @@ import { useNavigation } from '@react-navigation/native';
 import { Avatar } from '@rneui/themed';
 import {AuthContext} from '../../../utils/Auth';
 import Swiper from 'react-native-swiper'
+import { url } from 'inspector';
 
 const Recomend = () => {
   const {userInfo} = useContext(AuthContext);
   const navigation = useNavigation();
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null); // 선택한 날짜를 저장하는 state
+  const [initialDate, setInitialDate] = useState(null);
   const [images, setImages] = useState([]);
   const {params: traveldata,userdata} = useRoute(); //여행 데이터 받아오기 */ 
   const traveldate = String(traveldata.travlDate).substring(0,10); //날짜 글자 필터링
   const width = useWindowDimensions().width; //기기 폭 값
   const [isModalVisible, setIsModalVisible] = useState(false); //친구 모달창
+  const ITEMS_PER_PAGE = 3; // 1페이지당 출력할 조합 세트 수
+  const filteredData = selectedDate
+    ? RecomendGarmet.filter((item) => item.date === selectedDate)
+    : RecomendGarmet;
+  const pages = Array.from(
+    { length: Math.ceil(filteredData.length / ITEMS_PER_PAGE) },
+    (_, index) => index + 1
+  );
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const scrollRef = useRef();
+  const dataForCurrentPage = filteredData.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
 /* travledata는 여행 날짜 데이터 변수 */
-  const gotoRecomendOutter = (travledata) => {
-    console.log(travledata)
-    navigation.navigate('',travledata);
+  const gotoRecomendDetail = (detail,date) => {
+    console.log("Detail",detail)
+    console.log("date",date)
+    return navigation.navigate('RecomendDetail',{
+      detail : detail,
+      selecteddate:date
+    });
   };
-  console.log(userdata)
-  const gotoRecomendTop = (travledata) => {
-    return navigation.navigate('RecomendTop',travledata);
-  };
-
-  const gotoRecomendBottom= (travledata) => {
-    return navigation.navigate('RecomendBottom',travledata);
-  };
-
-  const gotoRecomendShose = (travledata) => {
-    return navigation.navigate('RecomendShose',travledata);}
 
   const gotoFriendsLook = () =>{ 
       if(traveldata.travlFriends!=null){// 같이 가는 친구가 있다면 친구창으로 이동
@@ -56,32 +65,15 @@ const Recomend = () => {
   };}
   
   useEffect(() => {
-    // Fetch images based on the selectedDate from your API
-    const fetchImages = async () => {
-      if (selectedDate) {
-        try {
-          const response = await fetchImagesByDate(selectedDate);
-          setImages(response.data); // Assuming the response.data contains an array of image URLs
-        } catch (error) {
-          console.error('Error fetching images: ', error);
-        }
-      }
-    };
+    // 초기에 날짜 중 가장 앞에 있는 인덱스의 날짜를 선택하도록 설정
+    if (RecomendGarmet.length > 0) {
+      const earliestDate = RecomendGarmet[0].date;
+      setSelectedDate(earliestDate);
+      setInitialDate(earliestDate);
+    }
+  }, []);
 
-    fetchImages();
-  }, [selectedDate]);
-
-  const handleDateSelection = (date) => {
-    // Update the selectedDate when a date is selected
-    setSelectedDate(date);
-  };
-
-  const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => handleImageSelection(item)}>
-      <Image source={{ uri: item.url }} style={{ width: 100, height: 100 }} />
-    </TouchableOpacity>
-  );
-
+ 
   return (
    <SafeAreaView
    style={styles.conatiner}>
@@ -102,10 +94,26 @@ const Recomend = () => {
                   style={styles.selectdatetext}>Select Date</Text>
               <View
                 style={{flexDirection:'row'}}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={gotoFriendsLook}>
                   <Image
                     style={{marginRight:5,width:30,height:30}}
                     source={frinedbtn}/>
+                    {<Modal 팝업창
+                        animationType="slide"
+                        transparent={true}
+                        visible={isModalVisible}
+                        onRequestClose={gotoFriendsLook}
+                        >
+                        <View style={styles.modalContainer}>
+                          <View style={styles.modalContent}>
+                            <Text style={styles.modaltext}>같이 가는 친구가 없습니다</Text>
+                            <TouchableOpacity onPress={gotoFriendsLook}>
+                              <Text style={styles.modaltext}>닫기</Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </Modal> }
                 </TouchableOpacity>
                 <TouchableOpacity>
                   <Image
@@ -118,53 +126,66 @@ const Recomend = () => {
     </View>
     <View
       style={styles.showimgcontainer}>
-      
-    </View>
-    <View
-      style={[styles.bottomfirstcontainer,{marginHorizontal:width-(width-20)}]}> 
-     <TouchableOpacity
-      onPress={() => gotoRecomendOutter(traveldata,userdata)}
-      style={{marginHorizontal:5}}>
-        <Text style={styles.hashtagtext}>#아우터</Text>
-    </TouchableOpacity>
-    <TouchableOpacity
-      onPress={() => gotoRecomendTop(traveldata,userdata)}
-      style={{marginHorizontal:5}}>
-        <Text style={styles.hashtagtext}>#상의</Text>
-    </TouchableOpacity>
-    <TouchableOpacity
-       onPress={() => gotoRecomendBottom(traveldata,userdata)}
-       style={{marginHorizontal:5}}>
-        <Text style={styles.hashtagtext}>#하의</Text>
-    </TouchableOpacity>
-    <TouchableOpacity
-       onPress={() => gotoRecomendShose(traveldata,userdata)}
-       style={{marginHorizontal:5}}>
-        <Text style={styles.hashtagtext}>#신발</Text>
-    </TouchableOpacity>
-    </View>
-    <View
-      style={[styles.bottomsecondcontainer,{marginHorizontal:width-(width-20)}]}>
-        <TouchableOpacity
-          onPress={() => gotoFriendsLook(traveldata)}>
-          <Text
-          style={styles.samedaystext}>같은 날 친구가 입는 옷은?</Text>
-           {<Modal 팝업창
-            animationType="slide"
-            transparent={true}
-            visible={isModalVisible}
-            onRequestClose={gotoFriendsLook}
-            >
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <Text style={styles.modaltext}>같이 가는 친구가 없습니다</Text>
-                <TouchableOpacity onPress={gotoFriendsLook}>
-                  <Text style={styles.modaltext}>닫기</Text>
+   <View style={{  }}>
+      {/* 날짜 선택 */}
+      <FlatList
+        horizontal
+        data={RecomendGarmet}
+        renderItem={({ item, index }) => (
+          <TouchableOpacity
+            style={{
+              width:110,
+              height:40,
+              borderWidth: 1,
+              paddingVertical: 8,
+              paddingHorizontal: 16,
+              marginHorizontal: 5,
+              borderRadius: 8,
+              backgroundColor: selectedDate === item.date ? 'blue' : 'white',
+            }}
+            onPress={() => setSelectedDate(item.date)}
+          >
+            <Text style={{ color: selectedDate === item.date ? 'white' : 'black' }}>{item.date}</Text>
+          </TouchableOpacity>
+        )}
+        keyExtractor={(item) => item.date}
+      />
+
+      {/* 이미지 세트 */}
+      {selectedDate &&  (
+        <FlatList
+          horizontal
+          data={RecomendGarmet.find((item) => item.date === selectedDate)?.clothes}
+          renderItem={({ item }) => (
+            <View style={{ margin: 10 }}>
+              <View
+                style={{flexDirection:'row'}}>
+                <TouchableOpacity
+                  onPress={() => gotoRecomendDetail(item.outter.detail,selectedDate)}>
+                  <Image source={{ uri: item.outter.img }} style={{ width: 200, height: 200 }} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                   onPress={() => gotoRecomendDetail(item.outter,selectedDate)}>
+                  <Image source={{ uri: item.outter.img }} style={{ width: 200, height: 200 }} />
                 </TouchableOpacity>
               </View>
+              <View
+                style={{flexDirection:'row'}}>
+                <TouchableOpacity
+                   onPress={() => gotoRecomendDetail(item.outter,selectedDate)}>
+                  <Image source={{ uri: item.outter.img }} style={{ width: 200, height: 200 }} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                   onPress={() => gotoRecomendDetail(item.outter,selectedDate)}>
+                  <Image source={{ uri: item.outter.img }} style={{ width: 200, height: 200 }} />
+                </TouchableOpacity>
+              </View>  
             </View>
-          </Modal> }
-        </TouchableOpacity>
+          )}
+          keyExtractor={(item) => item.id}
+        />
+      )}
+    </View>
     </View>
   </SafeAreaView>
   );
@@ -185,6 +206,7 @@ export default Recomend;
       alignItems:'flex-start',
       justifyContent:'center',
       alignContent:'flex-start',
+      marginBottom:40
     },
     infoicon:{
       resizeMode:'contain'
@@ -233,7 +255,7 @@ export default Recomend;
       fontFamily:'오뮤_다예쁨체',
     },
     showimgcontainer:{
-      flex:3.5,
+      flex:3,
       alignItems:'flex-start',justifyContent:'flex-start'
     },
     showimg:{
