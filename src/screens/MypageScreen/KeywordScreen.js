@@ -184,11 +184,13 @@ const FirstSetting = () => {
 
 
   const setUserInfo = async () =>{ //유저 정보 patch
-      const response = await axios.patch('http://10.0.2.2:3000/api/users/updateUserInfo?usrId=kfc',{
+    try{
+      const response = await axios.post('http://10.0.2.2:3000/api/users/updateUserInfo',{
       usrStyle1 :`${input[0].userStyle}`,
       usrStyle2 : `${input[1].userStyle}`,
       usrStyle3 : `${input[2].userStyle}`,
-    }) 
+      usrId : "zxc",
+    })}catch(e){console.log("수정에러",`${e}`)} 
     return navigation.navigate("Bottomtab")
 }
 

@@ -185,16 +185,16 @@ const FirstSetting = () => {
 
   const setUserInfo = async () =>{ //유저 정보 post
     /* let gd = String(userInfo.gender).substring(0,1); // 성별 */
-    let ag = parseInt(String(userInfo.ageRange).substring(4,6)); //나이
-      /* const response = await axios.post('http://10.0.2.2:3000/api/users/setUserInfo',{
-      usrId : `alll`,
+   /*  let ag = parseInt(String(userInfo.ageRange).substring(4,6)); //나이
+       const response = await axios.post('http://10.0.2.2:3000/api/users/setUserInfo',{
+      usrId : `zxc`,
       usrGender :`${userInfo.gender}`,
       usrAge :`${ag}`,
       usrProfileURL : `${userInfo.profileImageUrl}`,
       usrStyle1 :`${input[0].userStyle}`,
       usrStyle2 : `${input[1].userStyle}`,
       usrStyle3 : `${input[2].userStyle}`,
-    }) */
+    })  */
     return navigation.navigate("Bottomtab")
 }
 

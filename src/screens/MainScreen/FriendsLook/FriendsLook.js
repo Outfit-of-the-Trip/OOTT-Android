@@ -23,14 +23,13 @@ import codybackground from '../../../assets/images/codybackground.png';
 import {AuthContext} from '../../../utils/Auth';
 import TravelFriends from '../../OOTTScreen/TravelFriends/TravelFriends';
 
-const FriendsLook = () => {
+const FriendsLook = ({route}) => {
     const [isModalVisible, setModalVisible] = useState(false); // 모달 on/off
     const [friendname,setfriendname] = useState('') //모달창에서 선택된 친구
     const width = useWindowDimensions().width;
-    const {params: data} = useRoute(); //여행 데이터 받아오기
     const {userInfo} = useContext(AuthContext);
     const {travlFreinds} = useContext(AuthContext);
-    
+    console.log(route.params.date);
 
     const toggleModal = () => { //팝업창 on/off method
         setModalVisible(!isModalVisible);
@@ -126,7 +125,7 @@ const FriendsLook = () => {
             style={[styles.thirdcontainer,{marginHorizontal:width-(width-20)}]}>
             <Text
                 style={styles.bottomtext1}>
-                2021-11-04 with minseo          
+                {route.params.date} with minseo          
                 {/* {travelDate} with {travlFriends}로 바꿀 예정 입니다. */}
             </Text>
             <Text
