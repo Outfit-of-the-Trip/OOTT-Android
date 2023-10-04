@@ -47,13 +47,13 @@ const MainScreen = () => {
     var input = data.substring(0,10);
     return input;
   }
-
+console.log(userInfo);
 const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 합치기
+  
   useEffect(() => { //사용자 친구 데이터
     axios.get(`http://10.0.2.2:3000/api/friends/myFriends?userId=${userInfo.nickname}`)
       .then(function (response) {
         setfriend(response.data.length)
-
       })
       .catch(function (err) {
         console.log(err);
@@ -63,10 +63,10 @@ const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 �
   
 
   useEffect( () => { //사용자 데이터 
-     axios.get (`http://10.0.2.2:3000/api/users/getUserInfo?userId=kfc`)
+     axios.get (`http://10.0.2.2:3000/api/users/getUserInfo?userId=${userInfo.nickname}`)
       .then(function (response) {
         setuserdata(response.data);
-        console.log("kfc",response.data);
+        console.log(`${userInfo.nickname}`,response.data);
       })
       .catch(function (err) {
         console.log(err);
@@ -147,10 +147,13 @@ const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 �
     <SafeAreaView style={styles.container}>
             <View
               style={{flexDirection:'row', marginHorizontal:width-(width-20),marginTop:5}}>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('FriendsLook')}>
                     <Avatar
                       size={80}
                       rounded
                       source={{ uri:userInfo.profileImageUrl}}/>
+                      </TouchableOpacity>
                     <View
                       style={{marginLeft:10}}>
                       <Text style={styles.profileimgename}>
