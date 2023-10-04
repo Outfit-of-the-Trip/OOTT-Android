@@ -11,7 +11,7 @@ const FriendSelectScreen = () => {
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     {key: 'friendSearch', title: '친구 찾기'},
-    {key: 'friendRequest', title: '친구 요청'},
+    {key: 'friendRequest', title: '친구 수락'},
   ]);
 
   const renderScene = SceneMap({
