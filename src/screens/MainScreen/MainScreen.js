@@ -38,7 +38,10 @@ const MainScreen = () => {
   const gotoRecomend = (traveldata) => {
     return navigation.navigate('RecommendScreen', traveldata);
   };
-
+  const gotoFrineds = () =>{
+    return navigation.navigate('FriendsLook')
+  }
+  
   const translate = (item) =>{ // 날짜 정리 메서드
     var data = String(item);
     var input = data.substring(0,10);
