@@ -13,7 +13,6 @@ import {
   Box,
 } from 'native-base';
 import ClosetScreen from './ClosetScreen/ClosetScreen';
-import KeywordScreen from './KeywordScreen';
 
 import {
   View,

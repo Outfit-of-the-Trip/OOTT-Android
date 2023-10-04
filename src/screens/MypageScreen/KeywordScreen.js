@@ -18,6 +18,8 @@ import {useWindowDimensions} from 'react-native';
 import axios from 'axios'
 import { useRecoilState } from 'recoil';
 import { isUserFirstLogin } from '../../states/atoms';
+import { Button } from 'react-native-paper';
+
 
 
 const layouts = [
@@ -31,6 +33,7 @@ const layouts = [
       'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
       // Add more image URLs here.
     ],
+    info : '가나다',
   },
   {
     keyword: 'dandy',
@@ -42,6 +45,7 @@ const layouts = [
       'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
       // Add more image URLs here.
     ],
+    info : '',
   },
   {
     keyword: 'casual',
@@ -53,6 +57,7 @@ const layouts = [
       'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
       // Add more image URLs here.
     ],
+    info : '',
   },
   {
     keyword: 'street',
@@ -64,6 +69,7 @@ const layouts = [
       'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
       // Add more image URLs here.
     ],
+    info : '',
   },
   {
     keyword: 'sporty',
@@ -75,6 +81,7 @@ const layouts = [
       'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
       // Add more image URLs here.
     ],
+    info : '',
   },
   {
     keyword: 'vintage',
@@ -86,6 +93,7 @@ const layouts = [
       'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
       // Add more image URLs here.
     ],
+    info : '',
   },
   {
     keyword: 'modern',
@@ -97,6 +105,7 @@ const layouts = [
       'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
       // Add more image URLs here.
     ],
+    info : '',
   },
   {
     keyword: 'feminine',
@@ -108,6 +117,7 @@ const layouts = [
       'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
       // Add more image URLs here.
     ],
+    info : '',
   },
   {
     keyword: 'minimalism',
@@ -119,6 +129,7 @@ const layouts = [
       'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
       // Add more image URLs here.
     ],
+    info : '',
   },
   {
     keyword: 'Amekazi',
@@ -130,6 +141,7 @@ const layouts = [
       'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
       // Add more image URLs here.
     ],
+    info : '',
   },
   {
     keyword: 'classic',
@@ -141,15 +153,19 @@ const layouts = [
       'https://th.bing.com/th/id/OIP.CQZcsTUegtie8lsXCex86gHaKg?w=137&h=195&c=7&r=0&o=5&pid=1.7',
       // Add more image URLs here.
     ],
+    info : '',
   },
 ];
 
 
-const KeywordScreen = () => {
+const FirstSetting = () => {
+  const navigation = useNavigation();
   const [isFirstLogin,setIsFirstLogin] = useRecoilState(isUserFirstLogin)
   const [currentKeywordIndex, setCurrentKeywordIndex] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // Add this state
   const [likedKeywords, setLikedKeywords] = useState([]);
+  const {userInfo} = useContext(AuthContext);
+  const width = useWindowDimensions().width; //기기 넓이
   const [likesCount, setLikesCount] = useState(0);
   const [input,setInput] = useState([
     {
@@ -165,44 +181,17 @@ const KeywordScreen = () => {
       userStyle : 'null'
      },
     ]);
-  const {userInfo} = useContext(AuthContext);
-  const width = useWindowDimensions().width; //기기 넓이
 
-  const setUserInfo = async () =>{ //유저 정보 post
-    if(isFirstLogin!==false){ //처음 로그인이라면 
-    try{const response = await axios.post('http://10.0.2.2:3000/api/users/setUserInfo',{
-      usrId : "iop",
-      usrGender :"M",
-      usrAge : 25,
-      usrProfileURL : "http://imgtest.png",
-      usrStyle1 :input[0].userStyle,
-      usrStyle2 : input[1].userStyle,
-      usrStyle3 : input[2].userStyle,
-  })
-  console.log(response.data);
-  setIsFirstLogin(true)
-      }catch(e){console.log(`${e.error}`)}
-  }else{ //처음 로그인이 아니라면
-    try{
-      const response = await axios.patch('http://10.0.2.2:3000/api/users/updateUserInfo/?userId=admin',{
-        userStyle1 : input[0].userStyle,
-        userStyle2 : input[1].userStyle,
-        userStyle3 : input[2].userStyle,
-      })
-      
-    }catch(e){console.log(e)}
-  } 
+
+  const setUserInfo = async () =>{ //유저 정보 patch
+      const response = await axios.patch('http://10.0.2.2:3000/api/users/updateUserInfo?usrId=kfc',{
+      usrStyle1 :`${input[0].userStyle}`,
+      usrStyle2 : `${input[1].userStyle}`,
+      usrStyle3 : `${input[2].userStyle}`,
+    }) 
+    return navigation.navigate("Bottomtab")
 }
 
-  const getUserInfo = () =>{
-    axios.get('http://10.0.2.2:3000/api/users/getUserInfo?userId=iop')
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  }
 
 
   const handleNextKeyword = () => {
@@ -212,7 +201,8 @@ const KeywordScreen = () => {
       setCurrentKeywordIndex(nextKeywordIndex);
       setCurrentImageIndex(0); // 다음 키워드로 이동할 때 첫 번째 사진으로 설정
     } else {
-      console.log('No more layouts available.');
+        setCurrentKeywordIndex(0);
+        setCurrentImageIndex(0); // 다음 키워드로 이동할 때 첫 번째 사진으로 설정
     }
   };
 
@@ -221,55 +211,43 @@ const KeywordScreen = () => {
       const previousKeywordIndex = currentKeywordIndex - 1;
       setCurrentKeywordIndex(previousKeywordIndex);
       setCurrentImageIndex(0); // 이전 키워드로 이동할 때 첫 번째 사진으로 설정
+    }else{
+      setCurrentKeywordIndex(10);
+      setCurrentImageIndex(0); // 이전 키워드로 이동할 때 첫 번째 사진으로 설정
     }
   };
 
   const keyword = layouts[currentKeywordIndex].keyword;
   const keywordImages = layouts[currentKeywordIndex].images;
-
-  const handleLikeToggle =  () => {
-    if (likedKeywords.includes(keyword)) { //좋아요 해제되었을 때
-      setLikedKeywords(likedKeywords.filter(kw => kw !== keyword)); 
-      setLikesCount(prevLikesCount => {
-      const updateLikesCount = prevLikesCount - 1;
-      /* console.log("좋아요해제",updateLikesCount);
-      console.log("좋아요해제배열",input) */
-      setInput(data => { //좋아요된 키워드 선택 
-        return data.map(inputItem =>{ 
-          if(inputItem.id === updateLikesCount){ 
-            return {...inputItem, userStyle: "empty"};
-          }
-          return inputItem
-        })
+  const info = layouts[currentKeywordIndex].info;
+  const handleLikeToggle = () => {
+    if (likedKeywords.includes(keyword)) {
+      // 좋아요 해제되었을 때
+      const updatedInput = input.map(inputItem => {
+        if (inputItem.userStyle === keyword) {
+          return { ...inputItem, userStyle: "empty" };
+        }
+        return inputItem;
       });
-      return updateLikesCount})}
-     else {
-      if (likedKeywords.length < 3) { // 좋아요 눌렸을 때
-        setLikedKeywords([...likedKeywords, keyword]);
-        setLikesCount(prevLikesCount =>{
-        if(prevLikesCount < 3){
-          const updatedLikesCount = prevLikesCount + 1;
-          /* console.log("좋아요",updatedLikesCount);
-          console.log("좋아요배열",input) */
-          setInput(data => {
-          return data.map(inputItem =>{
-            if(inputItem.id === updatedLikesCount){
-              console.log(inputItem);
-              return {...inputItem, userStyle: keyword};
-            }
-            return inputItem;
-          })
+      setInput(updatedInput);
+      setLikedKeywords(likedKeywords.filter(kw => kw !== keyword));
+      setLikesCount(prevLikesCount => prevLikesCount - 1);
+    } else if (likedKeywords.length < 3) {
+      // 좋아요 눌렸을 때
+      const updatedInput = input.map(inputItem => {
+        if (inputItem.id === likedKeywords.length + 1) {
+          return { ...inputItem, userStyle: keyword };
+        }
+        return inputItem;
       });
-        return updatedLikesCount}else{
-          console.log('키워드 선택은 3개까지')
-          return prevLikesCount;
-        }})
-      }
-       else {
-        console.log('키워드 선택은 3개까지');
-      }
+      setInput(updatedInput);
+      setLikedKeywords([...likedKeywords, keyword]);
+      setLikesCount(prevLikesCount => prevLikesCount + 1);
+    } else {
+      console.log('키워드 선택은 3개까지');
     }
-  }
+  };
+  
 
   const ImageSwiper = ({images, currentImageIndex}) => {
     return (
@@ -283,21 +261,20 @@ const KeywordScreen = () => {
     );
   };
 
+  console.log(input);
+
   return (
     <View style={styles.all}>
       <View style={[styles.textContainer,{marginHorizontal:width-(width-20)}]}>
         <View
-          style={{flexDirection:'row',alignItems:'center'}}>
-          <Avatar
-            size={35}
-            rounded
-            source={{
-              uri:userInfo.profileImageUrl}}/>
+          style={{alignItems:'flex-start'}}>
           <Text
-            style={{fontSize:20,marginLeft:5}}>{userInfo.nickname}</Text>
+           style={{fontSize:20,marginLeft:5,color:'white',fontFamily:'SCDream4'}}>Choose Your preference</Text>  
+          <Text
+            style={{fontSize:20,marginLeft:5,color:'white',fontFamily:'SCDream6'}}>#{keyword}</Text>
         </View>
             <TouchableOpacity
-            onPress={getUserInfo}>
+            onPress={setUserInfo}>
             <Text style={styles.doneBtnText}>완료</Text>
           </TouchableOpacity>
       </View> 
@@ -310,26 +287,14 @@ const KeywordScreen = () => {
       </View>
 
       <View style={[styles.bottom,{marginHorizontal:width-(width-20)}]}>
-        <View
-          style={{flexDirection:'row'}}>
-          <TouchableOpacity
-              onPress={handleLikeToggle}
-              style={{marginRight:10}}>
-              <Image
-                source={
-                  likedKeywords.includes(keyword) ? Goodheartfilled : Goodheart
-                }
-                style={styles.heartIcon}
-              />
-            </TouchableOpacity>
+        <View>
+             <Text
+              style={{fontSize:24,color:'white',fontFamily:'SCDream5'}}>#{keyword} style</Text>
+            <Text
+              style={{color:'white',fontFamily:'SCDream4'}}>{info}</Text>
         </View>
         <View
           style={{flexDirection:'row',alignItems:"center",justifyContent:'space-between'}}>
-          <Text
-              style={{fontSize:32,color:'#4949E8',fontFamily:'오뮤_다예쁨체'}}>#{keyword}</Text>
-          <Text style={styles.text}>
-            키워드를 선택해주세요
-          </Text>
         </View>
           <View
           style={{flexDirection:'row',justifyContent:'space-between'}}>
@@ -337,6 +302,20 @@ const KeywordScreen = () => {
             onPress={handleBeforeKeyword}>
             <Text style={styles.beforeBtn}>이전</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+              onPress={handleLikeToggle}
+              style={{marginRight:10}}>
+              <Button
+                mode='outlined'
+                textColor='white'
+                labelStyle={{fontFamily:'SCDream4',fontSize:15}}
+                style={{
+                    borderStyle: 'solid',
+                    borderwidth:10,
+                    borderColor:'white',
+                    paddingHorizontal:50,
+                    borderRadius: 5,}}>선택</Button>
+            </TouchableOpacity>
           <TouchableOpacity
             onPress={handleNextKeyword}>
             <Text style={styles.nextBtn}>다음</Text>
@@ -351,10 +330,11 @@ const KeywordScreen = () => {
 const styles = StyleSheet.create({
   all: {
     flex: 3,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'black',
   },
   textContainer: {
     flex: 0.1,
+    marginTop:5,
     flexDirection:'row',
     alignItems: 'center',
     justifyContent:'space-between'
@@ -364,13 +344,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   layout1: {
-    flex: 1,
-  },
-  keywordContainer: {
-    flex: 0.1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor:'red'
+    flex: 0.8,
   },
   keyword: {
     justifyContent: 'center',
@@ -391,7 +365,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bottom: {
-    flex: 0.2,
+    flex: 0.3,
+    justifyContent:'space-around'
   },
   heartIcon: {
     width: 30,
@@ -400,19 +375,19 @@ const styles = StyleSheet.create({
   },
   beforeBtn: {
     fontSize: 24,
-    fontFamily:'오뮤_다예쁨체',
-    color: '#000000',
+    fontFamily:'STDream4',
+    color: 'white',
   },
   nextBtn: {
     fontSize: 24,
-    fontFamily:'오뮤_다예쁨체',
-    color: '#000000',
+    fontFamily:'STDream4',
+    color: 'white',
   },
   doneBtnText: {
     fontSize: 24,
-    fontFamily:'오뮤_다예쁨체',
-    color: '#000000',
+    fontFamily:'SCDream3',
+    color: 'white',
   },
 });
 
-export default KeywordScreen;
+export default FirstSetting;

@@ -17,7 +17,7 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <StatusBar backgroundColor="rgb(73, 73, 223)" />
+      <StatusBar/>
       <Navigation />
     </AuthProvider>
   );

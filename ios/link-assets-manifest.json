@@ -2,8 +2,52 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "src/assets/fonts/Tenada.ttf",
-      "sha1": "0134ece97e692354c8f42344646ee9cd5033c69e"
+      "path": "src/assets/fonts/Giants-Bold.ttf",
+      "sha1": "cd709a476759d6c4de8b327538afa3e04c19c802"
+    },
+    {
+      "path": "src/assets/fonts/Giants-Inline.ttf",
+      "sha1": "bedcfc1b1990c46f60e706e1bedb80de9819d4ab"
+    },
+    {
+      "path": "src/assets/fonts/Giants-Regular.ttf",
+      "sha1": "265fff269293e980e7e91caa095861173388aaaa"
+    },
+    {
+      "path": "src/assets/fonts/SCDream1.otf",
+      "sha1": "764ded6a6ab9be7b539064f79ac0227326da54ae"
+    },
+    {
+      "path": "src/assets/fonts/SCDream2.otf",
+      "sha1": "54ca573a0847d6b359de002084b44f4706754d51"
+    },
+    {
+      "path": "src/assets/fonts/SCDream3.otf",
+      "sha1": "4fe567db9c167acbe79e585f63cb074962e38bd7"
+    },
+    {
+      "path": "src/assets/fonts/SCDream4.otf",
+      "sha1": "e6378dc3d63ca129425e562f909f43b1fc66b589"
+    },
+    {
+      "path": "src/assets/fonts/SCDream5.otf",
+      "sha1": "033a8a0a5e344d79ffa2a65ea4bbb8bbcf66eefe"
+    },
+    {
+      "path": "src/assets/fonts/SCDream6.otf",
+      "sha1": "f58b1d53ee5815f4a1a762b0d536bb4c28249f73"
+    },
+    {
+      "path": "src/assets/fonts/SCDream7.otf",
+      "sha1": "cf384a16ec5d48b2b14591256ffdc2f4b3555ced"
+    },
+    {
+      "path": "src/assets/fonts/SCDream8.otf",
+      "sha1": "3db6a7a4dc5759eacc54b983b6858bfda8a4a0cc"
+    },
+    {
+      "path": "src/assets/fonts/SCDream9.otf",
+      "sha1": "131188c2e15cb851964bd399b3d5bad8d5d272b8"
     },
     {
       "path": "src/assets/fonts/오뮤_다예쁨체.ttf",

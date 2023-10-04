@@ -17,14 +17,14 @@ import {
 const TravelCategory = () => {
 
     const navigation = useNavigation()
-    const gotoRecomendSceen = () => {
+    const gotoRecommendSceen = () => {
         saveCategorysData(categoryIdx)
-        return navigation.navigate('RecomendSceen');
+        return navigation.navigate('RecommendScreen');
     };
 
     const saveCategorysData = useSetRecoilState(categoryState)
 
-    const [categoryIdx, setcategoryIdx] = useState("")
+    const [categoryIdx, setcategoryIdx] = useState("핫플레이스")
 
 
 
@@ -74,7 +74,7 @@ const TravelCategory = () => {
             </View>
             <View style={styles.nextButton}>
                 <TouchableOpacity 
-                    onPress={gotoRecomendSceen}
+                    onPress={gotoRecommendSceen}
                     style={{          
                         margin: 10,
                         backgroundColor: "black",
