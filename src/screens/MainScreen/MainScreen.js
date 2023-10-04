@@ -36,7 +36,7 @@ const MainScreen = () => {
   const [travelClothes,setTravelClothes] = useState([]); 
   const [imageurl,setImageUrl] = useState([]); //여행별 추천 옷 url
   const gotoRecomend = (traveldata) => {
-    return navigation.navigate('Recomend', traveldata);
+    return navigation.navigate('RecommendScreen', traveldata);
   };
 
   const translate = (item) =>{ // 날짜 정리 메서드
