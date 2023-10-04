@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useState} from 'react';
 
 import {useNavigation, NavigationContainer} from '@react-navigation/native';
 import {AuthContext} from '../../utils/Auth';
-
 import axios from 'axios';
 import {backendURL} from '../../constants/url';
 import {
@@ -81,7 +80,7 @@ const MypageScreen = () => {
 
             <View style={styles.userProfileContainer}>
               <Text style={styles.category}>선호 스타일</Text>
-              <Text style={styles.usrvalues}>와이드 키치</Text>
+              <Text style={styles.usrvalues}>{userInfo.userStyle1}</Text>
             </View>
           </View>
         </View>

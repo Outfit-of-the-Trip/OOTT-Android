@@ -346,17 +346,18 @@ const styles = StyleSheet.create({
   layout1: {
     flex: 0.8,
   },
+  keywordContainer: {
+    flex: 0.1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor:'red'
+  },
   keyword: {
     justifyContent: 'center',
     alignItems: 'center',
     fontSize: 22,
     fontWeight: 'bold',
     color: '#000000',
-  },
-  ImgContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
   },
   slide: {
     flex: 1,
