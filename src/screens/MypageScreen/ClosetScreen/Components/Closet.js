@@ -15,7 +15,7 @@ const Closet = () => {
     return (
       <Image
         source={{uri: item}}
-        style={{width: 120, height: 120, borderRadius: 10, margin: 6}}
+        style={{width: '32%', aspectRatio: 1, borderRadius: 10, marginHorizontal: 2}}
       />
     );
   };
@@ -57,7 +57,8 @@ const Closet = () => {
           numColumns={3}
           keyExtractor={item => item}
           data={data}
-          renderItem={renderImage}></FlatList>
+          renderItem={renderImage}>
+        </FlatList>
       </View>
       <Gallery
         visible={modalVisible}

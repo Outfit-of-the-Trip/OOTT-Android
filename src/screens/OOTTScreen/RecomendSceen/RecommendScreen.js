@@ -8,7 +8,8 @@ import { useNavigation } from '@react-navigation/native';
 import SplashVideo from '../../../components/SplashVideo';
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import Swiper from 'react-native-swiper'
-
+import avatrbtn from '../../../assets/images/avatarbtn.png'
+import friendbtn from '../../../assets/images/frinedbtn.png'
 
 import {
     StyleSheet,
@@ -30,7 +31,9 @@ const RecommendScreen = () => {
       return navigation.navigate('RecommendDetail', { date: selectedDate, place: place, detail: detail });
     };
 
-    
+    const gotoFriendsScreen = (date) =>{
+        return navigation.navigate('FriendsLook',{date : date})
+    }
     const width = useWindowDimensions().width; //기기 폭 값
     
     const BaseURL = testURL
@@ -97,6 +100,21 @@ const RecommendScreen = () => {
 
             <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Select Date</Text>
+                <View
+                    style={{flexDirection:'row'}}>
+                    <TouchableOpacity
+                        onPress={ () => gotoFriendsScreen(selectedDate)}>    
+                        <Image
+                            source={friendbtn}
+                            style={{width:30,height:30,marginRight:10}}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={gotoDetail}>    
+                        <Image
+                            source={avatrbtn}
+                            style={{width:30,height:30}}/>
+                    </TouchableOpacity>
+                </View>
             </View>
 
 
@@ -203,7 +221,8 @@ const styles = StyleSheet.create({
     },
     titleContainer: {
         flex: 0.5,
-        justifyContent: "center",
+        justifyContent: "space-between",
+        flexDirection:'row'
     },
     buttonContainer:{
         flex: 1,

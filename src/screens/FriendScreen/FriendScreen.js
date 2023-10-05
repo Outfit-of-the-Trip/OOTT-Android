@@ -26,8 +26,8 @@ const FriendScreen = () => {
 
   //친구 추가
   const addingFriend = async friend => {
-    console.log(userInfo.nickname);
-    console.log(friend.usrId);
+    // console.log(userInfo.nickname);
+    // console.log(friend.usrId);
     try {
       const response = await axios.post(
         'http://10.0.2.2:3000/api/friends/addFriends',
@@ -83,7 +83,7 @@ const FriendScreen = () => {
   //친구 이름 검색
   const foundFriend = findFriendInfo.filter(item => {
     if (item.usrId === friendName) {
-      console.log(item);
+      // console.log(item);
       return item;
     }
   });
@@ -94,7 +94,6 @@ const FriendScreen = () => {
         <TextInput style={styles.InputBox} onChangeText={findFriendName} />
         <Image style={styles.searchImg} source={Glass} />
       </View>
-
       {friendName.length === 0 ? (
         <View></View>
       ) : (
@@ -151,6 +150,7 @@ const styles = StyleSheet.create({
     fontFamily: '오뮤_다예쁨체',
     fontSize: 20,
   },
+  //
   plusButtonContainer: {
     justifyContent: 'center',
   },
@@ -205,6 +205,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: 'black',
   },
+  //
   personRowContainer: {
     alignSelf: 'center',
     width: '90%',

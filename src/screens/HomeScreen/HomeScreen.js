@@ -15,8 +15,6 @@ const HomeScreen = () => {
       blurRadius={5}
       resizeMode='cover'>
       <View style={styles.header}>
-        <Text
-          style={{color:'white',fontFamily:'Giants-Regular'}}>사용자 맞춤형 코디 추천</Text>
       </View>
       <View
         style={{backgroundColor:"red",}}>

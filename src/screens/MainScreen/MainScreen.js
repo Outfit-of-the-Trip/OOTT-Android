@@ -36,22 +36,24 @@ const MainScreen = () => {
   const [travelClothes,setTravelClothes] = useState([]); 
   const [imageurl,setImageUrl] = useState([]); //여행별 추천 옷 url
   const gotoRecomend = (traveldata) => {
-    return navigation.navigate('Recomend', traveldata);
+    return navigation.navigate('RecommendScreen', traveldata);
   };
-
+  const gotoFrineds = () =>{
+    return navigation.navigate('FriendsLook')
+  }
+  
   const translate = (item) =>{ // 날짜 정리 메서드
     var data = String(item);
     var input = data.substring(0,10);
     return input;
   }
-
+console.log(userInfo);
 const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 합치기
-
+  
   useEffect(() => { //사용자 친구 데이터
     axios.get(`http://10.0.2.2:3000/api/friends/myFriends?userId=${userInfo.nickname}`)
       .then(function (response) {
         setfriend(response.data.length)
-
       })
       .catch(function (err) {
         console.log(err);
@@ -61,14 +63,10 @@ const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 �
   
 
   useEffect( () => { //사용자 데이터 
-     axios.get (`http://10.0.2.2:3000/api/users/getUserInfo?userId=admin`)
+     axios.get (`http://10.0.2.2:3000/api/users/getUserInfo?userId=${userInfo.nickname}`)
       .then(function (response) {
         setuserdata(response.data);
-        /* 
-          setUSerHashtag[0] = response.data.usrstyle1
-          setUser
-        
-        */
+        console.log(`${userInfo.nickname}`,response.data);
       })
       .catch(function (err) {
         console.log(err);
@@ -88,7 +86,7 @@ const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 �
   }, []);
 
   useEffect(() => { //TRAVEL_CLOTHES
-    axios.get(`http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=admin`)
+    axios.get(`http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`)
       .then(function (response) {
        /*  setTravelClothes(response.data);
         console.log(response.data); */
@@ -149,14 +147,17 @@ const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 �
     <SafeAreaView style={styles.container}>
             <View
               style={{flexDirection:'row', marginHorizontal:width-(width-20),marginTop:5}}>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('FriendsLook')}>
                     <Avatar
                       size={80}
                       rounded
                       source={{ uri:userInfo.profileImageUrl}}/>
+                      </TouchableOpacity>
                     <View
                       style={{marginLeft:10}}>
                       <Text style={styles.profileimgename}>
-                          {userInfo.nickname}
+                       {userdata ?  (`${userdata.usrId}`) : ("아이디값 가져오는중")}
                       </Text>
                   <Text style={styles.profilebigtext}>{travelea} travel log</Text>
                   <Text style={styles.profilebigtext}>{combinedStyles}</Text>

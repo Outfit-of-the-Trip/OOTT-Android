@@ -8,6 +8,9 @@ import { userInfoState } from '../../states/atoms';
 import axios from 'axios';
 import {AuthContext} from '../../utils/Auth';
 
+import axios from 'axios';
+import {backendURL} from '../../constants/url';
+
 import {
   Pressable,
   HamburgerIcon,
@@ -241,11 +244,18 @@ const MypageScreen = () => {
               )}
             </View>
 
+
             <TouchableOpacity
               style={styles.plusButtonContainer}
               onPress={modalOpen}>
               <Text style={styles.plusButton}>+</Text>
             </TouchableOpacity>
+
+            <View style={styles.userProfileContainer}>
+              <Text style={styles.category}>선호 스타일</Text>
+              <Text style={styles.usrvalues}>{userInfo.userStyle1}</Text>
+            </View>
+
           </View>
         </View>
 

@@ -9,19 +9,27 @@ import {
     useWindowDimensions,
     Modal,
     CollapseBody,
-    FlatList
+    FlatList,
+    ImageBackground
   } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import React,{useState} from 'react';
+import React,{useState, useContext} from 'react';
 import Swiper from 'react-native-swiper'
 import { Avatar } from '@rneui/themed';
 
-const FriendsLook = () => {
+import friendbackground from '../../../assets/images/friendbackground.png';
+import codybackground from '../../../assets/images/codybackground.png';
+
+import {AuthContext} from '../../../utils/Auth';
+import TravelFriends from '../../OOTTScreen/TravelFriends/TravelFriends';
+
+const FriendsLook = ({route}) => {
     const [isModalVisible, setModalVisible] = useState(false); // 모달 on/off
     const [friendname,setfriendname] = useState('') //모달창에서 선택된 친구
     const width = useWindowDimensions().width;
-    const {params: data} = useRoute(); //여행 데이터 받아오기
-    const traveldate = String(data.travlDate).substring(0,10);
+    const {userInfo} = useContext(AuthContext);
+    const {travlFreinds} = useContext(AuthContext);
+    console.log(route.params.date);
 
     const toggleModal = () => { //팝업창 on/off method
         setModalVisible(!isModalVisible);
@@ -48,7 +56,7 @@ const FriendsLook = () => {
           }
 
         return nameArray.map((name, index) => (
-            <View key={index} style={{flexDirection:'row'}}>
+            <View key={index} style={{flexDirection:'row'}} >
             <Avatar
                 size={30}/>
             <TouchableOpacity onPress={() => handleNameClick(name)}>
@@ -61,17 +69,28 @@ const FriendsLook = () => {
     return(
         <SafeAreaView
             style={styles.allconatiner}>
+            <ImageBackground 
+              source={friendbackground} 
+              style={{flex: 1, resizeMode: 'cover',}}
+              blurRadius={15}	//Blur 효과
+            >
         <View
             style={[styles.firstcontainer,{marginHorizontal:width-(width-20)}]}>
+                
             <View style={styles.topshowcontainer}>
-            <Avatar
-                size={20}/>  
-            <Text
-                style={styles.toptext}>{traveldate} with </Text>
+            <Image
+              style={styles.profileImage}
+              source={{uri: userInfo.profileImageUrl}}
+            />
+            <Text style={styles.toptext}> 
+                양준민{travlFreinds} 
+            </Text>
+            <View style={styles.selectBtn}>
            <TouchableOpacity
                 onPress={toggleModal}>
                 <NameView/>
             </TouchableOpacity>
+            </View>
             <Modal 팝업창
                 animationType="slide"
                 transparent={true}
@@ -83,7 +102,7 @@ const FriendsLook = () => {
                  <CollapseBody
                     style={{height:'30%'}}>
                 <FlatList
-                    data={data.travlFriends} //펼칠 데이터 대상
+                    //펼칠 데이터 대상
                     renderItem={renderItem} //렌더링 Method
                     keyExtractor={(item,index) => index.toString()}
                     />
@@ -91,32 +110,30 @@ const FriendsLook = () => {
               </View>
             </View>
           </Modal>
-            
             </View>
         </View>
         <View
             style={styles.secondcontainer}>
-            <Swiper
-        dotStyle={{backgroundColor:'grey',width:8}}
-        activeDotColor='#4949E8'
-        >
-        {RecomendGarmet.map((img,index) =>(
-          <View
-          key={index}>
-          <Image
-          source={img.img}
-          style={[styles.showimg,{width:width}]}/>
-        </View>
-        ))}
-     </Swiper>
+                <ImageBackground 
+              source={codybackground} 
+              style={{flex: 1, resizeMode: 'cover', opacity: 0.5,}}
+              blurRadius={5}	//Blur 효과
+            >
+            </ImageBackground>
         </View>
         <View
             style={[styles.thirdcontainer,{marginHorizontal:width-(width-20)}]}>
             <Text
-                style={styles.bottomtext}>
-                #수트 #블레이저 #슬랙스
+                style={styles.bottomtext1}>
+                {route.params.date} with minseo          
+                {/* {travelDate} with {travlFriends}로 바꿀 예정 입니다. */}
+            </Text>
+            <Text
+                style={styles.bottomtext2}>
+                #cute #japan_look
             </Text>
         </View>
+        </ImageBackground>
         </SafeAreaView>
     )
 
@@ -135,6 +152,11 @@ firstcontainer:{
     justifyContent:'flex-start',
     alignItems:"center",
 },
+profileImage: {
+    width:50,
+    height: 50,
+    borderRadius: 100,
+},
 toptext:{
     fontSize:20,
     color:'black',
@@ -151,8 +173,15 @@ topname:{
     fontFamily:'오뮤_다예쁨체'
 },
 topshowcontainer:{
-    flex:0.5,
-    flexDirection:"row"
+    flex: 1,
+    flexDirection:"row",
+    alignItems: 'center',
+    alignContent:'center',
+},
+selectBtn: {
+    flex: 1,
+    flexDirection:"row",
+    justifyContent: 'flex-end',
 },
 topshowname:{
   fontFamily:'오뮤_다예쁨체',
@@ -164,16 +193,25 @@ showimg:{
     resizeMode:'cover',
   },
 secondcontainer:{
-    flex:3,
+    flex: 1,
 },
 thirdcontainer:{
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent:'center',
     flex:0.3,
-    justifyContent:'center',
-    alignItems:'flex-start'
 },
-bottomtext:{
-    fontSize:24,
-    color:'black',
+bottomtext1:{
+    fontSize: 20,
+    fontWeight: '100',
+    color:'white',
+    fontFamily:'오뮤_다예쁨체'
+},
+bottomtext2:{
+    padding: 10,
+    fontSize: 16,
+    fontWeight: '100',
+    color:'white',
     fontFamily:'오뮤_다예쁨체'
 },
 bottomline: {

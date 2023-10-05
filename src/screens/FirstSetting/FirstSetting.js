@@ -184,19 +184,17 @@ const FirstSetting = () => {
 
 
   const setUserInfo = async () =>{ //유저 정보 post
-    /* let gd = String(userInfo.gender).substring(0,1); // 성별
-    let ag = parseInt(String(userInfo.ageRange).substring(4,6)); //나이
-
-    try{
-      const response = await axios.post('http://10.0.2.2:3000/api/users/setUserInfo',{
-      usrId : `${userInfo.nickname}`,
-      usrGender :`${gd}`,
+    /* let gd = String(userInfo.gender).substring(0,1); // 성별 */
+   /*  let ag = parseInt(String(userInfo.ageRange).substring(4,6)); //나이
+       const response = await axios.post('http://10.0.2.2:3000/api/users/setUserInfo',{
+      usrId : `zxc`,
+      usrGender :`${userInfo.gender}`,
       usrAge :`${ag}`,
-      usrProfileURL : "http://imgtest.png",
+      usrProfileURL : `${userInfo.profileImageUrl}`,
       usrStyle1 :`${input[0].userStyle}`,
-      usrStyle2 : input[1].userStyle,
-      usrStyle3 : input[2].userStyle,
-    })}catch(e){console.log(`${e.error}`)} */
+      usrStyle2 : `${input[1].userStyle}`,
+      usrStyle3 : `${input[2].userStyle}`,
+    })  */
     return navigation.navigate("Bottomtab")
 }
 
