@@ -62,22 +62,24 @@ const RecommendScreen = () => {
             axios.post(BaseURL+'/api/recommend/getRecommend', travelData)
             .then(function (res) {
                 setIsLoding(false)
-                setTest(res.data)
+                console.log(res.data)
+                // setRecommendClothes(res.data)
+                // setSelectedDate(recommendClothes[0].date)
+                // setClothes(recommendClothes[0].clothes)
+
             })
             .catch(function (error) {
                 console.log(error);
             });
         }
         getRecommendedDate()
-        setRecommendClothes(RecomendGarmet)   
-        setSelectedDate(RecomendGarmet[0].date)
-        setClothes(RecomendGarmet[0].clothes)
+
      
     }, [])
 
-    useEffect(()=>{
-        setClothes(RecomendGarmet[selectIndex].clothes)
-    }, selectedDate)
+    // useEffect(()=>{
+    //     setClothes(recommendClothes[selectIndex].clothes)
+    // }, selectedDate)
 
     const [selectedDate, setSelectedDate] = useState(null);
     const [clothes, setClothes] = useState([])
@@ -85,7 +87,8 @@ const RecommendScreen = () => {
 
     return(
         <View style={styles.rootContainer}>
-            {/* {isLoding ? (<SplashVideo />) : ( */}
+            {isLoding ? (<SplashVideo />) : (
+                <>
 
             <View style={styles.headerContainer}>
                 <Text style={styles.headerText}>Today's look to {place}</Text>
@@ -180,8 +183,8 @@ const RecommendScreen = () => {
                     ))}
                 </Swiper>
             </View>
-
-           {/*  )} */}
+            </>
+          )}
         </View>
 
 
@@ -270,13 +273,13 @@ const styles = StyleSheet.create({
 
     shoes:{
         position: "absolute",
-        top:350,
+        top: 350,
         bottom: 0,
-        left:70,
+        left: 60,
         right:0,
 
-        width: 80,
-        height: 80,
+        width: 130,
+        height: 90,
     },
    
 })

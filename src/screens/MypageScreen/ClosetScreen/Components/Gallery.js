@@ -1,8 +1,8 @@
 import React from 'react';
-import {Modal, Pressable, View, StyleSheet, Image, Text} from 'react-native';
-import Camera from '../../../../assets/images/camera.png';
+import {Modal, Pressable, View, StyleSheet, Text} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const Gallery = ({visible, onClose, onLaunchImageLibrary}) => {
+const Gallery = ({visible, onClose, onLaunchImageLibrary, onLaunchCamera}) => {
   return (
     <Modal
       visible={visible}
@@ -15,10 +15,25 @@ const Gallery = ({visible, onClose, onLaunchImageLibrary}) => {
             style={styles.actionButton}
             android_ripple={{color: '#eee'}}
             onPress={() => {
+              onLaunchCamera();
+              onClose();
+            }}>
+            <Icon
+              name="camera-alt"
+              color="#757575"
+              size={24}
+              style={styles.icon}
+            />
+            <Text style={styles.actionText}>카메라로 촬영하기</Text>
+          </Pressable>
+          <Pressable
+            style={styles.actionButton}
+            android_ripple={{color: '#eee'}}
+            onPress={() => {
               onLaunchImageLibrary();
               onClose();
             }}>
-            <Image source={Camera} style={styles.icon} />
+            <Icon name="photo" color="#757575" size={24} style={styles.icon} />
             <Text style={styles.actionText}>사진 선택하기</Text>
           </Pressable>
         </View>
@@ -49,8 +64,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    resizeMode: 'contain',
-    width: '40%',
+    marginRight: 10,
   },
   text: {
     fontSize: 26,
