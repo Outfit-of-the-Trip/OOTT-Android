@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import React from 'react';
+import {View, Text} from 'react-native';
+import {Unity, UnityContext} from 'react-unity-webgl';
 
 const AbataScreen = () => {
-    return(
-        <View>
-            <Text>AbataScreen</Text>
-        </View>
-    )
-}
+  return (
+    <View>
+      <Text>AbataScreen</Text>
+    </View>
+  );
+};
 
 export default AbataScreen;

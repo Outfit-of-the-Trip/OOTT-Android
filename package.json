@@ -68,6 +68,7 @@
     "react-native-viewpager": "^0.2.13",
     "react-native-webview": "^13.3.1",
     "react-navigation-drawer": "^2.7.2",
+    "react-unity-webgl": "^9.4.3",
     "recoil": "^0.7.7",
     "rn-slick-bottom-tabs": "^1.1.1"
   },
