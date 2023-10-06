@@ -265,7 +265,7 @@ const MypageScreen = () => {
                   indicatorStyle={styles.listunderline}
                   style={styles.listBackground}
                   labelStyle={styles.listTitle}
-                  onTabPress={getPictureFromDB}
+                  // onTabPress={getPictureFromDB}
                 />
               )}
             />

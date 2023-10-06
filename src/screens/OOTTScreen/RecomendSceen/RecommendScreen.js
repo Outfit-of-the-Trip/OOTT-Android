@@ -8,8 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import SplashVideo from '../../../components/SplashVideo';
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import Swiper from 'react-native-swiper'
-import avatrbtn from '../../../assets/images/avatarbtn.png'
-import friendbtn from '../../../assets/images/frinedbtn.png'
+import base64 from 'base-64';
 
 import {
     StyleSheet,
@@ -59,34 +58,36 @@ const RecommendScreen = () => {
         "friend": friend,
         "category": category,
     };
+    
 
     useEffect(() => {
         const getRecommendedDate= async () => {
             axios.post(BaseURL+'/api/recommend/getRecommend', travelData)
             .then(function (res) {
                 setIsLoding(false)
-                console.log(res.data)
-                // setRecommendClothes(res.data)
-                // setSelectedDate(recommendClothes[0].date)
-                // setClothes(recommendClothes[0].clothes)
-
+                const Data = JSON.parse(base64.decode(res.data));
+                setRecommendClothes(Data)
+                setSelectedDate(Data[0].date)
+                setClothes(Data[0].clothes)
             })
             .catch(function (error) {
                 console.log(error);
             });
         }
         getRecommendedDate()
-
-     
     }, [])
 
-    // useEffect(()=>{
-    //     setClothes(recommendClothes[selectIndex].clothes)
-    // }, selectedDate)
-
-    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(0);
     const [clothes, setClothes] = useState([])
     const [selectIndex, setSelectIndex] = useState(0);
+
+    useEffect(() => {
+        if (recommendClothes && selectIndex >= 0 && selectIndex < recommendClothes.length) {
+            setClothes(recommendClothes[selectIndex].clothes);
+        }
+    }, [selectIndex, recommendClothes]);
+
+
 
     return(
         <View style={styles.rootContainer}>
@@ -100,21 +101,6 @@ const RecommendScreen = () => {
 
             <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Select Date</Text>
-                <View
-                    style={{flexDirection:'row'}}>
-                    <TouchableOpacity
-                        onPress={ () => gotoFriendsScreen(selectedDate)}>    
-                        <Image
-                            source={friendbtn}
-                            style={{width:30,height:30,marginRight:10}}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={gotoDetail}>    
-                        <Image
-                            source={avatrbtn}
-                            style={{width:30,height:30}}/>
-                    </TouchableOpacity>
-                </View>
             </View>
 
 
@@ -124,7 +110,7 @@ const RecommendScreen = () => {
                         horizontal
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
-                        data={RecomendGarmet}
+                        data={test}
                         renderItem={({ item, index }) => (
                         <TouchableOpacity
                             style={{
@@ -137,8 +123,8 @@ const RecommendScreen = () => {
                                 backgroundColor: selectedDate === item.date ? 'blue' : 'white',
                             }}
                             onPress={() => {
-                                setSelectedDate(item.date)
                                 setSelectIndex(index)
+                                setSelectedDate(item.date)
                             }}
                         >
                             <Text 
