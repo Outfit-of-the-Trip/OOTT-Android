@@ -19,17 +19,6 @@ const FriendSelectScreen = () => {
     friendRequest: FriendRequestScreen,
   });
 
-  //   const renderScene = ({route}) => {
-  //     switch (route.key) {
-  //       case 'friendSearch':
-  //         return <FriendScreen />;
-  //       case 'friendRequest':
-  //         return <FriendRequestScreen />;
-  //       default:
-  //         return null;
-  //     }
-  //   };
-
   return (
     <View style={styles.container}>
       <TabView

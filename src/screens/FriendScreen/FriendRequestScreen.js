@@ -1,5 +1,7 @@
 import axios from 'axios';
 import React, {useContext, useEffect, useState} from 'react';
+import { backendURL } from '../../constants/url';
+
 import {
   Text,
   View,
@@ -17,9 +19,7 @@ const FriendRequestScreen = () => {
 
   useEffect(() => {
     axios
-      .get(
-        `http://10.0.2.2:3000/api/friends/myResponse?userId=${userInfo.nickname}`,
-      )
+      .get(backendURL+`/api/friends/myResponse?userId=${userInfo.nickname}`)
       .then(res => {
         console.log('내가 받은 요청:', res.data);
         setFriendReq(res.data);
@@ -34,7 +34,7 @@ const FriendRequestScreen = () => {
   const acceptReq = req => {
     console.log(req);
     axios
-      .post('http://10.0.2.2:3000/api/friends/addFriends', {
+      .post(backendURL+'/api/friends/addFriends', {
         reqUser: `${userInfo.nickname}`,
         resUser: `${req.usrId}`,
       })
