@@ -7,6 +7,7 @@ import {AuthContext} from '../../utils/Auth';
 import FirstLogin from '../../components/FirstLogin';
 import recomend1 from '../../assets/images/recomend1.png'
 import moreb from '../../assets/images/moreb.png'
+import { backendURL } from '../../constants/url';
 
 import {
   View,
@@ -47,11 +48,10 @@ const MainScreen = () => {
     var input = data.substring(0,10);
     return input;
   }
-console.log(userInfo);
 const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 합치기
   
   useEffect(() => { //사용자 친구 데이터
-    axios.get(`http://10.0.2.2:3000/api/friends/myFriends?userId=${userInfo.nickname}`)
+    axios.get(backendURL+`/api/friends/myFriends?userId=${userInfo.nickname}`)
       .then(function (response) {
         setfriend(response.data.length)
       })
@@ -63,10 +63,9 @@ const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 �
   
 
   useEffect( () => { //사용자 데이터 
-     axios.get (`http://10.0.2.2:3000/api/users/getUserInfo?userId=${userInfo.nickname}`)
+     axios.get (backendURL+`/api/users/getUserInfo?userId=${userInfo.nickname}`)
       .then(function (response) {
         setuserdata(response.data);
-        console.log(`${userInfo.nickname}`,response.data);
       })
       .catch(function (err) {
         console.log(err);
@@ -75,7 +74,7 @@ const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 �
 
 
   useEffect(() => { //여행정보 데이터
-    axios.get(`http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`)
+    axios.get(backendURL+`/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`)
       .then(function (response) {
         settravelea(response.data.length)
         setData(response.data);
@@ -86,7 +85,7 @@ const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 �
   }, []);
 
   useEffect(() => { //TRAVEL_CLOTHES
-    axios.get(`http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`)
+    axios.get(backendURL+`/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`)
       .then(function (response) {
        /*  setTravelClothes(response.data);
         console.log(response.data); */
@@ -97,7 +96,7 @@ const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 �
   }, []);
 
   useEffect(() => { //EXAMPLE
-    axios.get(`http://10.0.2.2:3000/api/travel/getMyTravelInfo?userId=admin`)
+    axios.get(backendURL+`/api/travel/getMyTravelInfo?userId=admin`)
       .then(function (response) {
         //api 완성되면 travelClothes에서 배열 값 사용해서 옷 이미지 경로 불러오기
       })

@@ -56,7 +56,7 @@ export default () => (
       component={TravelScreen}
       options={{
         tabBarIcon: ({focused, color}) => (
-          <TabBarIcon focused={focused} tintColor={color} name="person" />
+          <TabBarIcon focused={focused} tintColor={color} name="airplanemode-on" />
         ),
       }}
     />
