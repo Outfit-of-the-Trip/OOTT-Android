@@ -1,21 +1,19 @@
-import React, {useState,useEffect,useContext} from 'react';
+import React, {useState, useEffect, useContext, useLayoutEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import { useWindowDimensions } from 'react-native';
-import { Avatar } from '@rneui/themed';
+import {ImageBackground, useWindowDimensions} from 'react-native';
+import {Avatar} from '@rneui/themed';
 import axios from 'axios';
-
-import profileImg from '../../assets/images/profileImg.png';
-import more from '../../assets/images/more.png';
-import { AuthContext } from '../../utils/Auth';
-import dateairplane from '../../assets/images/dateairplane.png';
-import TravelInfo from '../../constants/TravelInfo';
+import {AuthContext} from '../../utils/Auth';
+import FirstLogin from '../../components/FirstLogin';
+import recomend1 from '../../assets/images/recomend1.png'
+import moreb from '../../assets/images/moreb.png'
+import { backendURL } from '../../constants/url';
 
 import {
   View,
   StyleSheet,
   Text,
   SafeAreaView,
-  ScrollView,
   Image,
   TouchableOpacity,
   FlatList
@@ -24,22 +22,25 @@ import EmptyScreen from '../../components/EmptyScreen';
 
 
 const MainScreen = () => {
-  const{userInfo} = useContext(AuthContext);
-  console.log(userInfo);
+  const {userInfo} = useContext(AuthContext);
   const navigation = useNavigation();
   const width = useWindowDimensions().width; //기기 넓이
-
-  const [data,setData] = useState([]);
-  const [traveldate, settraveldate] = useState(); //여행 날짜
   const [travelea, settravelea] = useState(); //등록된 여행 개수
-  const [friend,setfriend] = useState();
-
-  const gotoRecomend = (travledata) => {
-    //console.log(travledata)
-    navigation.navigate('Recomend', travledata);
+  const [friend, setfriend] = useState();
+  const [userdata, setuserdata] = useState();
+  const [userHashTag,setUserHashtag] = useState([
+    { id : 1, usrstyle: "#레트로"},
+    { id : 2, usrstyle: "#formal"},
+    { id : 3, usrstyle: "#하이틴"},
+    ]);
+  const [data, setData] = useState([]);
+  const [travelClothes,setTravelClothes] = useState([]); 
+  const [imageurl,setImageUrl] = useState([]); //여행별 추천 옷 url
+  const gotoRecomend = (traveldata) => {
+    return navigation.navigate('RecommendScreen', traveldata);
   };
   const gotoFrineds = () =>{
-    return navigation.navigate('친구')
+    return navigation.navigate('FriendsLook')
   }
   
   const translate = (item) =>{ // 날짜 정리 메서드
@@ -47,148 +48,155 @@ const MainScreen = () => {
     var input = data.substring(0,10);
     return input;
   }
-
-  const Showlog = () =>{
-     if(travelea>0){
-      return <View>
-          <FlatList
-            data={data}
-            renderItem={({ item,index }) => (
-              <View key={index} style={styles.recomendconatiner}>
-              <View
-                style={styles.recotopcontainer}>
-                <View style={[styles.viewcontainer,{marginHorizontal:width-(width-10),marginBottom:width-(width-10)}]}>
-                  <Text style={styles.datetext}>{translate(item.travlDate)} to {item.travlPlace}</Text>
-                </View>
-                <TouchableOpacity onPress={() => gotoRecomend(item)}>
-                  <Image source={more} />
-                </TouchableOpacity>
-              </View>
-              <View style={[styles.viewcontainer,{marginHorizontal:width-(width-10)}]}>
-              <Text style={styles.tagtext}>태그</Text>
-              </View>
-            </View>
-              )}
-            keyExtractor={(item) => item.usrID} // Use a unique identifier as the key
-            />
-        </View>
-    }else{
-      return <EmptyScreen/>
-    }
-  }
-
+const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 합치기
+  
   useEffect(() => { //사용자 친구 데이터
-    axios.get('http://10.0.2.2:8000/api/friends/myFriends?userId=a')
+    axios.get(backendURL+`/api/friends/myFriends?userId=${userInfo.nickname}`)
       .then(function (response) {
         setfriend(response.data.length)
-        console.log(response.data.length)
       })
       .catch(function (err) {
         console.log(err);
       });
   }, []);
 
+  
 
-  useEffect(() => { //사용자 데이터 
-    axios.get('http://10.0.2.2:8000/api/users/getUserInfo?userId=admin')
+  useEffect( () => { //사용자 데이터 
+     axios.get (backendURL+`/api/users/getUserInfo?userId=${userInfo.nickname}`)
       .then(function (response) {
-        setusrname(response.data.usrId);
-
+        setuserdata(response.data);
       })
       .catch(function (err) {
         console.log(err);
       });
-  }, []);
+  },[]);
+
 
   useEffect(() => { //여행정보 데이터
-    axios.get('http://10.0.2.2:8000/api/travel/getMyTravelInfo?userId=a')
+    axios.get(backendURL+`/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`)
       .then(function (response) {
-        console.log(response.data);
-        var data = String(response.data.travlDate);
-        var input = data.substring(0,10);
-        settraveldate(input)
         settravelea(response.data.length)
         setData(response.data);
-        console.log(response.data);
       })
       .catch(function (err) {
         console.log(err);
       });
   }, []);
+
+  useEffect(() => { //TRAVEL_CLOTHES
+    axios.get(backendURL+`/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`)
+      .then(function (response) {
+       /*  setTravelClothes(response.data);
+        console.log(response.data); */
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => { //EXAMPLE
+    axios.get(backendURL+`/api/travel/getMyTravelInfo?userId=admin`)
+      .then(function (response) {
+        //api 완성되면 travelClothes에서 배열 값 사용해서 옷 이미지 경로 불러오기
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  }, []);
+
+  const Showlog = () =>{
+    if(travelea>0){
+     return(
+         <FlatList
+           data={data}
+           nestedScrollEnabled={true}
+           renderItem={({ item,index }) => (
+             <View key={index} style={styles.recomendconatiner}>
+               <View
+              style={{marginHorizontal:width-(width-10)}}>
+              <Text style={styles.datetext}>{translate(item.travlDate)} to {item.travlPlace}</Text>
+              <View
+                style={{flexDirection:'row',justifyContent:"space-between"}}>
+                <Text style={styles.tagtext}>태그</Text>
+                <TouchableOpacity
+                  onPress={() => gotoRecomend(item)}>
+                <Image
+                  style={{width:30,height:20,resizeMode:'center'}}
+                  source={moreb}/>
+                </TouchableOpacity>
+              </View>
+            </View>
+             <View
+                style={{flexDirection:"row"}}>
+                <Image
+                        source={recomend1}
+                        style={{width:'100%',margin:3,borderRadius:5}}/>
+             </View>
+           
+           </View>
+            )}
+           />);
+   }else{
+     return <EmptyScreen/>
+   }
+ }
 
   return (
     <SafeAreaView style={styles.container}>
-        <View style={styles.profile}>
-          <View
-            style={styles.profileimgconatiner}>
-            <Avatar
-              size={80}
-              rounded
-              source={{
-                uri:userInfo.profileImageUrl}} />
-            <Text
-              style={styles.profileimgename}>
-              {userInfo.nickname}
-            </Text>
-          </View>
-          <View
-            style={styles.profileinfoconatiner}>
             <View
-              style={styles.profiletextcontainer}>
-              <Text style={styles.profilebigtext}>{travelea}</Text>
-              <Text style={styles.profiletext}>mylog</Text>
+              style={{flexDirection:'row', marginHorizontal:width-(width-20),marginTop:5}}>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('FriendsLook')}>
+                    <Avatar
+                      size={80}
+                      rounded
+                      source={{ uri:userInfo.profileImageUrl}}/>
+                      </TouchableOpacity>
+                    <View
+                      style={{marginLeft:10}}>
+                      <Text style={styles.profileimgename}>
+                       {userdata ?  (`${userdata.usrId}`) : ("아이디값 가져오는중")}
+                      </Text>
+                  <Text style={styles.profilebigtext}>{travelea} travel log</Text>
+                  <Text style={styles.profilebigtext}>{combinedStyles}</Text>
+                  </View>
+          </View>
+          <View style={styles.bottomline} />
+          <View
+            style={{flex:4}}>
+            {travelea < 0 ?(
+              <FirstLogin/> )
+             : (
+              <Showlog/>
+            )}
             </View>
-            <View
-              style={styles.profiletextcontainer}>
-              <TouchableOpacity
-                onPress={gotoFrineds}>
-                <View
-                  style={{alignItems:"center"}}>
-                <Text style={styles.profilebigtext}>
-                  {friend}
-                </Text>
-                <Text style={styles.profiletext}>Friend</Text>
-                </View>
-              </TouchableOpacity> 
-              </View>
-          </View>
-        </View>
-        <View style={styles.bottomline} />
-        <View
-          style={{flex:4.6}}>
-        <Showlog/>
-        </View>
-    </SafeAreaView>
-  );
-};
+          </SafeAreaView>)
+}
+
+
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 5,
     backgroundColor:'white'
   },
-  profile: {
-    flex: 1,
-    flexDirection: 'row',
-    marginTop: 20,
-  },
+
   profileimgename:{
     color: 'black',
     fontSize: 24,
-    fontFamily: '오뮤_다예쁨체',
-  },
-  profileimgconatiner:{
-    flex: 0.5,
-    alignItems: 'center',
+    fontFamily: 'SCDream5',
+    marginBottom:2
   },
   recomendconatiner: {
-    flex: 1,
-    marginTop: "5%",
+    flex: 4,
+    marginTop: "3%",
     elevation:10,
     backgroundColor:"white",
     borderRadius:10,
     borderWidth:2,
     borderColor:'white',
+    height:'1'
   },
   viewcontainer:{
     flexDirection: 'row',
@@ -203,55 +211,53 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: 'contain',
   },
-  profileinfoconatiner:{
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignContent: 'center',
+  datetext: {
+    color: 'black',
+    fontSize: 24,
+    fontFamily: 'SCDream4',
   },
-  profiletextcontainer:{
-    flex: 0.5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignContent:'center'
+  bottomline: {
+    borderBottomColor: 'black',
+    borderBottomWidth: 2,
+    marginTop: 10,
+    shadowColor: 'grey',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
   },
-  recoimgae: {
-    flex: 1,
-    resizeMode: 'contain',
+  profilebigtext: {
+    color: 'black',
+    fontSize: 16,
+    fontFamily: 'SCDream4',
+    marginBottom:3
   },
   recotopcontainer:{
     flexDirection: 'row', 
     justifyContent: 'space-between'
   },
-  tagtext: {
-    color: 'black',
-    fontSize: 24,
-    fontFamily: '오뮤_다예쁨체',
+
+ recomendconatiner: {
+    flex: 2,
+    marginTop: "3%",
+    elevation:10,
+    backgroundColor:"white",
+    borderRadius:10,
+    borderWidth:3,
+    borderColor:'white',
+  },
+  viewcontainer:{
+    justifyContent:'flex-start' ,
+    alignItems: 'flex-start',
   },
   datetext: {
     color: 'black',
     fontSize: 24,
-    fontFamily: '오뮤_다예쁨체',
+    fontFamily: 'SCDream4',
   },
-  bottomline: {
-    borderBottomColor: 'gray',
-    borderBottomWidth: 1,
-    marginTop: 10,
-    shadowColor: 'black',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
-    elevation: 8,
-  },
-  profilebigtext: {
+  tagtext: {
     color: 'black',
-    fontSize: 32,
-    fontFamily: '오뮤_다예쁨체',
-  },
-  profiletext: {
-    color: 'black',
-    fontSize: 24,
-    fontFamily: '오뮤_다예쁨체',
+    fontSize: 16,
+    fontFamily: 'SCDream5',
   },
 });
 

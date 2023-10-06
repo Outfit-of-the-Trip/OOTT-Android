@@ -1,193 +1,425 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Alert, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, {useContext, useEffect, useState} from 'react';
+
+import {useNavigation} from '@react-navigation/native';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+import {TabView, TabBar} from 'react-native-tab-view';
+import { useRecoilValue } from 'recoil';
+import { userInfoState } from '../../states/atoms';
+import axios from 'axios';
+import {AuthContext} from '../../utils/Auth';
+import { backendURL } from '../../constants/url';
+
+import {
+  Pressable,
+  HamburgerIcon,
+  Menu,
+  Box,
+  NativeBaseProvider,
+} from 'native-base';
+
+import Gallery from './ClosetScreen/Components/Gallery';
+import Outer from './ClosetScreen/Components/Outer';
+import Top from './ClosetScreen/Components/Top';
+import Bottom from './ClosetScreen/Components/Bottom';
+import Shoes from './ClosetScreen/Components/Shoes';
+
+
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  Button,
+} from 'react-native';
+
+
 
 const MypageScreen = () => {
+
+  const {logout} = useContext(AuthContext);
+  const userInfo = useRecoilValue(userInfoState);
+
+  const witdh = Dimensions.get('window');
   const navigation = useNavigation();
-  const gotoKeywordScreen = () =>{
+
+  const gotoTravelPlace = () => {
     return navigation.navigate('KeywordScreen');
-  }
-  const gotoClosetScreen = () =>{
-    return navigation.navigate('ClosetScreen');
-  }
-  const gotoAbataScreen = () =>{
-    return navigation.navigate('AbataScreen');
-  }
+  };
+
+  const [index, setIndex] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [userStyles, setUserStyles] = useState();
+  const [getClothesData, setGetClothesData] = useState();
+  const [postData, setPostData] = useState();
+
+  const [data, setData] = useState({});
+  const [clothesData, setClothesData] = useState({})
+
+  useEffect(()=>{
+    setData(clothesData)
+  }, [clothesData])
+
+  //tab Index
+  const [routes] = useState([
+    {key: 'outer', title: '아우터'},
+    {key: 'top', title: '상의'},
+    {key: 'bottom', title: '하의'},
+    {key: 'shoes', title: '신발'},
+  ]);
+
+  // 각각 탭 페이지
+  const renderScenes = ({route}) => {
+    switch (route.key) {
+      case 'outer':
+        return <Outer imgData={data['outer']} />;
+      case 'top':
+        return <Top imgData={data['top']} />;
+      case 'bottom':
+        return <Bottom imgData={data['bottom']} />;
+      case 'shoes':
+        return <Shoes imgData={data['shoes']} />;
+      default:
+        return null;
+    }
+  };
+
+
+  //사진 크기
+  const options = {
+    mediaType: 'image',
+    maxWidth: 512,
+    maxHeight: 512,
+    includeBase64: Platform.OS === 'android',
+  };
+
+  //Modal Open
+  const modalOpen = () => {
+    if (Platform.OS === 'android') {
+      setModalVisible(true);
+    }
+  };
+
+  //갤러리에서 사진 선택
+  const onLaunchImageLibrary = async () => {
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        const ImgUri = response.assets[0].uri;
+        const base = response.assets[0];
+
+        try {
+          axios.post(backendURL+`/api/closet/uploadClosetImage`,
+            {
+              usrId: userInfo.nickname,
+              clothesId: postData,
+              img: base.base64,
+            },
+          ).then(()=>{
+            getPictureFromDB()
+          })
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
+    const setIndexs = () => {
+      if (index === 0) {
+        setPostData('outer');
+      } else if (index === 1) {
+        setPostData('top');
+      } else if (index === 2) {
+        setPostData('bottom');
+      } else if (index === 3) {
+        setPostData('shoes');
+      } else {
+        console.log('not included!');
+      }
+    };
+    setIndexs();
+  }, [index]);
+
+  //DB 사진 가져오기
+
+  const getPictureFromDB = async () => {
+    try {
+      await axios.get(backendURL+`/api/closet/getClosetData?userId=${userInfo.nickname}`)
+      .then((res)=>{setClothesData(res.data)})
+    } 
+    catch (e) {
+      console.log(e);
+    }
+  };
+
+  //카메라 촬영
+  const onLaunchCamera = () => {
+    launchCamera(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        console.log(response.assets[0].uri);
+      }
+    });
+  };
+
+  //유저 데이터 불러오기
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const response = await axios.get(backendURL+`/api/users/getUserInfo?userId=${userInfo.nickname}`);
+        setUserStyles(response.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getUserData();
+    getPictureFromDB();
+  }, []);
+
+
+
+  const MenuSlide = () => {
+    return (
+      <Box h="10%" w="10%" alignItems="flex-start">
+        <Menu
+          trigger={triggerProps => {
+            return (
+              <Pressable {...triggerProps}>
+                <HamburgerIcon size={30} />
+              </Pressable>
+            );
+          }}>
+          <Menu.Item onPress={gotoTravelPlace}>패션 키워드 설정</Menu.Item>
+          <Menu.Item onPress={() => console.log('아바타')}>
+            아바타 설정
+          </Menu.Item>
+          <Menu.Item onPress={logout}>로그아웃</Menu.Item>
+        </Menu>
+      </Box>
+    );
+  };
 
   return (
-    <View style={{ flex: 3 }}>
-      <View style={styles.profileContainer}>
-        <View style={styles.porfImgContainer}>
-            <Image style={styles.profileImage} source={require('D:/RN/OOTT-Android/src/assets/images/profileImg.png')} />
+    <NativeBaseProvider>
+      <View style={styles.rootContainer}>
+        <View style={styles.menuContainer}>
+          <MenuSlide />
         </View>
-        <View style={styles.profileList}>
-          <View style={styles.name}>
-            <Text style={styles.text}>이름</Text>
-            <Text style={styles.profContent}>양준민</Text>
+
+        <View style={styles.profileContainer}>
+          <View style={styles.profImgContainer}>
+            <Image
+              style={styles.profileImage}
+              source={{uri: userInfo.profileImageUrl}}
+            />
           </View>
-          <View style={styles.nickname}>
-            <Text style={styles.text}>닉네임</Text>
-            <Text style={styles.profContent}>user2</Text>
-          </View>
-          <View style={styles.keyword}>
-            <Text style={styles.text}>선호하는 패션 키워드</Text>
-            <Text style={styles.profContent}>와이드 키치</Text>
+          <View style={styles.profileList}>
+            <View style={styles.userProfileContainer}>
+              <Text style={styles.userName}>{userInfo.nickname}</Text>
+            </View>
+
+            <View style={styles.userProfileContainer}>
+              {userStyles ? (
+                <Text style={styles.userStyle}>
+                  #{userStyles.usrStyle1} #{userStyles.usrStyle2} #
+                  {userStyles.usrStyle3}
+                </Text>
+              ) : (
+                <Text style={styles.userStyle}>#취향 #선택을 #해주세요</Text>
+              )}
+            </View>
+
+
+            <TouchableOpacity
+              style={styles.plusButtonContainer}
+              onPress={modalOpen}>
+              <Text style={styles.plusButton}>+</Text>
+            </TouchableOpacity>
+
           </View>
         </View>
+
+        <View style={styles.closetContainer}>
+          <View style={styles.rootContainer}>
+            <TabView
+              style={styles.listTitle}
+              navigationState={{index, routes}}
+              renderScene={renderScenes}
+              onIndexChange={setIndex}
+              initialLayout={{width: witdh}}
+              renderTabBar={props => (
+                <TabBar
+                  {...props}
+                  indicatorStyle={styles.listunderline}
+                  style={styles.listBackground}
+                  labelStyle={styles.listTitle}
+                  // onTabPress={getPictureFromDB}
+                />
+              )}
+            />
+          </View>
+        </View>
+
+        <Gallery
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          onLaunchImageLibrary={onLaunchImageLibrary}
+          onLaunchCamera={onLaunchCamera}
+        />
       </View>
-      <View style={styles.all}>
-        <TouchableOpacity onPress={gotoAbataScreen}
-        style={styles.abataBtn}>
-          <Text style={styles.btnText}>아바타 설정하기</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={gotoKeywordScreen}
-        style={styles.keywordBtn}>
-          <Text style={styles.btnText}>패션 키워드 설정하기</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={gotoClosetScreen}
-        style={styles.closetBtn}>
-          <Text style={styles.btnText}>옷장 설정</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => Alert.alert("오픈 라이센스", "이거 쓰고 저거 쓰고 이것저것 스고 다섯서어어어ㅓ어어어", [
-          { text: "확인", onPress: () => console.log('OK') },
-        ])}
-        style={styles.closetBtn}>
-          <Text style={styles.btnText}>라이센스</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => Alert.alert("My title", "My msg", [
-          { text: "Yes", onPress: () => console.log('Yes') },
-          { text: "No", onPress: () => console.log('No') },
-        ])}
-        style={styles.logoutBtn}>
-          <Text style={styles.btnText}>로그아웃</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </NativeBaseProvider>
   );
 };
 
 const styles = StyleSheet.create({
- 
-  profileContainer: {
-    backgroundColor: '#FFFFFF',
-    flex: 1.2,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    flexDirection: 'row'
+  rootContainer: {
+    backgroundColor: 'white',
+    flex: 1,
   },
-  porfImgContainer: {
-    backgroundColor: '#FFFFFF',
+
+  menuContainer: {
+    flex: 0.5,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+  },
+  profileContainer: {
+    flex: 3,
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  closetContainer: {
+    flex: 8,
+  },
+
+  menuButton: {
+    margin: 10,
+    backgroundColor: 'skyblue',
+  },
+  plusButtonContainer: {
+    width: '90%',
+    alignItems: 'flex-end',
+    marginRight: 20,
+  },
+  plusButton: {
+    width: 40,
+    textAlign: 'center',
+    fontSize: 25,
+    color: '#FFFFFF',
+    backgroundColor: '#9F81F7',
+    borderRadius: 60,
+  },
+
+  ModalScreen: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    width: 30,
-    height: 30,
-    flexDirection: 'row'
   },
-  profileImage: {
-    width: 150,
-    height: 150,
+  profImgContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    width: 25,
+    height: 25,
+    flexDirection: 'row',
+  },
+  profileImage: {
+    width: 130,
+    height: 130,
     borderRadius: 100,
   },
   profileList: {
-    flex: 0.8,
+    flex: 1.3,
     justifyContent: 'center',
     alignItems: 'flex-start',
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    
   },
-  name: {
-    flex: 0.2,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+  userProfileContainer: {
+    paddingVertical: 5,
   },
-  nickname: {
-    flex: 0.2,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+  category: {
+    fontSize: 15,
+    fontWeight: 'bold',
   },
-  keyword: {
-    flex: 0.2,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+  userName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  userTravlePlan: {
+    fontSize: 16,
+    color: 'black',
+  },
+  userStyle: {
+    fontSize: 18,
+    color: 'black',
   },
   profContent: {
     fontSize: 18, // 버튼 텍스트 크기
     fontWeight: '900',
   },
-  all: {
-    backgroundColor: '#FFFFFF',
-    flex: 1.8,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    
-  },
-  abataBtn: {
-    backgroundColor: '#FFFFFF', // 버튼 배경색
+
+  buttonWithBackground: {
+    width: '80%',
     paddingVertical: 10,
-    paddingHorizontal: 95,
-    borderRadius: 20, // 버튼 테두리 둥글기
-    borderWidth: 1.4, // 버튼 테두리 두께
-    borderColor: '#007AFF', // 버튼 테두리 색상 
-    shadowColor: '#000', // 그림자 색상
-    shadowOffset: { width: 0, height: 2 }, // 그림자 위치
-    shadowOpacity: 0.2, // 그림자 투명도
-    shadowRadius: 6, // 그림자 둥글기
-    elevation: 6, // Android의 그림자 효과
-    margin: 10
+    borderRadius: 20,
+    borderWidth: 1.4,
+    borderColor: '#7401DF',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 6,
+    margin: 10,
+    backgroundColor: '#7401DF',
   },
-  keywordBtn: {
-    backgroundColor: '#FFFFFF', // 버튼 배경색
+  buttonWithoutBackground: {
+    width: '80%',
     paddingVertical: 10,
-    paddingHorizontal: 70,
-    borderRadius: 20, // 버튼 테두리 둥글기
-    borderWidth: 1.4, // 버튼 테두리 두께
-    borderColor: '#007AFF', // 버튼 테두리 색상 
-    shadowColor: '#000', // 그림자 색상
-    shadowOffset: { width: 0, height: 2 }, // 그림자 위치
-    shadowOpacity: 0.2, // 그림자 투명도
-    shadowRadius: 6, // 그림자 둥글기
-    elevation: 6, // Android의 그림자 효과
-    margin: 10
-  },
-  closetBtn: {
-    backgroundColor: '#FFFFFF', // 버튼 배경색
-    paddingVertical: 10,
-    paddingHorizontal: 120,
-    borderRadius: 20, // 버튼 테두리 둥글기
-    borderWidth: 1.4, // 버튼 테두리 두께
-    borderColor: '#007AFF', // 버튼 테두리 색상 
-    shadowColor: '#000', // 그림자 색상
-    shadowOffset: { width: 0, height: 2 }, // 그림자 위치
-    shadowOpacity: 0.2, // 그림자 투명도
-    shadowRadius: 6, // 그림자 둥글기
-    elevation: 6, // Android의 그림자 효과
-    margin: 10
-  },
-  logoutBtn: {
-    backgroundColor: '#FFFFFF', // 버튼 배경색
-    paddingVertical: 10,
-    paddingHorizontal: 123,
-    borderRadius: 20, // 버튼 테두리 둥글기
-    borderWidth: 1.4, // 버튼 테두리 두께
-    borderColor: '#007AFF', // 버튼 테두리 색상 
-    shadowColor: '#000', // 그림자 색상
-    shadowOffset: { width: 0, height: 2 }, // 그림자 위치
-    shadowOpacity: 0.2, // 그림자 투명도
-    shadowRadius: 6, // 그림자 둥글기
-    elevation: 6, // Android의 그림자 효과
-    margin: 10
+    borderRadius: 20,
+    borderWidth: 1.4,
+    borderColor: '#7401DF',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 6,
+    margin: 10,
   },
   btnText: {
-    color: '#007AFF', // 버튼 텍스트 색상
-    fontSize: 22, // 버튼 텍스트 크기
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 22,
     fontWeight: '400',
+  },
+  btnTexts: {
+    textAlign: 'center',
+    color: 'black',
+    fontSize: 22,
+    fontWeight: '400',
+  },
+  rootContainer: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  listTitle: {
+    color: 'black',
+    fontSize: 20,
+  },
+  listBackground: {
+    backgroundColor: 'white',
+  },
+  listunderline: {
+    backgroundColor: 'black',
   },
 });
 
