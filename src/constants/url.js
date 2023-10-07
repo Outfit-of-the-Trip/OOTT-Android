@@ -1,4 +1,4 @@
-const backendURL = process.env.backendURL || "http://34.64.159.185:3001"
+const backendURL = process.env.backendURL || "http://34.64.159.185:3000"
 const testURL = "http://10.0.2.2:3000"
 
 module.exports.backendURL = backendURL;

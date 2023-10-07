@@ -14,6 +14,7 @@ import {
 import {Avatar} from 'react-native-paper';
 import {AuthContext} from '../../utils/Auth';
 import Glass from '../../assets/images/glass.png';
+import { backendURL } from '../../constants/url';
 
 const FriendScreen = () => {
   // await AsyncStorage.getItem('userInfo') 현재 로그인한 계정의 데이터를 가져올 수 있음.
@@ -30,7 +31,7 @@ const FriendScreen = () => {
     // console.log(friend.usrId);
     try {
       const response = await axios.post(
-        'http://10.0.2.2:3000/api/friends/addFriends',
+        backendURL+'/api/friends/addFriends',
         {
           reqUser: `${userInfo.nickname}`,
           resUser: `${friend.usrId}`,
@@ -46,9 +47,7 @@ const FriendScreen = () => {
   useEffect(() => {
     const getFriendInfo = async () => {
       try {
-        const response = await axios.get(
-          'http://10.0.2.2:3000/api/test/getUserTable',
-        );
+        const response = await axios.get(backendURL+'/api/test/getUserTable');
         setFindFriendInfo(response.data);
         console.log(findFriendInfo);
       } catch (e) {
@@ -61,11 +60,8 @@ const FriendScreen = () => {
   // 여행 계획 가져오기
   useEffect(() => {
     const getMyTravelInfo = async () => {
-      const response = await axios.get(
-        `http://10.0.2.2:3000/api/test/getTravelTable`,
-      );
+      const response = await axios.get(backendURL+`/api/test/getTravelTable`);
       setFriendTravleInfo(response.data);
-      // console.log(response.data);
     };
     getMyTravelInfo();
   }, []);

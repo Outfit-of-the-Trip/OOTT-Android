@@ -2,13 +2,13 @@ import React, {useState, useEffect } from 'react'
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
 import { recommendDetailStates, userInfoState, dateState, searchState, reasonState, friendsState, categoryState } from '../../../states/atoms';
 import axios from 'axios';
-import { testURL } from '../../../constants/url';
 import { useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import SplashVideo from '../../../components/SplashVideo';
 import { RecomendGarmet } from '../../../constants/RecomendGarmet';
 import Swiper from 'react-native-swiper'
 import base64 from 'base-64';
+import { backendURL } from '../../../constants/url';
 
 import {
     StyleSheet,
@@ -35,7 +35,7 @@ const RecommendScreen = () => {
     }
     const width = useWindowDimensions().width; //기기 폭 값
     
-    const BaseURL = testURL
+    const BaseURL = backendURL
 
     const place = useRecoilValue(searchState);
     const date = useRecoilValue(dateState);
@@ -89,6 +89,9 @@ const RecommendScreen = () => {
 
 
 
+    const [coordi, setCoordi] = useState([])
+
+
     return(
         <View style={styles.rootContainer}>
             {isLoding ? (<SplashVideo />) : (
@@ -110,7 +113,7 @@ const RecommendScreen = () => {
                         horizontal
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
-                        data={test}
+                        data={recommendClothes}
                         renderItem={({ item, index }) => (
                         <TouchableOpacity
                             style={{
@@ -146,7 +149,7 @@ const RecommendScreen = () => {
                 <Swiper 
                     style={styles.wrapper} 
                     horizontal={true} 
-                    activeDotColor="black"
+                    activeDotColor="blue"
                 >   
                 {clothes && clothes.map((item, index) =>(
                     
@@ -247,33 +250,33 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 30,
         bottom: 0,
-        left:20,
+        left: 2,
         right:0,
 
-        width: 200,
-        height: 250,
+        width: 230,
+        height: 270,
     },
 
     top:{
         position: "absolute",
         top: 30,
         bottom: 0,
-        left: 190,
+        left: 180,
         right:0,
 
-        width: 170,
-        height: 170,
+        width: 230,
+        height: 230,
     },
 
     bottom:{
         position: "absolute",
-        top: 190,
+        top: 230,
         bottom: 0,
-        left: 150,
+        left: 180,
         right:0,
 
-        width: 250,
-        height: 250,
+        width: 230,
+        height: 230,
     },
 
     shoes:{

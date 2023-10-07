@@ -7,6 +7,7 @@ import { useRecoilValue } from 'recoil';
 import { userInfoState } from '../../states/atoms';
 import axios from 'axios';
 import {AuthContext} from '../../utils/Auth';
+import { backendURL } from '../../constants/url';
 
 import {
   Pressable,
@@ -21,8 +22,6 @@ import Outer from './ClosetScreen/Components/Outer';
 import Top from './ClosetScreen/Components/Top';
 import Bottom from './ClosetScreen/Components/Bottom';
 import Shoes from './ClosetScreen/Components/Shoes';
-
-import ClosetScreen from './ClosetScreen/ClosetScreen';
 
 
 import {
@@ -117,7 +116,7 @@ const MypageScreen = () => {
         const base = response.assets[0];
 
         try {
-          axios.post(`http://10.0.2.2:3000/api/closet/uploadClosetImage`,
+          axios.post(backendURL+`/api/closet/uploadClosetImage`,
             {
               usrId: userInfo.nickname,
               clothesId: postData,
@@ -154,7 +153,7 @@ const MypageScreen = () => {
 
   const getPictureFromDB = async () => {
     try {
-      await axios.get(`http://10.0.2.2:3000/api/closet/getClosetData?userId=${userInfo.nickname}`)
+      await axios.get(backendURL+`/api/closet/getClosetData?userId=${userInfo.nickname}`)
       .then((res)=>{setClothesData(res.data)})
     } 
     catch (e) {
@@ -179,9 +178,7 @@ const MypageScreen = () => {
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const response = await axios.get(
-          `http://10.0.2.2:3000/api/users/getUserInfo?userId=${userInfo.nickname}`,
-        );
+        const response = await axios.get(backendURL+`/api/users/getUserInfo?userId=${userInfo.nickname}`);
         setUserStyles(response.data);
       } catch (e) {
         console.log(e);
