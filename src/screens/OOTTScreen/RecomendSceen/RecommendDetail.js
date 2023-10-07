@@ -1,6 +1,5 @@
-import React, {  useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { recommendDetailStates, searchState } from '../../../states/atoms';
+import React from 'react';
+import { defaultImg } from '../../../constants/url';
 
 import {
     View,
@@ -20,8 +19,6 @@ const RecommendDetail = ({route}) => {
     const openExternalURL = (url) => {
         Linking.openURL(url).catch((err) => console.error('URL 열기 오류:', err));
     };
-
-    const place = useRecoilValue(searchState);
 
     return(
 
@@ -116,7 +113,10 @@ const RecommendDetail = ({route}) => {
                             renderItem={({item,index}) =>(
                                 <View style={styles.sliderContent}>
                                     <Image
-                                        source={{uri: item.img}}
+                                        source={{uri: 
+                                            item.img == defaultImg
+                                            ? defaultImg : "data:image/png;base64,"+item.img
+                                        }}
                                         style={styles.image}
                                     />
                                     <View style={styles.recTextContainer}>

@@ -91,7 +91,7 @@ const Navigation = () => {
                 <Stack.Screen
                   name="MainScreen"
                   component={MainScreen}
-                  options={{headerShown: false}}
+                  options={{headerShown: true}}
                 />
                 <Stack.Screen
                   name="OOTTScreen"
