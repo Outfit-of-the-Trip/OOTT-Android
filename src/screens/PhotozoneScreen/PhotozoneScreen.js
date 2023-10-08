@@ -1,9 +1,6 @@
-import React, {useCallback, useRef, useMemo, useState, useEffect} from 'react';
-import {StyleSheet, View, Dimensions, Text, Image} from 'react-native';
-import BottomSheet, {
-  BottomSheetScrollView,
-  BottomSheetBackdrop,
-} from '@gorhom/bottom-sheet';
+import React, {useCallback, useRef, useMemo, useState} from 'react';
+import {StyleSheet, View, Dimensions} from 'react-native';
+import BottomSheet, {BottomSheetScrollView} from '@gorhom/bottom-sheet';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {WebView} from 'react-native-webview';
 import DetailModal from './DetailModal';
@@ -45,7 +42,7 @@ const TravelScreen = () => {
         <WebView
           javaScriptEnabled={true}
           style={styles.webview}
-          source={{ uri: 'http://34.64.159.185:3000/' }}
+          source={{uri: 'http://34.64.159.185:3000/'}}
           onMessage={handleOnMessage}
         />
         <BottomSheet

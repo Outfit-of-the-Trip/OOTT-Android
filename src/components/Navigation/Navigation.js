@@ -19,7 +19,6 @@ import KeywordScreen from '../../screens/MypageScreen/KeywordScreen';
 import ClosetScreen from '../../screens/MypageScreen/ClosetScreen/ClosetScreen';
 import AbataScreen from '../../screens/MypageScreen/AbataScreen';
 import Toplogo from '../../assets/images/toplogo.png';
-import Rest from '../../assets/images/rest.jpg';
 
 import TravelPlace from '../../screens/OOTTScreen/TravelPlace/TravelPlace';
 import TravelFriends from '../../screens/OOTTScreen/TravelFriends/TravelFriends';

@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import React, {useState} from 'react';
 import {Platform, View, FlatList, StyleSheet, Image} from 'react-native';
 import Gallery from './Gallery';
 import {launchImageLibrary} from 'react-native-image-picker';
@@ -15,7 +14,12 @@ const Closet = () => {
     return (
       <Image
         source={{uri: item}}
-        style={{width: '32%', aspectRatio: 1, borderRadius: 10, marginHorizontal: 2}}
+        style={{
+          width: '32%',
+          aspectRatio: 1,
+          borderRadius: 10,
+          marginHorizontal: 2,
+        }}
       />
     );
   };
@@ -57,8 +61,7 @@ const Closet = () => {
           numColumns={3}
           keyExtractor={item => item}
           data={data}
-          renderItem={renderImage}>
-        </FlatList>
+          renderItem={renderImage}></FlatList>
       </View>
       <Gallery
         visible={modalVisible}

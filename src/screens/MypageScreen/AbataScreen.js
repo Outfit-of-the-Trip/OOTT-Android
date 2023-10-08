@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import {Unity, UnityContext} from 'react-unity-webgl';
+import {View, Text, StyleSheet} from 'react-native';
 
 const AbataScreen = () => {
   return (
@@ -11,3 +10,10 @@ const AbataScreen = () => {
 };
 
 export default AbataScreen;
+
+const styles = StyleSheet.create({
+  webview: {
+    width: '80%',
+    height: '80%',
+  },
+});
