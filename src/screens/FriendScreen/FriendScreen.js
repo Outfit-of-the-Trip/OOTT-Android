@@ -27,8 +27,6 @@ const FriendScreen = () => {
 
   //친구 추가
   const addingFriend = async friend => {
-    // console.log(userInfo.nickname);
-    // console.log(friend.usrId);
     try {
       const response = await axios.post(
         backendURL + '/api/friends/addFriends',
