@@ -1,17 +1,9 @@
-import React from 'react'
+import React from 'react';
 
-import {
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    TouchableOpacity
-  } from 'react-native';
+import {Text} from 'react-native';
 
 const SettingScreen = () => {
-  return (
-    <Text>Setting Screen</Text>
-  )
-}
+  return <Text>Setting Screen</Text>;
+};
 
-export default SettingScreen
+export default SettingScreen;

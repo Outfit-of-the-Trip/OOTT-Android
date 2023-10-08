@@ -14,16 +14,16 @@ import {
 import {Avatar} from 'react-native-paper';
 import {AuthContext} from '../../utils/Auth';
 import Glass from '../../assets/images/glass.png';
-import { backendURL } from '../../constants/url';
+import {backendURL} from '../../constants/url';
+import {testURL} from '../../constants/url';
 
 const FriendScreen = () => {
-  // await AsyncStorage.getItem('userInfo') 현재 로그인한 계정의 데이터를 가져올 수 있음.
   const {userInfo} = useContext(AuthContext);
-  // console.log(userInfo);
 
   const [friendName, setFriendName] = useState('');
   const [findFriendInfo, setFindFriendInfo] = useState([]);
   const [friendTravleInfo, setFriendTravleInfo] = useState([]);
+  const [myfriends, setMyFriends] = useState([]);
 
   //친구 추가
   const addingFriend = async friend => {
@@ -31,7 +31,7 @@ const FriendScreen = () => {
     // console.log(friend.usrId);
     try {
       const response = await axios.post(
-        backendURL+'/api/friends/addFriends',
+        backendURL + '/api/friends/addFriends',
         {
           reqUser: `${userInfo.nickname}`,
           resUser: `${friend.usrId}`,
@@ -39,7 +39,7 @@ const FriendScreen = () => {
       );
       console.log(response.data);
     } catch (e) {
-      console.log(e);
+      console.log('Friends Request: ', e);
     }
   };
 
@@ -47,20 +47,29 @@ const FriendScreen = () => {
   useEffect(() => {
     const getFriendInfo = async () => {
       try {
-        const response = await axios.get(backendURL+'/api/test/getUserTable');
+        const response = await axios.get(testURL + '/api/test/getUserTable');
         setFindFriendInfo(response.data);
-        console.log(findFriendInfo);
       } catch (e) {
-        console.log(e);
+        console.log('all User: ', e);
       }
     };
     getFriendInfo();
   }, []);
 
+  // 내 친구 리스트
+  useEffect(() => {
+    axios
+      .get(testURL + `/api/friends/myFriends?userId=${userInfo.nickname}`)
+      .then(res => {
+        setMyFriends(res.data);
+      })
+      .catch(e => console.log('Friends error: ', e));
+  }, []);
+
   // 여행 계획 가져오기
   useEffect(() => {
     const getMyTravelInfo = async () => {
-      const response = await axios.get(backendURL+`/api/test/getTravelTable`);
+      const response = await axios.get(testURL + `/api/test/getTravelTable`);
       setFriendTravleInfo(response.data);
     };
     getMyTravelInfo();
@@ -90,36 +99,51 @@ const FriendScreen = () => {
         <TextInput style={styles.InputBox} onChangeText={findFriendName} />
         <Image style={styles.searchImg} source={Glass} />
       </View>
-      {friendName.length === 0 ? (
-        <View></View>
-      ) : (
-        foundFriend.map((item, i) => (
-          <ScrollView key={i}>
-            <View style={styles.personRowContainer}>
-              <View style={styles.row}>
-                <View style={styles.personColumnContainer}>
-                  <Avatar.Image
-                    size={50}
-                    source={{uri: item.usrProfileURL}}
-                    style={styles.avatarContainer}
-                  />
+      {friendName.length === 0
+        ? myfriends.map((item, i) => (
+            <View key={i} style={styles.personRowContainer}>
+              <ScrollView>
+                <View style={styles.row}>
+                  <View style={styles.personColumnContainer}>
+                    <Avatar.Image
+                      size={50}
+                      source={{uri: item.usrProfileURL}}
+                      style={styles.avatarContainer}
+                    />
+                  </View>
+                  <View style={styles.personColumnContainer}>
+                    <Text style={styles.textfont}>{item.myFriend}</Text>
+                  </View>
                 </View>
-                <View style={styles.personColumnContainer}>
-                  <Text style={styles.textfont}>&nbsp;{item.usrId}</Text>
-                  <Text style={styles.textfont}>
-                    {countTravle} fashion items
-                  </Text>
-                </View>
-              </View>
-              <TouchableOpacity
-                style={styles.plusButtonContainer}
-                onPress={() => addingFriend(item)}>
-                <Text style={styles.plusButton}>+</Text>
-              </TouchableOpacity>
+              </ScrollView>
             </View>
-          </ScrollView>
-        ))
-      )}
+          ))
+        : foundFriend.map((item, i) => (
+            <ScrollView key={i}>
+              <View style={styles.personRowContainer}>
+                <View style={styles.row}>
+                  <View style={styles.personColumnContainer}>
+                    <Avatar.Image
+                      size={50}
+                      source={{uri: item.usrProfileURL}}
+                      style={styles.avatarContainer}
+                    />
+                  </View>
+                  <View style={styles.personColumnContainer}>
+                    <Text style={styles.textfont}>&nbsp;{item.usrId}</Text>
+                    <Text style={styles.textfont}>
+                      {countTravle} Travle Plan
+                    </Text>
+                  </View>
+                </View>
+                <TouchableOpacity
+                  style={styles.plusButtonContainer}
+                  onPress={() => addingFriend(item)}>
+                  <Text style={styles.plusButton}>+</Text>
+                </TouchableOpacity>
+              </View>
+            </ScrollView>
+          ))}
     </SafeAreaView>
   );
 };
@@ -201,13 +225,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: 'black',
   },
-  //
+
   personRowContainer: {
     alignSelf: 'center',
     width: '90%',
     margin: 5,
     padding: 4,
-    marginTop: 5,
     borderRadius: 10,
     flexDirection: 'row',
     borderBottomWidth: 2,
@@ -234,9 +257,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     width: 50,
     color: 'black',
-  },
-  friendDeleteButton: {
-    justifyContent: 'space-between',
   },
   textfont: {
     fontFamily: '오뮤_다예쁨체',

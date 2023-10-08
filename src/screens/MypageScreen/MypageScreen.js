@@ -47,6 +47,9 @@ const MypageScreen = () => {
   const gotoTravelPlace = () => {
     return navigation.navigate('KeywordScreen');
   };
+  const gotoAbatar = () => {
+    navigation.navigate('AbataScreen');
+  };
 
   const [index, setIndex] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
@@ -199,9 +202,7 @@ const MypageScreen = () => {
             );
           }}>
           <Menu.Item onPress={gotoTravelPlace}>패션 키워드 설정</Menu.Item>
-          <Menu.Item onPress={() => console.log('아바타')}>
-            아바타 설정
-          </Menu.Item>
+          <Menu.Item onPress={gotoAbatar}>아바타 설정</Menu.Item>
           <Menu.Item onPress={logout}>로그아웃</Menu.Item>
         </Menu>
       </Box>

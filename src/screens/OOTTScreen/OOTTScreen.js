@@ -1,13 +1,9 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react';
 
 import {useNavigation} from '@react-navigation/native';
 import {SheetProvider, SheetManager} from 'react-native-actions-sheet';
 import {useRecoilState, useRecoilValue} from 'recoil';
-import {
-  searchState,
-  dateState,
-  reasonState,
-} from '../../states/atoms';
+import {searchState, dateState, reasonState} from '../../states/atoms';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import './sheet';
@@ -26,13 +22,24 @@ const OOTTScreen = () => {
 
   const place = useRecoilValue(searchState);
   const date = useRecoilValue(dateState);
-  const firstDate = date[0]
-  const lastDate = date[date.length -1]
+  const firstDate = date[0];
+  const lastDate = date[date.length - 1];
   const [reason, setReason] = useRecoilState(reasonState);
 
   const [isLoding, setIsLoding] = useState(null);
 
-  const [popData] = useState(['배낭여행', '레저여행', '캠핑', '엠티', '호캉스', '핫플레이스', '인생샷', '출장', '워크숍', '학회']);
+  const [popData] = useState([
+    '배낭여행',
+    '레저여행',
+    '캠핑',
+    '엠티',
+    '호캉스',
+    '핫플레이스',
+    '인생샷',
+    '출장',
+    '워크숍',
+    '학회',
+  ]);
 
   const buttonColor = place && firstDate && reason ? 'black' : 'grey';
 
