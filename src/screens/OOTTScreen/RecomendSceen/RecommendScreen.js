@@ -1,11 +1,10 @@
 import React, {useState, useEffect } from 'react'
-import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { recommendDetailStates, userInfoState, dateState, searchState, reasonState, friendsState, categoryState } from '../../../states/atoms';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import SplashVideo from '../../../components/SplashVideo';
-
-import Swiper from 'react-native-swiper'
+import BitSwiper from 'react-native-bit-swiper';
 import base64 from 'base-64';
 import { backendURL } from '../../../constants/url';
 import { WithLocalSvg } from 'react-native-svg';
@@ -14,19 +13,22 @@ import heartWhite from './heartSvg/heartWhite.svg'
 import heartSelect from './heartSvg/heartSelect.svg'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-
 import {
     StyleSheet,
     View,
     Text,
     FlatList,
     TouchableOpacity,
-    Image
+    Image,
+    Dimensions
 } from 'react-native';
+
+const windowHeight = Dimensions.get('window').height;
 
 
 
 const RecommendScreen = () => {
+
 
 
     const navigation = useNavigation();
@@ -247,14 +249,11 @@ const RecommendScreen = () => {
 
             <View style={styles.clothesContainer}>
 
-                <Swiper 
-                    style={styles.wrapper} 
-                    horizontal={true} 
-                    activeDotColor="blue"
-                >   
-                {clothes && clothes.map((item, index) =>(
+                <BitSwiper 
+                    items={clothes}
+                    itemWidth="100%" // 활성 아이템의 넓이
 
-                    
+                    onItemRender={((item, index) =>(
                         <View style={styles.imageContainer} key={index}>
                             <View style={{flex: 1, margin:5, alignItems:"flex-end"}}>
                                 <HeartClick
@@ -279,10 +278,7 @@ const RecommendScreen = () => {
                                     />
                                 </TouchableOpacity>
 
-                                <TouchableOpacity 
-
-                                    onPress={()=>{gotoDetail(item.top.detail)}}
-                                >
+                                <TouchableOpacity onPress={()=>{gotoDetail(item.top.detail)}}>
                                     <Image
                                         style={styles.top} 
                                         source={{uri: item.top.img}}
@@ -290,9 +286,7 @@ const RecommendScreen = () => {
                                 </TouchableOpacity>
                                 
 
-                                <TouchableOpacity 
-                                    onPress={()=>{gotoDetail(item.bottom.detail)}}
-                                >
+                                <TouchableOpacity onPress={()=>{gotoDetail(item.bottom.detail)}}>
                                     <Image
                                         style={styles.bottom}
                                         source={{uri: item.bottom.img}}
@@ -300,9 +294,7 @@ const RecommendScreen = () => {
                                 </TouchableOpacity>
 
 
-                                <TouchableOpacity 
-                                    onPress={()=>{gotoDetail(item.shoes.detail)}}
-                                >
+                                <TouchableOpacity onPress={()=>{gotoDetail(item.shoes.detail)}}>
                                     <Image
                                         style={styles.shoes}
                                         source={{uri: item.shoes.img}}
@@ -314,7 +306,7 @@ const RecommendScreen = () => {
 
                         </View>
                     ))}
-                </Swiper>
+                />
             </View>
             </>
           )}
@@ -355,11 +347,11 @@ const styles = StyleSheet.create({
         flex: 7,
     },
     imageContainer:{
-        flex:1,
-        margin: 10,
-        borderRadius: 10,
+        height: windowHeight-280,
+        borderRadius: 20,
         backgroundColor: "#f0f0f0"
     },
+
 
 
 
@@ -386,18 +378,18 @@ const styles = StyleSheet.create({
         left: 0,
         right:0,
 
-        width: 250,
-        height: 300,
+        width: 260,
+        height: 270,
     },
     top:{
         position: "absolute",
         top: 20,
         bottom: 0,
-        left: 190,
+        left: 200,
         right: 0,
 
-        width: 200,
-        height: 190,
+        width: 230,
+        height: 230,
     },
     bottom:{
         position: "absolute",
@@ -413,11 +405,11 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 310,
         bottom: 0,
-        left: 40,
+        left: 50,
         right:0,
 
-        width: 100,
-        height: 100,
+        width: 120,
+        height: 120,
     },
    
 })
