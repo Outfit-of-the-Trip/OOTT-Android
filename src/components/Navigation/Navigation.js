@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Image} from 'react-native';
 import axios from 'axios';
+import { backendURL } from '../../constants/url';
 
 import HomeScreen from '../../screens/HomeScreen/HomeScreen';
 import MainScreen from '../../screens/MainScreen/MainScreen';
@@ -19,6 +20,7 @@ import KeywordScreen from '../../screens/MypageScreen/KeywordScreen';
 import ClosetScreen from '../../screens/MypageScreen/ClosetScreen/ClosetScreen';
 import AbataScreen from '../../screens/MypageScreen/AbataScreen';
 import Toplogo from '../../assets/images/toplogo.png';
+import Rest from '../../assets/images/rest.jpg';
 
 import TravelPlace from '../../screens/OOTTScreen/TravelPlace/TravelPlace';
 import TravelFriends from '../../screens/OOTTScreen/TravelFriends/TravelFriends';
@@ -40,8 +42,7 @@ const Navigation = () => {
 
   useEffect(() => {
     //사용자 데이터
-    axios
-      .get(`http://10.0.2.2:3000/api/users/getUserInfo?userId=admin`)
+    axios.get(backendURL+`/api/users/getUserInfo?userId=`+userInfo.nickname)
       .then(function (response) {
         setfirstlogin(() => {
           let data = response.data.usrCreateAt;
@@ -70,7 +71,88 @@ const Navigation = () => {
         }}>
         {userInfo.id ? (
           <>
-          
+            {isfirstlogin ? (
+              <>
+                <Stack.Screen
+                  name="IsFirstLoginScreen"
+                  component={IsFirstLoginScreen}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name="FirstSetting"
+                  component={FirstSetting}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name="Bottomtab"
+                  component={Bottomtab}
+                  options={{headerShown: true}}
+                />
+                <Stack.Screen
+                  name="MainScreen"
+                  component={MainScreen}
+                  options={{headerShown: true}}
+                />
+                <Stack.Screen
+                  name="OOTTScreen"
+                  component={OOTTScreen}
+                  options={{headerShown: true}}
+                />
+
+                <Stack.Screen
+                  name="RecommendDetail"
+                  component={RecommendDetail}
+                  options={{headerShown: true}}
+                />
+                <Stack.Screen
+                  name="FriendsLook"
+                  component={FriendsLook}
+                  options={{headerShown: true}}
+                />
+                <Stack.Screen name="ShoppingList" component={ShoppingList} />
+                <Stack.Screen
+                  name="RecommendScreen"
+                  component={RecommendScreen}
+                  options={{headerShown: true}}
+                />
+                <Stack.Screen
+                  name="TravelPlace"
+                  component={TravelPlace}
+                  options={{headerShown: true}}
+                />
+                <Stack.Screen
+                  name="TravelFriends"
+                  component={TravelFriends}
+                  options={{headerShown: true}}
+                />
+                <Stack.Screen
+                  name="TravelCategory"
+                  component={TravelCategory}
+                  options={{headerShown: true}}
+                />
+                <Stack.Screen
+                  name="KeywordScreen"
+                  component={KeywordScreen}
+                  options={{headerShown: true}}
+                />
+                <Stack.Screen
+                  name="ClosetScreen"
+                  component={ClosetScreen}
+                  options={{headerShown: true}}
+                />
+                <Stack.Screen
+                  name="AbataScreen"
+                  component={AbataScreen}
+                  options={{headerShown: true}}
+                />
+                <Stack.Screen
+                  name="MypageScreen"
+                  component={MypageScreen}
+                  options={{headerShown: true}}
+                />
+              </>
+            ) : (
+              <>
                 <Stack.Screen
                   name="IsFirstLoginScreen"
                   component={IsFirstLoginScreen}
@@ -147,7 +229,9 @@ const Navigation = () => {
                   component={MypageScreen}
                   options={{headerShown: true}}
                 />
-                </>
+              </>
+            )}
+          </>
         ) : (
           <Stack.Screen
             name="HomeScreen"
