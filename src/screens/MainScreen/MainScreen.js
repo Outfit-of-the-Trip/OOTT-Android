@@ -170,7 +170,7 @@ const MainScreen = () => {
         </TouchableOpacity>
         <View style={{marginLeft: 10}}>
           <Text style={styles.profileimgename}>
-            {userdata ? `${userdata.usrId}` : '아이디값 가져오는중'}
+            {userdata ? `${userdata.usrId}` : 'Loading...'}
           </Text>
           <Text style={styles.profilebigtext}>{travelea} travel log</Text>
           <Text style={styles.profilebigtext}>{combinedStyles}</Text>

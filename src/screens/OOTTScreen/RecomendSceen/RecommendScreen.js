@@ -90,7 +90,7 @@ const RecommendScreen = () => {
     }
 
     const endOOTT = () => {
-        return navigation.navigate('MainScreen')
+        return navigation.navigate('Bottomtab')
     }
     
 
