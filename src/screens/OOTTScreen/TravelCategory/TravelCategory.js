@@ -20,11 +20,11 @@ const TravelCategory = () => {
   const category = ['핫플레이스', '전통', '놀이공원', '바닷가', '산'];
 
   const catImages = [
-    'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FJPkpg%2FbtssDKPHyNM%2FdBXdskD0UQZDdSQ7RJSBX0%2Fimg.png',
-    'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FJPkpg%2FbtssDKPHyNM%2FdBXdskD0UQZDdSQ7RJSBX0%2Fimg.png',
-    'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FJPkpg%2FbtssDKPHyNM%2FdBXdskD0UQZDdSQ7RJSBX0%2Fimg.png',
-    'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FJPkpg%2FbtssDKPHyNM%2FdBXdskD0UQZDdSQ7RJSBX0%2Fimg.png',
-    'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FJPkpg%2FbtssDKPHyNM%2FdBXdskD0UQZDdSQ7RJSBX0%2Fimg.png',
+    'https://thumbnail4.coupangcdn.com/thumbnails/remote/212x212ex/image/vendor_inventory/4b98/66de5d5469dca4482ff5924eede9a882325277f2994d1d109160591b341e.jpg',
+    'https://thumbnail12.coupangcdn.com/thumbnails/remote/212x212ex/image/vendor_inventory/79ca/8de567884f193e4a89a79e91b27dde9db0f538eba65dd83ca52bbf406479.jpg',
+    'https://t1a.coupangcdn.com/thumbnails/remote/212x212ex/image/vendor_inventory/8ced/f1f4a78f7e5e4071adadff4569f37422f5a744cc0a0614fbe94565447a61.jpg',
+    'https://t1c.coupangcdn.com/thumbnails/remote/212x212ex/image/vendor_inventory/1da5/7a0cdef1fb63ae9a2255f5083aaf155febc0ba1292efc1d85cf8f4715234.png',
+    'https://t3a.coupangcdn.com/thumbnails/remote/212x212ex/image/vendor_inventory/9ae8/4015105e8499c577c366ccbd6237177de93565e53322370b63afc6943a58.jpg',
   ];
 
   return (

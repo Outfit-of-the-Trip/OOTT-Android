@@ -88,8 +88,6 @@ const MypageScreen = () => {
     }
   };
 
-
-  //사진 크기
   const options = {
     mediaType: 'image',
     maxWidth: 512,
@@ -192,12 +190,12 @@ const MypageScreen = () => {
 
   const MenuSlide = () => {
     return (
-      <Box h="10%" w="10%" alignItems="flex-start">
+      <Box h="5%" w="10%" alignItems="flex-start">
         <Menu
           trigger={triggerProps => {
             return (
               <Pressable {...triggerProps}>
-                <HamburgerIcon size={30} />
+                <HamburgerIcon size={7} />
               </Pressable>
             );
           }}>
@@ -212,18 +210,20 @@ const MypageScreen = () => {
   return (
     <NativeBaseProvider>
       <View style={styles.rootContainer}>
-        <View style={styles.menuContainer}>
-          <MenuSlide />
-        </View>
 
         <View style={styles.profileContainer}>
+
+
           <View style={styles.profImgContainer}>
             <Image
               style={styles.profileImage}
               source={{uri: userInfo.profileImageUrl}}
             />
           </View>
+
+
           <View style={styles.profileList}>
+
             <View style={styles.userProfileContainer}>
               <Text style={styles.userName}>{userInfo.nickname}</Text>
             </View>
@@ -239,15 +239,34 @@ const MypageScreen = () => {
               )}
             </View>
 
-
-            <TouchableOpacity
-              style={styles.plusButtonContainer}
-              onPress={modalOpen}>
-              <Text style={styles.plusButton}>+</Text>
-            </TouchableOpacity>
-
           </View>
+
+            <View style={styles.menuContainer}>
+              <MenuSlide />
+            </View>
         </View>
+
+
+
+        <View style={{flex: 1, flexDirection:'row', alignItems:'center'}}>
+           
+            <View style={{flex: 5, marginLeft: 20,}}>
+              <Text style={{
+                fontSize: 20,
+                color:"black",
+                fontWeight:"bold"
+              }}>MY CLOSET</Text>
+            </View>
+
+              <TouchableOpacity
+                    style={styles.plusButtonContainer}
+                    onPress={modalOpen}>
+                    <Text style={styles.plusButton}>+</Text>
+              </TouchableOpacity>
+        </View>
+
+
+        
 
         <View style={styles.closetContainer}>
           <View style={styles.rootContainer}>
@@ -288,35 +307,32 @@ const styles = StyleSheet.create({
   },
 
   menuContainer: {
-    flex: 0.5,
+    flex: 0.2,
     justifyContent: 'center',
-    alignItems: 'flex-end',
   },
   profileContainer: {
-    flex: 3,
+    flex: 2,
+    marginLeft: 15,
     alignItems: 'center',
     flexDirection: 'row',
   },
   closetContainer: {
-    flex: 8,
+    flex: 7,
   },
 
-  menuButton: {
-    margin: 10,
-    backgroundColor: 'skyblue',
-  },
   plusButtonContainer: {
-    width: '90%',
-    alignItems: 'flex-end',
+    flex: 8,
     marginRight: 20,
+    alignItems: 'flex-end',
   },
+
   plusButton: {
-    width: 40,
+    width: 30,
     textAlign: 'center',
-    fontSize: 25,
-    color: '#FFFFFF',
-    backgroundColor: '#9F81F7',
-    borderRadius: 60,
+    fontSize: 20,
+    color: 'white',
+    backgroundColor: '#a3a3c4',
+    borderRadius: 100,
   },
 
   ModalScreen: {
@@ -325,24 +341,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   profImgContainer: {
-    flex: 1,
-    justifyContent: 'center',
+    flex: 0.4,
+    marginLeft: 12,
     alignItems: 'center',
-    width: 25,
-    height: 25,
     flexDirection: 'row',
   },
   profileImage: {
-    width: 130,
-    height: 130,
+    width: 50,
+    height: 50,
     borderRadius: 100,
   },
   profileList: {
     flex: 1.3,
     justifyContent: 'center',
-    alignItems: 'flex-start',
     flexDirection: 'column',
-    justifyContent: 'flex-start',
   },
   userProfileContainer: {
     paddingVertical: 5,
@@ -414,7 +426,8 @@ const styles = StyleSheet.create({
   },
   listTitle: {
     color: 'black',
-    fontSize: 20,
+    fontSize: 18,
+
   },
   listBackground: {
     backgroundColor: 'white',
