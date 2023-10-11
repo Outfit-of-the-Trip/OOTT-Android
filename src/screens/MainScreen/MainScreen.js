@@ -7,7 +7,7 @@ import {AuthContext} from '../../utils/Auth';
 import FirstLogin from '../../components/FirstLogin';
 import recomend1 from '../../assets/images/recomend1.png';
 import moreb from '../../assets/images/moreb.png';
-import {backendURL} from '../../constants/url';
+import {backendURL,testURL} from '../../constants/url';
 
 import {
   View,
@@ -45,10 +45,16 @@ const MainScreen = () => {
   const translate = item => {
     // 날짜 정리 메서드
     var data = String(item);
-    var input = data.substring(0, 10);
+    var input = data.substring(2, 10);
     return input;
   };
   const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 합치기
+  useEffect(() => {
+
+
+  },data);
+
+
 
   useEffect(() => {
     //사용자 친구 데이터
@@ -78,11 +84,19 @@ const MainScreen = () => {
     //여행정보 데이터
     axios
       .get(
-        backendURL + `/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`,
+        backendURL + `/api/travel/getMyTravelInfo?userId=박성훈`,
       )
       .then(function (response) {
         settravelea(response.data.length);
         setData(response.data);
+        console.log(data);
+        let bottomSeqString = response.data;
+        for(var i=0;i<bottomSeqString.length;i++) {
+          bottomSeqString[i] = bottomSeqString[i].bottomSeq.split(',')[0];
+        }
+        setImageUrl([...bottomSeqString]);
+        console.log("url",imageurl[0]);
+        
       })
       .catch(function (err) {
         console.log(err);
@@ -107,7 +121,7 @@ const MainScreen = () => {
   useEffect(() => {
     //EXAMPLE
     axios
-      .get(backendURL + `/api/travel/getMyTravelInfo?userId=admin`)
+      .get(testURL + `/api/travel/getMyTravelInfo?userId=admin`)
       .then(function (response) {
         //api 완성되면 travelClothes에서 배열 값 사용해서 옷 이미지 경로 불러오기
       })
@@ -133,7 +147,7 @@ const MainScreen = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <Text style={styles.tagtext}>태그</Text>
+                  <Text style={styles.tagtext}>{item.travlReason}</Text>
                   <TouchableOpacity onPress={() => gotoRecomend(item)}>
                     <Image
                       style={{width: 30, height: 20, resizeMode: 'center'}}
@@ -143,10 +157,10 @@ const MainScreen = () => {
                 </View>
               </View>
               <View style={{flexDirection: 'row'}}>
-                <Image
-                  source={recomend1}
-                  style={{width: '100%', margin: 3, borderRadius: 5}}
-                />
+              <Image
+                  style={{resizeMode: 'center'}}
+                  source={{uri:"https://blog.kakaocdn.net/dn/bsKM2O/btsxg3Xt95e/skN2iIfQWfDXKzdzQIR1wK/img.png"}}
+              />
               </View>
             </View>
           )}

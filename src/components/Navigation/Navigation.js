@@ -74,16 +74,6 @@ const Navigation = () => {
             {isfirstlogin ? (
               <>
                 <Stack.Screen
-                  name="IsFirstLoginScreen"
-                  component={IsFirstLoginScreen}
-                  options={{headerShown: false}}
-                />
-                <Stack.Screen
-                  name="FirstSetting"
-                  component={FirstSetting}
-                  options={{headerShown: false}}
-                />
-                <Stack.Screen
                   name="Bottomtab"
                   component={Bottomtab}
                   options={{headerShown: true}}
