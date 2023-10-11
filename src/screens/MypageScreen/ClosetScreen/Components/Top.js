@@ -8,7 +8,7 @@ const Top = ({imgData}) => {
       <View style={styles.listStyle}>
         <Image
           source={{uri: 'data:image/png;base64,' + item}}
-          style={{width: 120, height: 120, borderRadius: 10, margin: 6}}
+          style={{width: 130, height: 130}}
         />
       </View>
     );
@@ -30,14 +30,11 @@ const Top = ({imgData}) => {
 const styles = StyleSheet.create({
   listStyle: {
     backgroundColor: '#f0f0f0',
-    margin: 1,
+    margin: 2,
   },
   imageContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  image: {
-    margin: 2,
   },
 });
 
