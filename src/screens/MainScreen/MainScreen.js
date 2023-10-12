@@ -34,7 +34,6 @@ const MainScreen = () => {
   ]);
   const [data, setData] = useState([]);
   const [travelClothes, setTravelClothes] = useState([]);
-  const [imageurl, setImageUrl] = useState([]); //여행별 추천 옷 url
   const gotoRecomend = traveldata => {
     return navigation.navigate('RecommendScreen', traveldata);
   };
@@ -49,10 +48,12 @@ const MainScreen = () => {
     return input;
   };
   const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 합치기
-  useEffect(() => {
-
-
-  },data);
+   useEffect(() => {
+    console.log("데이터처리신발",modifiedData[0].shoesimgeUrl[0])
+    console.log("데이터처리상의",modifiedData[0].topimgeUrl[0])
+    console.log("데이터처리아우터",modifiedData[0].outerimgeUrl[0])
+    console.log("데이터처리바지",modifiedData[0].bottomimageUrl[0])
+  },modifiedData); 
 
 
 
@@ -80,6 +81,27 @@ const MainScreen = () => {
       });
   }, []);
 
+  const modifiedData = data.map((item,index) => {
+    const bottomSeqString = data[index].bottomSeq;
+    const bottomSeqArr = bottomSeqString.split(',').map(url => url.trim().replace(/\[|\]/g, ''));
+    const topSeqString = data[index].topSeq;
+    const topSeqArr = topSeqString.split(',').map(url => url.trim().replace(/\[|\]/g, ''));
+    const outerSeqString = data[index].outerSeq;
+    const outerSeqArr = outerSeqString.split(',').map(url => url.trim().replace(/\[|\]/g, ''));
+    const shoesSeqString = data[index].shoesSeq;
+    const shoseSeqArr = shoesSeqString.split(',').map(url => url.trim().replace(/\[|\]/g, '')); 
+    return {
+      id: item.id,
+      bottomimageUrl: bottomSeqArr,
+      topimgeUrl : topSeqArr,
+      outerimgeUrl : outerSeqArr,
+      shoesimgeUrl : shoseSeqArr,
+      travlDate : item.travlDate,
+      travlPlace : item.travlPlace,
+      travlReason : item.travlReason
+    };
+  });
+
   useEffect(() => {
     //여행정보 데이터
     axios
@@ -89,19 +111,14 @@ const MainScreen = () => {
       .then(function (response) {
         settravelea(response.data.length);
         setData(response.data);
-        console.log(data);
-        let bottomSeqString = response.data;
-        for(var i=0;i<bottomSeqString.length;i++) {
-          bottomSeqString[i] = bottomSeqString[i].bottomSeq.split(',')[0];
-        }
-        setImageUrl([...bottomSeqString]);
-        console.log("url",imageurl[0]);
+        
         
       })
       .catch(function (err) {
         console.log(err);
       });
   }, []);
+
 
   useEffect(() => {
     //TRAVEL_CLOTHES
@@ -130,11 +147,12 @@ const MainScreen = () => {
       });
   }, []);
 
+
   const Showlog = () => {
     if (travelea > 0) {
       return (
         <FlatList
-          data={data}
+          data={modifiedData}
           nestedScrollEnabled={true}
           renderItem={({item, index}) => (
             <View key={index} style={styles.recomendconatiner}>
@@ -157,13 +175,14 @@ const MainScreen = () => {
                 </View>
               </View>
               <View style={{flexDirection: 'row'}}>
-              <Image
+             {/*  <Image
                   style={{resizeMode: 'center'}}
-                  source={{uri:"https://blog.kakaocdn.net/dn/bsKM2O/btsxg3Xt95e/skN2iIfQWfDXKzdzQIR1wK/img.png"}}
-              />
+                  source={{uri: item.imageUrl[0]}}
+                  onError={(error) => console.log('Image load error for URL:', item.imageUrl[0], 'Error:', error)}
+                  />  */}
               </View>
             </View>
-          )}
+      )}
         />
       );
     } else {
