@@ -98,7 +98,6 @@ const RecommendScreen = () => {
         const getRecommendedDate= async () => {
             axios.post(backendURL+'/api/recommend/getRecommend', travelData)
             .then(function (res) {
-                console.log('rerender')
                 setIsLoding(false)
                 const Data = JSON.parse(base64.decode(res.data));
                 setRecommendClothes(Data)
@@ -148,9 +147,6 @@ const RecommendScreen = () => {
         setCoordi(copy)
     }
 
-    useEffect(()=>{
-        console.log(coordi)
-    }, [coordi])
 
     const HeartClick = (props) => {
         return (

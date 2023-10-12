@@ -159,6 +159,7 @@ const MypageScreen = () => {
     }
   };
 
+
   //카메라 촬영
   const onLaunchCamera = () => {
     launchCamera(options, response => {
