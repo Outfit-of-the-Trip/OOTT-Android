@@ -32,10 +32,7 @@ const TravelDetailScreen = ({route}) => {
     // const gotoFriendsScreen = (date) =>{
     //     return navigation.navigate('FriendsLook',{date : date})
     // }
-    
 
-    const [recommendClothes, setRecommendClothes] = useState(recommendDetailStates)
-    const [isLoding, setIsLoding] = useState(true);
 
 
 
@@ -43,11 +40,6 @@ const TravelDetailScreen = ({route}) => {
     const [selectIndex, setSelectIndex] = useState(0);
 
 
-    useEffect(() => {
-        if (recommendClothes && selectIndex >= 0 && selectIndex < recommendClothes.length) {
-            setClothes(recommendClothes[selectIndex].clothes);
-        }
-    }, [selectIndex]);
 
     useEffect(()=>{
         setSelectedDate(JSON.parse(route.params.travlDate)[0])
@@ -138,60 +130,37 @@ const TravelDetailScreen = ({route}) => {
 
             <View style={styles.clothesContainer}>
 
-            { JSON.parse(route.params.outerSeq)[selectIndex] != "None" ? (
-                <Image
-                    style={styles.outer} 
-                    source={{uri: JSON.parse(route.params.outerSeq)[selectIndex]}}
-                />
-                ) : (<View></View>)
-            }
-
-            { JSON.parse(route.params.topSeq)[selectIndex] != "None" ? (
-                <Image
-                    style={styles.top} 
-                    source={{uri: JSON.parse(route.params.topSeq)[selectIndex]}}
-                />
-                ) : (<View></View>)
-            }
-
-            { JSON.parse(route.params.bottomSeq)[selectIndex] != "None" ? (
-                <Image
-                    style={styles.bottom} 
-                    source={{uri: JSON.parse(route.params.bottomSeq)[selectIndex]}}
-                />
-                ) : (<View></View>)
-            }
-
-            { JSON.parse(route.params.shoesSeq)[selectIndex] != "None" ? (
-                <Image
-                    style={styles.shoes} 
-                    source={{uri: JSON.parse(route.params.shoesSeq)[selectIndex]}}
-                />
-                ) : (<View></View>)
-            }
-                            
-                {/* <View style={{flex: 12}}>
+                { JSON.parse(route.params.outerSeq)[selectIndex] != "None" ? (
                     <Image
                         style={styles.outer} 
                         source={{uri: JSON.parse(route.params.outerSeq)[selectIndex]}}
                     />
+                    ) : (<View></View>)
+                }
 
-                                    <Image
-                                        style={styles.top} 
-                                        source={{uri: JSON.parse(route.params.topSeq)[selectIndex]}}
-                                    />
-                                
-                                    <Image
-                                        style={styles.bottom}
-                                        source={{uri: JSON.parse(route.params.bottomSeq)[selectIndex]}}
-                                    />
+                { JSON.parse(route.params.topSeq)[selectIndex] != "None" ? (
+                    <Image
+                        style={styles.top} 
+                        source={{uri: JSON.parse(route.params.topSeq)[selectIndex]}}
+                    />
+                    ) : (<View></View>)
+                }
 
-                                    <Image
-                                        style={styles.shoes}
-                                        source={{uri: JSON.parse(route.params.shoesSeq)[selectIndex]}}
-                                    />
+                { JSON.parse(route.params.bottomSeq)[selectIndex] != "None" ? (
+                    <Image
+                        style={styles.bottom} 
+                        source={{uri: JSON.parse(route.params.bottomSeq)[selectIndex]}}
+                    />
+                    ) : (<View></View>)
+                }
 
-                            </View> */}
+                { JSON.parse(route.params.shoesSeq)[selectIndex] != "None" ? (
+                    <Image
+                        style={styles.shoes} 
+                        source={{uri: JSON.parse(route.params.shoesSeq)[selectIndex]}}
+                    />
+                    ) : (<View></View>)
+                }
 
             </View> 
 

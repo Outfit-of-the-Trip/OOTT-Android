@@ -15,7 +15,6 @@ export const AuthProvider = ({children}) => {
   const login = async () => {
     KakaoLogin.login()
       .then(result => {
-        console.log(result);
         getProfile();
       })
       .catch(error => {

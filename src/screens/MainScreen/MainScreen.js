@@ -6,6 +6,7 @@ import { Button } from 'react-native-paper';
 
 import { useRecoilState } from 'recoil';
 import { userInfoState } from '../../states/atoms';
+import SplashVideo from '../../components/SplashVideo';
 
 import { backendURL } from '../../constants/url';
 import emptyImage from '../../assets/images/emptyImage.png'
@@ -33,6 +34,8 @@ const MainScreen = () => {
   const navigation = useNavigation();
   const width = useWindowDimensions().width; //기기 넓이
   const [userData, setUserData] = useState([]);
+  
+  const [isLoding, setIsLoding] = useState(true)
 
 
 
@@ -79,6 +82,7 @@ const MainScreen = () => {
         const res = await axios.get(backendURL + `/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`)
         setTravelClothes(res.data)
         setTravelLen(res.data.length)
+        setIsLoding(false)
       } catch(e){
         console.log(e)
       }
@@ -132,6 +136,10 @@ const MainScreen = () => {
   return (
       
     <ScrollView style={styles.container}>
+
+      {isLoding ? (<SplashVideo />):(
+        <>
+      
       <View style={{flexDirection: 'row', marginHorizontal: width - (width - 20), marginTop: 30}}>
         <Avatar size={50} rounded source={{uri: userInfo.profileImageUrl}} />
         <View style={{marginLeft: 25}}>
@@ -191,6 +199,8 @@ const MainScreen = () => {
           </View>
 
         )) : (<View style={{marginTop: 80}}><EmptyScreen /></View>)}
+        </>
+      )}
     </ScrollView>
     
   );
