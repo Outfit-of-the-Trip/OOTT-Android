@@ -25,7 +25,7 @@ const MainScreen = () => {
   const navigation = useNavigation();
   const width = useWindowDimensions().width; //기기 넓이
   const [travelea, settravelea] = useState(); //등록된 여행 개수
-  const [friend, setfriend] = useState();
+  const [modifiedData, setModifiedData] = useState([]);
   const [userdata, setuserdata] = useState();
   const [userHashTag, setUserHashtag] = useState([
     {id: 1, usrstyle: '#레트로'},
@@ -48,13 +48,37 @@ const MainScreen = () => {
     return input;
   };
   const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 합치기
-   useEffect(() => {
-    console.log("데이터처리신발",modifiedData[0].shoesimgeUrl[0])
-    console.log("데이터처리상의",modifiedData[0].topimgeUrl[0])
-    console.log("데이터처리아우터",modifiedData[0].outerimgeUrl[0])
-    console.log("데이터처리바지",modifiedData[0].bottomimageUrl[0])
-  },modifiedData); 
 
+   useEffect(() => {
+    if(data.length > 0) {
+      const updatedData = data.map((item,index) => {
+        const bottomSeqString = data[index].bottomSeq;
+        const bottomSeqArr = bottomSeqString.split(',').map(url => url.trim().replace(/\[|\]/g, ''));
+        const topSeqString = data[index].topSeq;
+        const topSeqArr = topSeqString.split(',').map(url => url.trim().replace(/\[|\]/g, ''));
+        const outerSeqString = data[index].outerSeq;
+        const outerSeqArr = outerSeqString.split(',').map(url => url.trim().replace(/\[|\]/g, ''));
+        const shoesSeqString = data[index].shoesSeq;
+        const shoseSeqArr = shoesSeqString.split(',').map(url => url.trim().replace(/\[|\]/g, '')); 
+        return {
+          id: item.id,
+          bottomimageUrl: bottomSeqArr,
+          topimgeUrl : topSeqArr,
+          outerimgeUrl : outerSeqArr,
+          shoesimgeUrl : shoseSeqArr,
+          travlDate : item.travlDate,
+          travlPlace : item.travlPlace,
+          travlReason : item.travlReason
+        };
+        });
+        setModifiedData(updatedData);
+        console.log("데이터처리신발",updatedData[0].shoesimgeUrl[0])
+        console.log("데이터처리상의",updatedData[0].topimgeUrl[0])
+        console.log("데이터처리아우터",updatedData[0].outerimgeUrl[0])
+        console.log("데이터처리바지",updatedData[0].bottomimageUrl[0])  
+
+      }else(console.log("렌더링아직안됌"))
+  },[data]); 
 
 
   useEffect(() => {
@@ -80,28 +104,6 @@ const MainScreen = () => {
         console.log(err);
       });
   }, []);
-
-  const modifiedData = data.map((item,index) => {
-    const bottomSeqString = data[index].bottomSeq;
-    const bottomSeqArr = bottomSeqString.split(',').map(url => url.trim().replace(/\[|\]/g, ''));
-    const topSeqString = data[index].topSeq;
-    const topSeqArr = topSeqString.split(',').map(url => url.trim().replace(/\[|\]/g, ''));
-    const outerSeqString = data[index].outerSeq;
-    const outerSeqArr = outerSeqString.split(',').map(url => url.trim().replace(/\[|\]/g, ''));
-    const shoesSeqString = data[index].shoesSeq;
-    const shoseSeqArr = shoesSeqString.split(',').map(url => url.trim().replace(/\[|\]/g, '')); 
-    return {
-      id: item.id,
-      bottomimageUrl: bottomSeqArr,
-      topimgeUrl : topSeqArr,
-      outerimgeUrl : outerSeqArr,
-      shoesimgeUrl : shoseSeqArr,
-      travlDate : item.travlDate,
-      travlPlace : item.travlPlace,
-      travlReason : item.travlReason
-    };
-  });
-
   useEffect(() => {
     //여행정보 데이터
     axios
@@ -111,8 +113,6 @@ const MainScreen = () => {
       .then(function (response) {
         settravelea(response.data.length);
         setData(response.data);
-        
-        
       })
       .catch(function (err) {
         console.log(err);
@@ -149,7 +149,7 @@ const MainScreen = () => {
 
 
   const Showlog = () => {
-    if (travelea > 0) {
+    if (travelea > 0 && data.length>0) {
       return (
         <FlatList
           data={modifiedData}
