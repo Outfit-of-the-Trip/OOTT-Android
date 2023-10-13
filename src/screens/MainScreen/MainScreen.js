@@ -153,9 +153,6 @@ const MainScreen = () => {
               <Text style={{fontSize: 17, color:'black', fontFamily:'SCDream5', marginVertical: 3}}>{JSON.parse(item.travlDate)[0]} to {item.travlPlace}</Text>
               <Text style={{fontSize: 17, color:'black', fontFamily:'SCDream5'}}>#{item.travlReason}  #{item.travlCategory}</Text>
             </View>
-
-            <Button onPress={()=>{gotoTravelDetailScreen(item)}}>상세 정보 보기</Button>
-
             <View style={{ flexDirection: 'row', marginVertical: 15,}}>
     
               { JSON.parse(item.outerSeq)[0] != "None" ? (
@@ -188,6 +185,8 @@ const MainScreen = () => {
               }
               
             </View>
+            <Button onPress={()=>{gotoTravelDetailScreen(item)}}>상세 정보 보기</Button>
+
             <Divider width={1.5} />
           </View>
 
