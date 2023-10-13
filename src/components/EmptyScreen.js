@@ -4,9 +4,7 @@ import emptyImage from '../assets/images/emptyImage.png'
 import {
     View,
     StyleSheet,
-    Text,
     Image,
-    ScrollView
   } from 'react-native';
 import { Button } from 'react-native-paper';
 
