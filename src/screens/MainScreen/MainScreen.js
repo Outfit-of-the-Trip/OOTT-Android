@@ -48,8 +48,8 @@ const MainScreen = () => {
   }
 
 
-  const gotoRecomend = traveldata => {
-    return navigation.navigate('RecommendScreen', traveldata);
+  const gotoTravelDetailScreen = traveldata => {
+    return navigation.navigate('TravelDetailScreen', traveldata);
   };
 
   useEffect(() =>{
@@ -59,6 +59,7 @@ const MainScreen = () => {
           const res = await axios.get(backendURL + `/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`)
           setTravelClothes(res.data)
           setTravelLen(res.data.length)
+
         } catch(e){
           console.log(e)
         }
@@ -152,6 +153,8 @@ const MainScreen = () => {
               <Text style={{fontSize: 17, color:'black', fontFamily:'SCDream5', marginVertical: 3}}>{JSON.parse(item.travlDate)[0]} to {item.travlPlace}</Text>
               <Text style={{fontSize: 17, color:'black', fontFamily:'SCDream5'}}>#{item.travlReason}  #{item.travlCategory}</Text>
             </View>
+
+            <Button onPress={()=>{gotoTravelDetailScreen(item)}}>상세 정보 보기</Button>
 
             <View style={{ flexDirection: 'row', marginVertical: 15,}}>
     
