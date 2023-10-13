@@ -27,6 +27,8 @@ import TravelFriends from '../../screens/OOTTScreen/TravelFriends/TravelFriends'
 import TravelCategory from '../../screens/OOTTScreen/TravelCategory/TravelCategory';
 import RecommendScreen from '../../screens/OOTTScreen/RecomendSceen/RecommendScreen';
 
+import TravelDetailScreen from '../../screens/MainScreen/TravelDetailScreen';
+
 import Bottomtab from './BottomTab';
 import {login} from '@react-native-seoul/kakao-login';
 
@@ -81,6 +83,11 @@ const Navigation = () => {
                 <Stack.Screen
                   name="MainScreen"
                   component={MainScreen}
+                  options={{headerShown: true}}
+                />
+                <Stack.Screen
+                  name="TravelDetailScreen"
+                  component={TravelDetailScreen}
                   options={{headerShown: true}}
                 />
                 <Stack.Screen
@@ -219,6 +226,12 @@ const Navigation = () => {
                   component={MypageScreen}
                   options={{headerShown: true}}
                 />
+                <Stack.Screen
+                  name="TravelDetailScreen"
+                  component={TravelDetailScreen}
+                  options={{headerShown: true}}
+                />
+                
               </>
             )}
           </>
