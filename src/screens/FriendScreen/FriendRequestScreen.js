@@ -41,6 +41,7 @@ const FriendRequestScreen = () => {
       .then(res => console.log(res.data))
       .catch(e => console.log(e));
   };
+
   return (
     <View style={styles.container}>
       {friendReq.length === 0 ? (
@@ -49,28 +50,21 @@ const FriendRequestScreen = () => {
         </View>
       ) : (
         friendReq.map((item, i) => (
-          <ScrollView key={i}>
-            <View style={styles.personRowContainer}>
-              <View style={styles.row}>
-                <View style={styles.personColumnContainer}>
-                  <Avatar.Image
-                    size={50}
-                    source={{uri: item.usrProfileURL}}
-                    style={styles.avatarContainer}
-                  />
-                </View>
-                <View style={styles.personColumnContainer}>
-                  <Text style={styles.textfont}>&nbsp;{item.usrId}</Text>
-                </View>
+         
+            <View key={i} style={styles.personRowContainer}>
+              <View style={styles.personColumnContainer}>
+                <Avatar size={50} rounded source={{uri: item.usrProfileURL}} />
               </View>
-
+              <View style={{flex: 2, justifyContent: 'center', marginLeft: 10,}}>
+                <Text style={styles.textfont}>{item.myFriend}</Text>
+                <Text style={{fontSize: 15}}>8 recommended</Text>
+              </View>
               <TouchableOpacity
                 style={styles.plusButtonContainer}
                 onPress={() => acceptReq(item)}>
                 <Text style={styles.AcceptButton}>수락</Text>
               </TouchableOpacity>
             </View>
-          </ScrollView>
         ))
       )}
     </View>
@@ -80,7 +74,7 @@ const FriendRequestScreen = () => {
 export default FriendRequestScreen;
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {backgroundColor:'white'},
   personRowContainer: {
     alignSelf: 'center',
     width: '90%',
@@ -135,8 +129,10 @@ const styles = StyleSheet.create({
   EmptyContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'white'
   },
   EmptyImg: {
+    backgroundColor: 'white',
     marginLeft: 15,
     resizeMode: 'contain',
     width: '100%',
