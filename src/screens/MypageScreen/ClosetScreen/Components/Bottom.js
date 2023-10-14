@@ -2,7 +2,9 @@ import React from 'react';
 
 import {View, FlatList, StyleSheet, Image} from 'react-native';
 
+
 const Bottom = ({imgData}) => {
+
   const renderImage = ({item, index}) => {
     return (
       <View style={styles.listStyle}>
@@ -19,7 +21,6 @@ const Bottom = ({imgData}) => {
       <View style={styles.imageContainer}>
         <FlatList
           numColumns={3}
-          // keyExtractor={item => item}
           data={imgData}
           renderItem={renderImage}></FlatList>
       </View>
