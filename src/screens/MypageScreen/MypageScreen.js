@@ -1,13 +1,14 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
-import {useNavigation} from '@react-navigation/native';
-import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
-import {TabView, TabBar} from 'react-native-tab-view';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import { TabView, TabBar } from 'react-native-tab-view';
 import { useRecoilValue } from 'recoil';
 import { userInfoState } from '../../states/atoms';
-import axios from 'axios';
-import {AuthContext} from '../../utils/Auth';
+import { AuthContext } from '../../utils/Auth';
 import { backendURL } from '../../constants/url';
+
+import axios from 'axios';
 
 import {
   Pressable,
@@ -38,6 +39,14 @@ import {
 
 const MypageScreen = () => {
 
+  const isFocused = useIsFocused();
+
+  useEffect(() =>{
+    if(isFocused) {
+      getPictureFromDB()
+    }
+  }, [isFocused])
+
   const {logout} = useContext(AuthContext);
   const userInfo = useRecoilValue(userInfoState);
 
@@ -54,7 +63,6 @@ const MypageScreen = () => {
   const [index, setIndex] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [userStyles, setUserStyles] = useState();
-  const [getClothesData, setGetClothesData] = useState();
   const [postData, setPostData] = useState();
 
   const [data, setData] = useState({});
@@ -110,7 +118,6 @@ const MypageScreen = () => {
       } else if (response.error) {
         console.log('Image picker error: ', response.error);
       } else {
-        const ImgUri = response.assets[0].uri;
         const base = response.assets[0];
 
         try {
@@ -152,7 +159,11 @@ const MypageScreen = () => {
   const getPictureFromDB = async () => {
     try {
       await axios.get(backendURL+`/api/closet/getClosetData?userId=${userInfo.nickname}`)
-      .then((res)=>{setClothesData(res.data)})
+      .then((res)=>{
+        setClothesData(res.data)
+        setPostData(0)
+        setIndex(0)
+      })
     } 
     catch (e) {
       console.log(e);
@@ -283,7 +294,6 @@ const MypageScreen = () => {
                   indicatorStyle={styles.listunderline}
                   style={styles.listBackground}
                   labelStyle={styles.listTitle}
-                  // onTabPress={getPictureFromDB}
                 />
               )}
             />
