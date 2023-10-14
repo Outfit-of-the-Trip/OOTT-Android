@@ -161,7 +161,6 @@ const MypageScreen = () => {
       await axios.get(backendURL+`/api/closet/getClosetData?userId=${userInfo.nickname}`)
       .then((res)=>{
         setClothesData(res.data)
-        setPostData(0)
         setIndex(0)
       })
     } 
