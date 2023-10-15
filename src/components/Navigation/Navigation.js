@@ -17,7 +17,6 @@ import MypageScreen from '../../screens/MypageScreen/MypageScreen';
 
 import {AuthContext} from '../../utils/Auth';
 import KeywordScreen from '../../screens/MypageScreen/KeywordScreen';
-import ClosetScreen from '../../screens/MypageScreen/ClosetScreen/ClosetScreen';
 import AbataScreen from '../../screens/MypageScreen/AbataScreen';
 import Toplogo from '../../assets/images/toplogo.png';
 import Rest from '../../assets/images/rest.jpg';
@@ -133,11 +132,6 @@ const Navigation = () => {
                   options={{headerShown: true}}
                 />
                 <Stack.Screen
-                  name="ClosetScreen"
-                  component={ClosetScreen}
-                  options={{headerShown: true}}
-                />
-                <Stack.Screen
                   name="AbataScreen"
                   component={AbataScreen}
                   options={{headerShown: true}}
@@ -209,11 +203,6 @@ const Navigation = () => {
                 <Stack.Screen
                   name="KeywordScreen"
                   component={KeywordScreen}
-                  options={{headerShown: true}}
-                />
-                <Stack.Screen
-                  name="ClosetScreen"
-                  component={ClosetScreen}
                   options={{headerShown: true}}
                 />
                 <Stack.Screen

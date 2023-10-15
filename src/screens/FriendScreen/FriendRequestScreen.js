@@ -21,14 +21,9 @@ const FriendRequestScreen = () => {
     axios
       .get(backendURL+`/api/friends/myResponse?userId=${userInfo.nickname}`)
       .then(res => {
-        console.log('내가 받은 요청:', res.data);
         setFriendReq(res.data);
       })
       .catch(e => console.log(e));
-  }, []);
-
-  useEffect(() => {
-    console.log('friendReq:', friendReq);
   }, []);
 
   const acceptReq = req => {
@@ -38,7 +33,7 @@ const FriendRequestScreen = () => {
         reqUser: `${userInfo.nickname}`,
         resUser: `${req.usrId}`,
       })
-      .then(res => console.log(res.data))
+      .then()
       .catch(e => console.log(e));
   };
 
@@ -92,7 +87,6 @@ const styles = StyleSheet.create({
     margin: 9,
     flexDirection: 'column',
     justifyContent: 'center',
-    fontFamily: '오뮤_다예쁨체',
   },
   row: {
     flexDirection: 'row',
@@ -103,13 +97,11 @@ const styles = StyleSheet.create({
   },
   userId: {
     textAlign: 'center',
-    fontFamily: '오뮤_다예쁨체',
     fontSize: 20,
     width: 50,
     color: 'black',
   },
   textfont: {
-    fontFamily: '오뮤_다예쁨체',
     fontSize: 20,
     color: '#000000',
     marginTop: 8,
@@ -119,7 +111,6 @@ const styles = StyleSheet.create({
   },
   AcceptButton: {
     width: 50,
-    fontFamily: '오뮤_다예쁨체',
     textAlign: 'center',
     fontSize: 18,
     color: '#FFFFFF',
