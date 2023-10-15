@@ -7,6 +7,10 @@ import { useRecoilValue } from 'recoil';
 import { userInfoState } from '../../states/atoms';
 import { AuthContext } from '../../utils/Auth';
 import { backendURL } from '../../constants/url';
+import EmptyScreen from '../../components/EmptyScreen';
+
+import GridImageView from 'react-native-grid-image-viewer';
+
 
 import axios from 'axios';
 
@@ -18,11 +22,7 @@ import {
   NativeBaseProvider,
 } from 'native-base';
 
-import Gallery from './ClosetScreen/Components/Gallery';
-import Outer from './ClosetScreen/Components/Outer';
-import Top from './ClosetScreen/Components/Top';
-import Bottom from './ClosetScreen/Components/Bottom';
-import Shoes from './ClosetScreen/Components/Shoes';
+import Gallery from './Gallery';
 
 
 import {
@@ -80,17 +80,18 @@ const MypageScreen = () => {
     {key: 'shoes', title: '신발'},
   ]);
 
+
   // 각각 탭 페이지
   const renderScenes = ({route}) => {
     switch (route.key) {
       case 'outer':
-        return <Outer imgData={data['outer']} />;
+        return <GridImageView data={data['outer']} />;
       case 'top':
-        return <Top imgData={data['top']} />;
+        return <GridImageView data={data['top']} />;
       case 'bottom':
-        return <Bottom imgData={data['bottom']} />;
+        return <GridImageView data={data['bottom']} />;
       case 'shoes':
-        return <Shoes imgData={data['shoes']} />;
+        return <GridImageView data={data['shoes']} />;
       default:
         return null;
     }
@@ -156,12 +157,14 @@ const MypageScreen = () => {
 
   //DB 사진 가져오기
 
+  const [isLoding, setIsLoding] = useState(true)
+
   const getPictureFromDB = async () => {
     try {
       await axios.get(backendURL+`/api/closet/getClosetData?userId=${userInfo.nickname}`)
       .then((res)=>{
         setClothesData(res.data)
-        setIndex(0)
+        setIsLoding(false)
       })
     } 
     catch (e) {
@@ -278,6 +281,7 @@ const MypageScreen = () => {
 
 
         
+        {isLoding ? (<View style={styles.closetContainer}><EmptyScreen /></View>):(
 
         <View style={styles.closetContainer}>
           <View style={styles.rootContainer}>
@@ -296,8 +300,10 @@ const MypageScreen = () => {
                 />
               )}
             />
+
           </View>
         </View>
+        )}
 
         <Gallery
           visible={modalVisible}

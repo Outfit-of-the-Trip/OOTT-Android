@@ -34,7 +34,6 @@ const FriendScreen = () => {
           resUser: `${friend.usrId}`,
         },
       );
-      console.log(response.data);
     } catch (e) {
       console.log('Friends Request: ', e);
     }
