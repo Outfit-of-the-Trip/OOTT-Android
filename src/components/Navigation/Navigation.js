@@ -9,27 +9,23 @@ import HomeScreen from '../../screens/HomeScreen/HomeScreen';
 import MainScreen from '../../screens/MainScreen/MainScreen';
 import IsFirstLoginScreen from '../../screens/IsFirstLoginScreen/IsFirstLoginScreen';
 import RecommendDetail from '../../screens/OOTTScreen/RecomendSceen/RecommendDetail';
-import FriendsLook from '../../screens/MainScreen/FriendsLook/FriendsLook';
-import ShoppingList from '../../screens/MainScreen/ShoppingList/ShoppingList';
 import FirstSetting from '../../screens/FirstSetting/FirstSetting';
 import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
 import MypageScreen from '../../screens/MypageScreen/MypageScreen';
 
 import {AuthContext} from '../../utils/Auth';
 import KeywordScreen from '../../screens/MypageScreen/KeywordScreen';
-import AbataScreen from '../../screens/MypageScreen/AbataScreen';
 import Toplogo from '../../assets/images/toplogo.png';
-import Rest from '../../assets/images/rest.jpg';
 
 import TravelPlace from '../../screens/OOTTScreen/TravelPlace/TravelPlace';
 import TravelFriends from '../../screens/OOTTScreen/TravelFriends/TravelFriends';
 import TravelCategory from '../../screens/OOTTScreen/TravelCategory/TravelCategory';
 import RecommendScreen from '../../screens/OOTTScreen/RecomendSceen/RecommendScreen';
-
 import TravelDetailScreen from '../../screens/MainScreen/TravelDetailScreen';
 
+import UnityView from '../../screens/UnityScreen/UnityView';
+
 import Bottomtab from './BottomTab';
-import {login} from '@react-native-seoul/kakao-login';
 
 const Stack = createNativeStackNavigator();
 
@@ -101,12 +97,6 @@ const Navigation = () => {
                   options={{headerShown: true}}
                 />
                 <Stack.Screen
-                  name="FriendsLook"
-                  component={FriendsLook}
-                  options={{headerShown: true}}
-                />
-                <Stack.Screen name="ShoppingList" component={ShoppingList} />
-                <Stack.Screen
                   name="RecommendScreen"
                   component={RecommendScreen}
                   options={{headerShown: true}}
@@ -132,13 +122,13 @@ const Navigation = () => {
                   options={{headerShown: true}}
                 />
                 <Stack.Screen
-                  name="AbataScreen"
-                  component={AbataScreen}
+                  name="MypageScreen"
+                  component={MypageScreen}
                   options={{headerShown: true}}
                 />
                 <Stack.Screen
-                  name="MypageScreen"
-                  component={MypageScreen}
+                  name="UnityView"
+                  component={UnityView}
                   options={{headerShown: true}}
                 />
               </>
@@ -175,12 +165,6 @@ const Navigation = () => {
                   options={{headerShown: true}}
                 />
                 <Stack.Screen
-                  name="FriendsLook"
-                  component={FriendsLook}
-                  options={{headerShown: true}}
-                />
-                <Stack.Screen name="ShoppingList" component={ShoppingList} />
-                <Stack.Screen
                   name="RecommendScreen"
                   component={RecommendScreen}
                   options={{headerShown: true}}
@@ -206,11 +190,6 @@ const Navigation = () => {
                   options={{headerShown: true}}
                 />
                 <Stack.Screen
-                  name="AbataScreen"
-                  component={AbataScreen}
-                  options={{headerShown: true}}
-                />
-                <Stack.Screen
                   name="MypageScreen"
                   component={MypageScreen}
                   options={{headerShown: true}}
@@ -218,6 +197,11 @@ const Navigation = () => {
                 <Stack.Screen
                   name="TravelDetailScreen"
                   component={TravelDetailScreen}
+                  options={{headerShown: true}}
+                />
+                <Stack.Screen
+                  name="UnityView"
+                  component={UnityView}
                   options={{headerShown: true}}
                 />
                 

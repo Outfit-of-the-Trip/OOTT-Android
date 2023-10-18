@@ -10,8 +10,6 @@ import { backendURL } from '../../constants/url';
 import EmptyScreen from '../../components/EmptyScreen';
 
 import GridImageView from 'react-native-grid-image-viewer';
-
-
 import axios from 'axios';
 
 import {
@@ -32,7 +30,7 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  Button,
+  Alert,
 } from 'react-native';
 
 
@@ -55,9 +53,6 @@ const MypageScreen = () => {
 
   const gotoTravelPlace = () => {
     return navigation.navigate('KeywordScreen');
-  };
-  const gotoAbatar = () => {
-    navigation.navigate('AbataScreen');
   };
 
   const [index, setIndex] = useState(0);
@@ -214,7 +209,6 @@ const MypageScreen = () => {
             );
           }}>
           <Menu.Item onPress={gotoTravelPlace}>패션 키워드 설정</Menu.Item>
-          <Menu.Item onPress={gotoAbatar}>아바타 설정</Menu.Item>
           <Menu.Item onPress={logout}>로그아웃</Menu.Item>
         </Menu>
       </Box>

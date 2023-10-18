@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View, Dimensions, Image} from 'react-native';
+import { defaultImg } from '../../constants/url';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -23,7 +24,7 @@ const DetailModal = props => {
                 ? 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FJPkpg%2FbtssDKPHyNM%2FdBXdskD0UQZDdSQ7RJSBX0%2Fimg.png'
                 : props.data.image,
           }}
-          defaultSource={require('../../assets/images/avatar.png')}
+          defaultSource={{uri: defaultImg}}
           resizeMode="cover"
         />
       </View>
