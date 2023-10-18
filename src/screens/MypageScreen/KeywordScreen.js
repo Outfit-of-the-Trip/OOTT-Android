@@ -1,14 +1,16 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import Swiper from 'react-native-swiper';
 
 import {useNavigation} from '@react-navigation/native';
-import {AuthContext} from '../../utils/Auth';
 import {useWindowDimensions} from 'react-native';
 import axios from 'axios';
-import {useRecoilState} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
+import { userInfoState } from '../../states/atoms';
 import {isUserFirstLogin} from '../../states/atoms';
 import {Button} from 'react-native-paper';
+
+import { backendURL } from '../../constants/url';
 
 const layouts = [
   {
@@ -89,7 +91,7 @@ const FirstSetting = () => {
   const [currentKeywordIndex, setCurrentKeywordIndex] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // Add this state
   const [likedKeywords, setLikedKeywords] = useState([]);
-  const {userInfo} = useContext(AuthContext);
+  const userInfo = useRecoilValue(userInfoState);
   const width = useWindowDimensions().width; //기기 넓이
   const [likesCount, setLikesCount] = useState(0);
   const [input, setInput] = useState([
@@ -108,15 +110,14 @@ const FirstSetting = () => {
   ]);
 
   const setUserInfo = async () => {
-    //유저 정보 patch
     try {
       const response = await axios.post(
-        'http://10.0.2.2:3000/api/users/updateUserInfo',
+        backendURL+'/api/users/updateUserInfo',
         {
           usrStyle1: `${input[0].userStyle}`,
           usrStyle2: `${input[1].userStyle}`,
           usrStyle3: `${input[2].userStyle}`,
-          usrId: 'zxc',
+          usrId: `${userInfo.nickname}`,
         },
       );
     } catch (e) {
@@ -189,8 +190,6 @@ const FirstSetting = () => {
       </Swiper>
     );
   };
-
-  console.log(input);
 
   return (
     <View style={styles.all}>

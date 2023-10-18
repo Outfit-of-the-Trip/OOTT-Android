@@ -1,10 +1,6 @@
 import React, {useState, useEffect } from 'react'
-import { useRecoilState } from 'recoil';
-import { recommendDetailStates, userInfoState, dateState, searchState, reasonState, friendsState, categoryState } from '../../states/atoms';
-
 import { useNavigation } from '@react-navigation/native';
-
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {
     StyleSheet,
@@ -22,30 +18,18 @@ const windowHeight = Dimensions.get('window').height;
 
 const TravelDetailScreen = ({route}) => {
 
-
-    const navigation = useNavigation();
-
-    // const gotoDetail = (detail) => {
-    //   return navigation.navigate('RecommendDetail', { date: selectedDate, place: place, detail: detail });
-    // };
-
-    // const gotoFriendsScreen = (date) =>{
-    //     return navigation.navigate('FriendsLook',{date : date})
-    // }
-
-
-
-
     const [selectedDate, setSelectedDate] = useState("");
     const [selectIndex, setSelectIndex] = useState(0);
-
-
 
     useEffect(()=>{
         setSelectedDate(JSON.parse(route.params.travlDate)[0])
     },[])
 
+    const navigation = useNavigation();
 
+    const gotoUnityScreen = () => {
+      return navigation.navigate('UnityView');
+    };
 
 
     return(
@@ -67,21 +51,17 @@ const TravelDetailScreen = ({route}) => {
                 </View>
 
                 <View style={{flex: 2}}>
-                    {/* <TouchableOpacity 
+                    <TouchableOpacity 
                         style={{flex: 1.5, justifyContent: "center", alignItems:"center", marginTop: 20 }}
-                        disabled={coordi.filter(item => 'index' in item).length == recommendClothes.length? false : true}
-                        onPress={sendTravelData}
+                        onPress={gotoUnityScreen}
                     >
                         <Icon
-                            name="check-circle"
+                            name="3d-rotation"
                             size={35}
-                            color={coordi.filter(item => 'index' in item).length == recommendClothes.length? 'black' : 'grey'}
+                            color='black'
                         />
-                        <Text style={{
-                            fontWeight: "bold",
-                            color: coordi.filter(item => 'index' in item).length == recommendClothes.length ? 'black' : 'grey'
-                        }}>선택 완료</Text>
-                    </TouchableOpacity> */}
+
+                    </TouchableOpacity>
                     
                 </View>
                 
@@ -207,9 +187,6 @@ const styles = StyleSheet.create({
     },
 
 
-
-
-
     headerText:{
         fontSize: 23,
         marginLeft: 10,
@@ -221,9 +198,6 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         color: "black",
     },
-
-
-
 
     outer:{
         position: "absolute",
