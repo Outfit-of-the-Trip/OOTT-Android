@@ -1,14 +1,17 @@
 import React, {useState, useEffect } from 'react'
-import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { recommendDetailStates, userInfoState, dateState, searchState, reasonState, friendsState, categoryState } from '../../../states/atoms';
 import axios from 'axios';
-import { useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import SplashVideo from '../../../components/SplashVideo';
-import { RecomendGarmet } from '../../../constants/RecomendGarmet';
-import Swiper from 'react-native-swiper'
+import BitSwiper from 'react-native-bit-swiper';
 import base64 from 'base-64';
 import { backendURL } from '../../../constants/url';
+import { WithLocalSvg } from 'react-native-svg';
+import circle from './heartSvg/circle.svg'
+import heartWhite from './heartSvg/heartWhite.svg'
+import heartSelect from './heartSvg/heartSelect.svg'
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import {
     StyleSheet,
@@ -16,13 +19,17 @@ import {
     Text,
     FlatList,
     TouchableOpacity,
-    Button,
-    Image
+    Image,
+    Dimensions
 } from 'react-native';
+
+const windowHeight = Dimensions.get('window').height;
 
 
 
 const RecommendScreen = () => {
+
+
 
     const navigation = useNavigation();
 
@@ -33,20 +40,16 @@ const RecommendScreen = () => {
     const gotoFriendsScreen = (date) =>{
         return navigation.navigate('FriendsLook',{date : date})
     }
-    const width = useWindowDimensions().width; //기기 폭 값
     
-    const BaseURL = backendURL
 
-    const place = useRecoilValue(searchState);
-    const date = useRecoilValue(dateState);
-    const reason = useRecoilValue(reasonState);
-    const friend = useRecoilValue(friendsState);
-    const category = useRecoilValue(categoryState);
-    const userInfo = useRecoilValue(userInfoState);
+    const [place, setPlace] = useRecoilState(searchState);
+    const [date, setDate] = useRecoilState(dateState);
+    const [reason, setReason] = useRecoilState(reasonState);
+    const [friend, setFreind] = useRecoilState(friendsState);
+    const [category, setCategory] = useRecoilState(categoryState);
+    const [userInfo] = useRecoilState(userInfoState);
 
-    const [recommendClothes, setRecommendClothes] = useRecoilState(recommendDetailStates)
-    const [test, setTest] = useState(null)
-
+    const [recommendClothes, setRecommendClothes] = useState(recommendDetailStates)
     const [isLoding, setIsLoding] = useState(true);
 
     const travelData = {
@@ -58,17 +61,54 @@ const RecommendScreen = () => {
         "friend": friend,
         "category": category,
     };
+
+
+    const sendTravelData = async () => {
+        
+        axios.post(backendURL+'/api/travel/addTravelInfo', {
+            usrId: userInfo.nickname,
+            travlDate: date,
+            travlFriends: friend,
+            travlPlace: place,
+            travlCategory: category,
+            travlReason: reason,
+            coordi: coordi
+        })
+        .then(function (res) {
+            if(res.data.success) {
+                setPlace("")
+                setDate([])
+                setReason("")
+                setFreind([])
+                setCategory("")
+                endOOTT()
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+
+    const endOOTT = () => {
+        return navigation.navigate('Bottomtab')
+    }
     
 
     useEffect(() => {
         const getRecommendedDate= async () => {
-            axios.post(BaseURL+'/api/recommend/getRecommend', travelData)
+            axios.post(backendURL+'/api/recommend/getRecommend', travelData)
             .then(function (res) {
                 setIsLoding(false)
                 const Data = JSON.parse(base64.decode(res.data));
                 setRecommendClothes(Data)
                 setSelectedDate(Data[0].date)
                 setClothes(Data[0].clothes)
+                setCoordi(
+                    Data.map(item => ({
+                        date: item.date,
+                        clothes: {}
+                    }))
+                )
             })
             .catch(function (error) {
                 console.log(error);
@@ -78,38 +118,96 @@ const RecommendScreen = () => {
     }, [])
 
     const [selectedDate, setSelectedDate] = useState(0);
-    const [clothes, setClothes] = useState([])
     const [selectIndex, setSelectIndex] = useState(0);
+
+    const [clothes, setClothes] = useState([])
 
     useEffect(() => {
         if (recommendClothes && selectIndex >= 0 && selectIndex < recommendClothes.length) {
             setClothes(recommendClothes[selectIndex].clothes);
         }
-    }, [selectIndex, recommendClothes]);
+    }, [selectIndex]);
 
 
+    const [coordi, setCoordi] = useState([
+        {
+            date:null,
+            index:null,
+            clothes:{}
+        }
+    ])
 
-    const [coordi, setCoordi] = useState([])
+    const selectCoordi = (date, index, outer, top, bottom, shoes) => {
+        const copy = [...coordi];
+        copy[date].index = index
+        copy[date].clothes.outer = outer
+        copy[date].clothes.top = top
+        copy[date].clothes.bottom = bottom
+        copy[date].clothes.shoes = shoes
+        setCoordi(copy)
+    }
+
+
+    const HeartClick = (props) => {
+        return (
+            <TouchableOpacity onPress={()=>{selectCoordi(props.selectedDate, props.index, props.outer, props.top, props.bottom, props.shoes)}}>
+                <View style={{ position: 'relative' }}>
+                    <WithLocalSvg width={35} height={35} fill="#000000" asset={circle} />
+                    <View style={{ position: 'absolute', top: 8, left: 5.7 }}>
+                        <WithLocalSvg width={23} height={23} fill="#000000" asset={props.isClicked} />
+                    </View>
+                </View>
+            </TouchableOpacity>
+        );
+    };
 
 
     return(
         <View style={styles.rootContainer}>
-            {isLoding ? (<SplashVideo />) : (
-                <>
+            {isLoding && clothes ? (<SplashVideo />) : (
+            <>
 
-            <View style={styles.headerContainer}>
-                <Text style={styles.headerText}>Today's look to {place}</Text>
+            <View style={styles.header}>
+
+                <View style={{flex: 7}}>
+
+                    <View style={styles.headerContainer}>
+                        <Text style={styles.headerText}>Today's look to {place}</Text>
+                    </View>
+
+
+                    <View style={styles.titleContainer}>
+                        <Text style={styles.titleText}>Select Date</Text>
+                    </View>
+                </View>
+
+                <View style={{flex: 2}}>
+                    <TouchableOpacity 
+                        style={{flex: 1.5, justifyContent: "center", alignItems:"center", marginTop: 20 }}
+                        disabled={coordi.filter(item => 'index' in item).length == recommendClothes.length? false : true}
+                        onPress={sendTravelData}
+                    >
+                        <Icon
+                            name="check-circle"
+                            size={35}
+                            color={coordi.filter(item => 'index' in item).length == recommendClothes.length? 'black' : 'grey'}
+                        />
+                        <Text style={{
+                            fontWeight: "bold",
+                            color: coordi.filter(item => 'index' in item).length == recommendClothes.length ? 'black' : 'grey'
+                        }}>선택 완료</Text>
+                    </TouchableOpacity>
+                    
+                </View>
+                
             </View>
 
 
-            <View style={styles.titleContainer}>
-                <Text style={styles.titleText}>Select Date</Text>
-            </View>
 
 
             <View style={styles.buttonContainer}>
                 <View style={styles.flalistContainer}>
-                    <FlatList
+                <FlatList
                         horizontal
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
@@ -146,25 +244,39 @@ const RecommendScreen = () => {
 
 
             <View style={styles.clothesContainer}>
-                <Swiper 
-                    style={styles.wrapper} 
-                    horizontal={true} 
-                    activeDotColor="blue"
-                >   
-                {clothes && clothes.map((item, index) =>(
-                    
+
+                <BitSwiper 
+                    items={clothes}
+                    itemWidth="100%" // 활성 아이템의 넓이
+
+                    onItemRender={((item, index) =>(
                         <View style={styles.imageContainer} key={index}>
+                            <View style={{flex: 1, margin:5, alignItems:"flex-end"}}>
+                                <HeartClick
+                                    isClicked = {
+                                        coordi[selectIndex].date == selectedDate && coordi[selectIndex].index == index
+                                        ?  heartSelect : heartWhite
+                                    }
+                                    selectedDate={selectIndex}
+                                    index={index}
+                                    outer={item.outter.img}
+                                    top={item.top.img}
+                                    bottom={item.bottom.img}
+                                    shoes={item.shoes.img}
+                                />
+                            </View>
                             
+                            <View style={{flex: 12}}>
                                 <TouchableOpacity onPress={()=>{gotoDetail(item.outter.detail)}}>
                                     <Image
-                                        style={styles.outter}
+                                        style={styles.outer} 
                                         source={{uri: item.outter.img}}
                                     />
                                 </TouchableOpacity>
 
                                 <TouchableOpacity onPress={()=>{gotoDetail(item.top.detail)}}>
                                     <Image
-                                        style={styles.top}
+                                        style={styles.top} 
                                         source={{uri: item.top.img}}
                                     />
                                 </TouchableOpacity>
@@ -184,11 +296,13 @@ const RecommendScreen = () => {
                                         source={{uri: item.shoes.img}}
                                     />
                                 </TouchableOpacity>
+
+                            </View>
                         
 
                         </View>
                     ))}
-                </Swiper>
+                />
             </View>
             </>
           )}
@@ -208,6 +322,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
     },
+    header:{
+        flex: 1,
+        justifyContent: "center",
+        flexDirection: "row"
+    },
     titleContainer: {
         flex: 0.5,
         justifyContent: "space-between",
@@ -224,11 +343,11 @@ const styles = StyleSheet.create({
         flex: 7,
     },
     imageContainer:{
-        flex:1,
-        margin: 10,
-        borderRadius: 10,
+        height: windowHeight-280,
+        borderRadius: 20,
         backgroundColor: "#f0f0f0"
     },
+
 
 
 
@@ -246,31 +365,31 @@ const styles = StyleSheet.create({
     },
 
 
-    outter:{
+
+
+    outer:{
         position: "absolute",
-        top: 30,
+        top: 0,
         bottom: 0,
-        left: 2,
+        left: 0,
         right:0,
 
-        width: 230,
+        width: 260,
         height: 270,
     },
-
     top:{
         position: "absolute",
-        top: 30,
+        top: 20,
         bottom: 0,
-        left: 180,
-        right:0,
+        left: 200,
+        right: 0,
 
         width: 230,
         height: 230,
     },
-
     bottom:{
         position: "absolute",
-        top: 230,
+        top: 200,
         bottom: 0,
         left: 180,
         right:0,
@@ -278,16 +397,15 @@ const styles = StyleSheet.create({
         width: 230,
         height: 230,
     },
-
     shoes:{
         position: "absolute",
-        top: 350,
+        top: 310,
         bottom: 0,
-        left: 60,
+        left: 50,
         right:0,
 
-        width: 130,
-        height: 90,
+        width: 120,
+        height: 120,
     },
    
 })

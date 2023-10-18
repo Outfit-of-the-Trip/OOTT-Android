@@ -21,14 +21,9 @@ const FriendRequestScreen = () => {
     axios
       .get(backendURL+`/api/friends/myResponse?userId=${userInfo.nickname}`)
       .then(res => {
-        console.log('내가 받은 요청:', res.data);
         setFriendReq(res.data);
       })
       .catch(e => console.log(e));
-  }, []);
-
-  useEffect(() => {
-    console.log('friendReq:', friendReq);
   }, []);
 
   const acceptReq = req => {
@@ -38,9 +33,10 @@ const FriendRequestScreen = () => {
         reqUser: `${userInfo.nickname}`,
         resUser: `${req.usrId}`,
       })
-      .then(res => console.log(res.data))
+      .then()
       .catch(e => console.log(e));
   };
+
   return (
     <View style={styles.container}>
       {friendReq.length === 0 ? (
@@ -49,28 +45,21 @@ const FriendRequestScreen = () => {
         </View>
       ) : (
         friendReq.map((item, i) => (
-          <ScrollView key={i}>
-            <View style={styles.personRowContainer}>
-              <View style={styles.row}>
-                <View style={styles.personColumnContainer}>
-                  <Avatar.Image
-                    size={50}
-                    source={{uri: item.usrProfileURL}}
-                    style={styles.avatarContainer}
-                  />
-                </View>
-                <View style={styles.personColumnContainer}>
-                  <Text style={styles.textfont}>&nbsp;{item.usrId}</Text>
-                </View>
+         
+            <View key={i} style={styles.personRowContainer}>
+              <View style={styles.personColumnContainer}>
+                <Avatar size={50} rounded source={{uri: item.usrProfileURL}} />
               </View>
-
+              <View style={{flex: 2, justifyContent: 'center', marginLeft: 10,}}>
+                <Text style={styles.textfont}>{item.myFriend}</Text>
+                <Text style={{fontSize: 15}}>8 recommended</Text>
+              </View>
               <TouchableOpacity
                 style={styles.plusButtonContainer}
                 onPress={() => acceptReq(item)}>
                 <Text style={styles.AcceptButton}>수락</Text>
               </TouchableOpacity>
             </View>
-          </ScrollView>
         ))
       )}
     </View>
@@ -80,7 +69,7 @@ const FriendRequestScreen = () => {
 export default FriendRequestScreen;
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {backgroundColor:'white'},
   personRowContainer: {
     alignSelf: 'center',
     width: '90%',
@@ -98,7 +87,6 @@ const styles = StyleSheet.create({
     margin: 9,
     flexDirection: 'column',
     justifyContent: 'center',
-    fontFamily: '오뮤_다예쁨체',
   },
   row: {
     flexDirection: 'row',
@@ -109,13 +97,11 @@ const styles = StyleSheet.create({
   },
   userId: {
     textAlign: 'center',
-    fontFamily: '오뮤_다예쁨체',
     fontSize: 20,
     width: 50,
     color: 'black',
   },
   textfont: {
-    fontFamily: '오뮤_다예쁨체',
     fontSize: 20,
     color: '#000000',
     marginTop: 8,
@@ -125,7 +111,6 @@ const styles = StyleSheet.create({
   },
   AcceptButton: {
     width: 50,
-    fontFamily: '오뮤_다예쁨체',
     textAlign: 'center',
     fontSize: 18,
     color: '#FFFFFF',
@@ -135,8 +120,10 @@ const styles = StyleSheet.create({
   EmptyContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'white'
   },
   EmptyImg: {
+    backgroundColor: 'white',
     marginLeft: 15,
     resizeMode: 'contain',
     width: '100%',

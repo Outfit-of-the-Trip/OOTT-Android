@@ -1,206 +1,237 @@
-import React, {useState, useEffect, useContext, useLayoutEffect} from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {ImageBackground, useWindowDimensions} from 'react-native';
-import {Avatar} from '@rneui/themed';
-import axios from 'axios';
-import {AuthContext} from '../../utils/Auth';
-import FirstLogin from '../../components/FirstLogin';
-import recomend1 from '../../assets/images/recomend1.png'
-import moreb from '../../assets/images/moreb.png'
+import React, { useState, useEffect } from 'react';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { useWindowDimensions } from 'react-native';
+import { Avatar, Divider } from '@rneui/themed';
+import { Button } from 'react-native-paper';
+
+import { useRecoilState } from 'recoil';
+import { userInfoState } from '../../states/atoms';
+import SplashVideo from '../../components/SplashVideo';
+
 import { backendURL } from '../../constants/url';
+import emptyImage from '../../assets/images/emptyImage.png'
+
+import axios from 'axios';
+
 
 import {
   View,
   StyleSheet,
   Text,
-  SafeAreaView,
   Image,
   TouchableOpacity,
-  FlatList
+  ScrollView
 } from 'react-native';
-import EmptyScreen from '../../components/EmptyScreen';
-
 
 const MainScreen = () => {
-  const {userInfo} = useContext(AuthContext);
+
+  const isFocused = useIsFocused();
+
+  const userInfo = useRecoilState(userInfoState)[0];
+  const [travelClothes, setTravelClothes] = useState([]);
+  const [travelLen, setTravelLen] = useState(0)
+
   const navigation = useNavigation();
   const width = useWindowDimensions().width; //기기 넓이
-  const [travelea, settravelea] = useState(); //등록된 여행 개수
-  const [friend, setfriend] = useState();
-  const [userdata, setuserdata] = useState();
-  const [userHashTag,setUserHashtag] = useState([
-    { id : 1, usrstyle: "#레트로"},
-    { id : 2, usrstyle: "#formal"},
-    { id : 3, usrstyle: "#하이틴"},
-    ]);
-  const [data, setData] = useState([]);
-  const [travelClothes,setTravelClothes] = useState([]); 
-  const [imageurl,setImageUrl] = useState([]); //여행별 추천 옷 url
-  const gotoRecomend = (traveldata) => {
-    return navigation.navigate('RecommendScreen', traveldata);
+  const [userData, setUserData] = useState([]);
+  
+  const [isLoding, setIsLoding] = useState(true)
+
+
+
+  const [userHashTag, setUserHashtag] = useState(["one", "two", "three"]);
+  const [combinedStyles, setCombinedStyles] = useState("");
+
+  const HashTag = (one, two, three) => {
+    let copy = [...userHashTag]
+    copy[0] = one
+    copy[1] = two
+    copy[2] = three
+    setUserHashtag(copy)
+  }
+
+
+  const gotoTravelDetailScreen = traveldata => {
+    return navigation.navigate('TravelDetailScreen', traveldata);
   };
-  const gotoFrineds = () =>{
-    return navigation.navigate('FriendsLook')
+
+  useEffect(() =>{
+    if(isFocused) {
+      const getTravelData = async () => {
+        try{
+          const res = await axios.get(backendURL + `/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`)
+          setTravelClothes(res.data)
+          setTravelLen(res.data.length)
+
+        } catch(e){
+          console.log(e)
+        }
+      };
+      getTravelData()
+    }
+  }, [isFocused])
+
+  useEffect(() => {
+    setCombinedStyles(userHashTag.map(tag => `#${tag}`).join(' '))
+  },[userHashTag])
+
+
+  useEffect(() => {
+    const getTravelData = async () => {
+      try{
+        const res = await axios.get(backendURL + `/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`)
+        setTravelClothes(res.data)
+        setTravelLen(res.data.length)
+        setIsLoding(false)
+      } catch(e){
+        console.log(e)
+      }
+    };
+    getTravelData()
+  }, [travelClothes])
+
+  useEffect(() => {
+    const getUserInfo= async () => {
+      try{
+        const res = await axios.get(backendURL + `/api/users/getUserInfo?userId=${userInfo.nickname}`)
+        setUserData(res.data)
+        HashTag(res.data.usrStyle1, res.data.usrStyle2, res.data.usrStyle3)
+      } catch(e){
+        console.log(e)
+      }
+    };
+
+    getUserInfo()
+
+  }, [userData])
+
+  const EmptyScreen = () => { 
+    return (
+      <View style={{justifyContent:'center',alignItems:'center'}}>
+        <View style={{justifyContent:'center',alignItems:'center'}}>
+          <Image
+            style={{width:300,height:280}}
+            source={emptyImage}
+          />
+          <View style={{marginBottom: 23}}>
+            <Text style={{fontSize: 17, fontWeight: 'bold'}}>내 여행 코디를 추천받아 보세요!</Text>
+          </View>
+          <Button
+            mode='outlined'
+            onPress={() => navigation.navigate('OOTTScreen')}
+            textColor='black'
+            labelStyle={{fontFamily:'SCDream5',fontSize:16}}
+            style={{
+              borderStyle: 'solid',
+              borderWidth: 1.5,
+              paddingHorizontal:20,
+              borderRadius: 8
+            }}
+          >Move for OOTT</Button>
+        </View>
+      </View>
+    )  
   }
-  
-  const translate = (item) =>{ // 날짜 정리 메서드
-    var data = String(item);
-    var input = data.substring(0,10);
-    return input;
-  }
-const combinedStyles = userHashTag.map(tag => tag.usrstyle).join(''); //태그 합치기
-  
-  useEffect(() => { //사용자 친구 데이터
-    axios.get(backendURL+`/api/friends/myFriends?userId=${userInfo.nickname}`)
-      .then(function (response) {
-        setfriend(response.data.length)
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  }, []);
-
-  
-
-  useEffect( () => { //사용자 데이터 
-     axios.get (backendURL+`/api/users/getUserInfo?userId=${userInfo.nickname}`)
-      .then(function (response) {
-        setuserdata(response.data);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  },[]);
-
-
-  useEffect(() => { //여행정보 데이터
-    axios.get(backendURL+`/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`)
-      .then(function (response) {
-        settravelea(response.data.length)
-        setData(response.data);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  }, []);
-
-  useEffect(() => { //TRAVEL_CLOTHES
-    axios.get(backendURL+`/api/travel/getMyTravelInfo?userId=${userInfo.nickname}`)
-      .then(function (response) {
-       /*  setTravelClothes(response.data);
-        console.log(response.data); */
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  }, []);
-
-  useEffect(() => { //EXAMPLE
-    axios.get(backendURL+`/api/travel/getMyTravelInfo?userId=admin`)
-      .then(function (response) {
-        //api 완성되면 travelClothes에서 배열 값 사용해서 옷 이미지 경로 불러오기
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  }, []);
-
-  const Showlog = () =>{
-    if(travelea>0){
-     return(
-         <FlatList
-           data={data}
-           nestedScrollEnabled={true}
-           renderItem={({ item,index }) => (
-             <View key={index} style={styles.recomendconatiner}>
-               <View
-              style={{marginHorizontal:width-(width-10)}}>
-              <Text style={styles.datetext}>{translate(item.travlDate)} to {item.travlPlace}</Text>
-              <View
-                style={{flexDirection:'row',justifyContent:"space-between"}}>
-                <Text style={styles.tagtext}>태그</Text>
-                <TouchableOpacity
-                  onPress={() => gotoRecomend(item)}>
-                <Image
-                  style={{width:30,height:20,resizeMode:'center'}}
-                  source={moreb}/>
-                </TouchableOpacity>
-              </View>
-            </View>
-             <View
-                style={{flexDirection:"row"}}>
-                <Image
-                        source={recomend1}
-                        style={{width:'100%',margin:3,borderRadius:5}}/>
-             </View>
-           
-           </View>
-            )}
-           />);
-   }else{
-     return <EmptyScreen/>
-   }
- }
 
   return (
-    <SafeAreaView style={styles.container}>
-            <View
-              style={{flexDirection:'row', marginHorizontal:width-(width-20),marginTop:5}}>
-                    <TouchableOpacity
-                      onPress={() => navigation.navigate('FriendsLook')}>
-                    <Avatar
-                      size={80}
-                      rounded
-                      source={{ uri:userInfo.profileImageUrl}}/>
-                      </TouchableOpacity>
-                    <View
-                      style={{marginLeft:10}}>
-                      <Text style={styles.profileimgename}>
-                       {userdata ?  (`${userdata.usrId}`) : ("아이디값 가져오는중")}
-                      </Text>
-                  <Text style={styles.profilebigtext}>{travelea} travel log</Text>
-                  <Text style={styles.profilebigtext}>{combinedStyles}</Text>
-                  </View>
-          </View>
-          <View style={styles.bottomline} />
-          <View
-            style={{flex:4}}>
-            {travelea < 0 ?(
-              <FirstLogin/> )
-             : (
-              <Showlog/>
-            )}
+      
+    <ScrollView style={styles.container}>
+
+      {isLoding ? (<SplashVideo />):(
+        <>
+      
+      <View style={{flexDirection: 'row', marginHorizontal: width - (width - 20), marginTop: 30}}>
+        <Avatar size={50} rounded source={{uri: userInfo.profileImageUrl}} />
+        <View style={{marginLeft: 25}}>
+          <Text style={styles.profileimgename}>{userInfo ? `${userInfo.nickname}` : '아이디 없음'}</Text>
+          <Text style={styles.profilebigtext}>{travelLen} travel log</Text>
+          <Text style={styles.profilebigtext}>{combinedStyles}</Text>
+        </View>
+      </View>
+      
+      <View style={styles.bottomline} />
+
+
+      {travelClothes ? (
+
+        travelClothes.map((item) =>
+          <View key={item.travlSeq}style={{marginHorizontal: 20, backgroundColor: 'white'}}>
+
+            <View style={{ marginTop: 30}}>
+              <Text style={{fontSize: 17, color:'black', fontFamily:'SCDream5', marginVertical: 3}}>{JSON.parse(item.travlDate)[0]} to {item.travlPlace}</Text>
+              <Text style={{fontSize: 17, color:'black', fontFamily:'SCDream5'}}>#{item.travlReason}  #{item.travlCategory}</Text>
             </View>
-          </SafeAreaView>)
-}
+            <View style={{ flexDirection: 'row', marginVertical: 15,}}>
+    
+              { JSON.parse(item.outerSeq)[0] != "None" ? (
+                <Image
+                  style={styles.clothesImg}
+                  source={{uri: JSON.parse(item.outerSeq)[0]}}
+                />
+                ) : (<View></View>)
+              }
+              { JSON.parse(item.topSeq)[0] != "None" ? (
+                <Image
+                  style={styles.clothesImg}
+                  source={{uri: JSON.parse(item.topSeq)[0]}}
+                />
+                ) : (<View></View>)
+              }
+              { JSON.parse(item.bottomSeq)[0] != "None" ? (
+                <Image
+                  style={styles.clothesImg}
+                  source={{uri: JSON.parse(item.bottomSeq)[0]}}
+                />
+                ) : (<View></View>)
+              }
+              { JSON.parse(item.shoesSeq)[0] != "None" ? (
+                <Image
+                  style={styles.clothesImg}
+                  source={{uri: JSON.parse(item.shoesSeq)[0]}}
+                />
+                ) : (<View></View>)
+              }
+              
+            </View>
+            <Button onPress={()=>{gotoTravelDetailScreen(item)}}>상세 정보 보기</Button>
 
+            <Divider width={1.5} />
+          </View>
 
+        )) : (<View style={{marginTop: 80}}><EmptyScreen /></View>)}
+        </>
+      )}
+    </ScrollView>
+    
+  );
+
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 5,
-    backgroundColor:'white'
+    backgroundColor: 'white',
   },
 
-  profileimgename:{
+  profileimgename: {
     color: 'black',
-    fontSize: 24,
+    fontSize: 20,
     fontFamily: 'SCDream5',
-    marginBottom:2
+    marginBottom: 2,
   },
   recomendconatiner: {
     flex: 4,
-    marginTop: "3%",
-    elevation:10,
-    backgroundColor:"white",
-    borderRadius:10,
-    borderWidth:2,
-    borderColor:'white',
-    height:'1'
+    marginTop: '3%',
+    elevation: 10,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: 'white',
+    height: '1',
   },
-  viewcontainer:{
+  viewcontainer: {
     flexDirection: 'row',
-    justifyContent:'flex-start' ,
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   friends: {
@@ -213,40 +244,37 @@ const styles = StyleSheet.create({
   },
   datetext: {
     color: 'black',
-    fontSize: 24,
+    fontSize: 18,
     fontFamily: 'SCDream4',
   },
   bottomline: {
-    borderBottomColor: 'black',
-    borderBottomWidth: 2,
-    marginTop: 10,
-    shadowColor: 'grey',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
+    borderBottomColor: 'grey',
+    borderBottomWidth: 1,
+    marginTop: 20,
+    marginHorizontal: 15,
   },
   profilebigtext: {
     color: 'black',
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: 'SCDream4',
-    marginBottom:3
+    marginVertical: 2,
   },
-  recotopcontainer:{
-    flexDirection: 'row', 
-    justifyContent: 'space-between'
+  recotopcontainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 
- recomendconatiner: {
+  recomendconatiner: {
     flex: 2,
-    marginTop: "3%",
-    elevation:10,
-    backgroundColor:"white",
-    borderRadius:10,
-    borderWidth:3,
-    borderColor:'white',
+    marginTop: '3%',
+    elevation: 10,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    borderWidth: 3,
+    borderColor: 'white',
   },
-  viewcontainer:{
-    justifyContent:'flex-start' ,
+  viewcontainer: {
+    justifyContent: 'flex-start',
     alignItems: 'flex-start',
   },
   datetext: {
@@ -259,6 +287,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'SCDream5',
   },
+
+  clothesImg:{
+    width: 80, 
+    height: 80,
+    marginHorizontal: 3,
+    borderRadius: 5,
+  }
 });
 
 export default MainScreen;

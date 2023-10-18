@@ -1,11 +1,9 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {SlickTabBarNavigator, DotSize} from 'rn-slick-bottom-tabs';
-import {Image} from 'react-native';
 
 import MainScreen from '../../screens/MainScreen/MainScreen';
 import TravelScreen from '../../screens/PhotozoneScreen/PhotozoneScreen';
 import OOTTScreen from '../../screens/OOTTScreen/OOTTScreen';
-import FriendScreen from '../../screens/FriendScreen/FriendScreen';
 import MypageScreen from '../../screens/MypageScreen/MypageScreen';
 import FriendSelectScreen from '../../screens/FriendScreen/FriendSelectScreen';
 

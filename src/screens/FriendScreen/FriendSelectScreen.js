@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Dimensions, Text, StyleSheet} from 'react-native';
+import {View, Dimensions, StyleSheet} from 'react-native';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
 
 import FriendRequestScreen from './FriendRequestScreen';

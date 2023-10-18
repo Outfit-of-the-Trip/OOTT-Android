@@ -1,13 +1,16 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
-import {useNavigation} from '@react-navigation/native';
-import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
-import {TabView, TabBar} from 'react-native-tab-view';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import { TabView, TabBar } from 'react-native-tab-view';
 import { useRecoilValue } from 'recoil';
 import { userInfoState } from '../../states/atoms';
-import axios from 'axios';
-import {AuthContext} from '../../utils/Auth';
+import { AuthContext } from '../../utils/Auth';
 import { backendURL } from '../../constants/url';
+import EmptyScreen from '../../components/EmptyScreen';
+
+import GridImageView from 'react-native-grid-image-viewer';
+import axios from 'axios';
 
 import {
   Pressable,
@@ -17,11 +20,7 @@ import {
   NativeBaseProvider,
 } from 'native-base';
 
-import Gallery from './ClosetScreen/Components/Gallery';
-import Outer from './ClosetScreen/Components/Outer';
-import Top from './ClosetScreen/Components/Top';
-import Bottom from './ClosetScreen/Components/Bottom';
-import Shoes from './ClosetScreen/Components/Shoes';
+import Gallery from './Gallery';
 
 
 import {
@@ -31,12 +30,20 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  Button,
+  Alert,
 } from 'react-native';
 
 
 
 const MypageScreen = () => {
+
+  const isFocused = useIsFocused();
+
+  useEffect(() =>{
+    if(isFocused) {
+      getPictureFromDB()
+    }
+  }, [isFocused])
 
   const {logout} = useContext(AuthContext);
   const userInfo = useRecoilValue(userInfoState);
@@ -51,7 +58,6 @@ const MypageScreen = () => {
   const [index, setIndex] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [userStyles, setUserStyles] = useState();
-  const [getClothesData, setGetClothesData] = useState();
   const [postData, setPostData] = useState();
 
   const [data, setData] = useState({});
@@ -69,24 +75,23 @@ const MypageScreen = () => {
     {key: 'shoes', title: '신발'},
   ]);
 
+
   // 각각 탭 페이지
   const renderScenes = ({route}) => {
     switch (route.key) {
       case 'outer':
-        return <Outer imgData={data['outer']} />;
+        return <GridImageView data={data['outer']} />;
       case 'top':
-        return <Top imgData={data['top']} />;
+        return <GridImageView data={data['top']} />;
       case 'bottom':
-        return <Bottom imgData={data['bottom']} />;
+        return <GridImageView data={data['bottom']} />;
       case 'shoes':
-        return <Shoes imgData={data['shoes']} />;
+        return <GridImageView data={data['shoes']} />;
       default:
         return null;
     }
   };
 
-
-  //사진 크기
   const options = {
     mediaType: 'image',
     maxWidth: 512,
@@ -109,7 +114,6 @@ const MypageScreen = () => {
       } else if (response.error) {
         console.log('Image picker error: ', response.error);
       } else {
-        const ImgUri = response.assets[0].uri;
         const base = response.assets[0];
 
         try {
@@ -148,15 +152,21 @@ const MypageScreen = () => {
 
   //DB 사진 가져오기
 
+  const [isLoding, setIsLoding] = useState(true)
+
   const getPictureFromDB = async () => {
     try {
       await axios.get(backendURL+`/api/closet/getClosetData?userId=${userInfo.nickname}`)
-      .then((res)=>{setClothesData(res.data)})
+      .then((res)=>{
+        setClothesData(res.data)
+        setIsLoding(false)
+      })
     } 
     catch (e) {
       console.log(e);
     }
   };
+
 
   //카메라 촬영
   const onLaunchCamera = () => {
@@ -189,19 +199,16 @@ const MypageScreen = () => {
 
   const MenuSlide = () => {
     return (
-      <Box h="10%" w="10%" alignItems="flex-start">
+      <Box h="5%" w="10%" alignItems="flex-start">
         <Menu
           trigger={triggerProps => {
             return (
               <Pressable {...triggerProps}>
-                <HamburgerIcon size={30} />
+                <HamburgerIcon size={7} />
               </Pressable>
             );
           }}>
           <Menu.Item onPress={gotoTravelPlace}>패션 키워드 설정</Menu.Item>
-          <Menu.Item onPress={() => console.log('아바타')}>
-            아바타 설정
-          </Menu.Item>
           <Menu.Item onPress={logout}>로그아웃</Menu.Item>
         </Menu>
       </Box>
@@ -211,18 +218,20 @@ const MypageScreen = () => {
   return (
     <NativeBaseProvider>
       <View style={styles.rootContainer}>
-        <View style={styles.menuContainer}>
-          <MenuSlide />
-        </View>
 
         <View style={styles.profileContainer}>
+
+
           <View style={styles.profImgContainer}>
             <Image
               style={styles.profileImage}
               source={{uri: userInfo.profileImageUrl}}
             />
           </View>
+
+
           <View style={styles.profileList}>
+
             <View style={styles.userProfileContainer}>
               <Text style={styles.userName}>{userInfo.nickname}</Text>
             </View>
@@ -238,15 +247,35 @@ const MypageScreen = () => {
               )}
             </View>
 
-
-            <TouchableOpacity
-              style={styles.plusButtonContainer}
-              onPress={modalOpen}>
-              <Text style={styles.plusButton}>+</Text>
-            </TouchableOpacity>
-
           </View>
+
+            <View style={styles.menuContainer}>
+              <MenuSlide />
+            </View>
         </View>
+
+
+
+        <View style={{flex: 1, flexDirection:'row', alignItems:'center'}}>
+           
+            <View style={{flex: 5, marginLeft: 20,}}>
+              <Text style={{
+                fontSize: 20,
+                color:"black",
+                fontWeight:"bold"
+              }}>MY CLOSET</Text>
+            </View>
+
+              <TouchableOpacity
+                    style={styles.plusButtonContainer}
+                    onPress={modalOpen}>
+                    <Text style={styles.plusButton}>+</Text>
+              </TouchableOpacity>
+        </View>
+
+
+        
+        {isLoding ? (<View style={styles.closetContainer}><EmptyScreen /></View>):(
 
         <View style={styles.closetContainer}>
           <View style={styles.rootContainer}>
@@ -262,12 +291,13 @@ const MypageScreen = () => {
                   indicatorStyle={styles.listunderline}
                   style={styles.listBackground}
                   labelStyle={styles.listTitle}
-                  // onTabPress={getPictureFromDB}
                 />
               )}
             />
+
           </View>
         </View>
+        )}
 
         <Gallery
           visible={modalVisible}
@@ -287,35 +317,32 @@ const styles = StyleSheet.create({
   },
 
   menuContainer: {
-    flex: 0.5,
+    flex: 0.2,
     justifyContent: 'center',
-    alignItems: 'flex-end',
   },
   profileContainer: {
-    flex: 3,
+    flex: 2,
+    marginLeft: 15,
     alignItems: 'center',
     flexDirection: 'row',
   },
   closetContainer: {
-    flex: 8,
+    flex: 7,
   },
 
-  menuButton: {
-    margin: 10,
-    backgroundColor: 'skyblue',
-  },
   plusButtonContainer: {
-    width: '90%',
-    alignItems: 'flex-end',
+    flex: 8,
     marginRight: 20,
+    alignItems: 'flex-end',
   },
+
   plusButton: {
-    width: 40,
+    width: 30,
     textAlign: 'center',
-    fontSize: 25,
-    color: '#FFFFFF',
-    backgroundColor: '#9F81F7',
-    borderRadius: 60,
+    fontSize: 20,
+    color: 'white',
+    backgroundColor: '#a3a3c4',
+    borderRadius: 100,
   },
 
   ModalScreen: {
@@ -324,24 +351,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   profImgContainer: {
-    flex: 1,
-    justifyContent: 'center',
+    flex: 0.4,
+    marginLeft: 12,
     alignItems: 'center',
-    width: 25,
-    height: 25,
     flexDirection: 'row',
   },
   profileImage: {
-    width: 130,
-    height: 130,
+    width: 50,
+    height: 50,
     borderRadius: 100,
   },
   profileList: {
     flex: 1.3,
     justifyContent: 'center',
-    alignItems: 'flex-start',
     flexDirection: 'column',
-    justifyContent: 'flex-start',
   },
   userProfileContainer: {
     paddingVertical: 5,
@@ -413,7 +436,8 @@ const styles = StyleSheet.create({
   },
   listTitle: {
     color: 'black',
-    fontSize: 20,
+    fontSize: 18,
+
   },
   listBackground: {
     backgroundColor: 'white',

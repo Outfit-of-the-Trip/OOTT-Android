@@ -11,35 +11,31 @@ import {
   Image,
 } from 'react-native';
 
-import {Avatar} from 'react-native-paper';
+import { Avatar, Divider } from '@rneui/themed';
 import {AuthContext} from '../../utils/Auth';
 import Glass from '../../assets/images/glass.png';
-import { backendURL } from '../../constants/url';
+import {backendURL} from '../../constants/url';
 
 const FriendScreen = () => {
-  // await AsyncStorage.getItem('userInfo') 현재 로그인한 계정의 데이터를 가져올 수 있음.
   const {userInfo} = useContext(AuthContext);
-  // console.log(userInfo);
 
   const [friendName, setFriendName] = useState('');
   const [findFriendInfo, setFindFriendInfo] = useState([]);
   const [friendTravleInfo, setFriendTravleInfo] = useState([]);
+  const [myfriends, setMyFriends] = useState([]);
 
   //친구 추가
   const addingFriend = async friend => {
-    // console.log(userInfo.nickname);
-    // console.log(friend.usrId);
     try {
       const response = await axios.post(
-        backendURL+'/api/friends/addFriends',
+        backendURL + '/api/friends/addFriends',
         {
           reqUser: `${userInfo.nickname}`,
           resUser: `${friend.usrId}`,
         },
       );
-      console.log(response.data);
     } catch (e) {
-      console.log(e);
+      console.log('Friends Request: ', e);
     }
   };
 
@@ -47,20 +43,27 @@ const FriendScreen = () => {
   useEffect(() => {
     const getFriendInfo = async () => {
       try {
-        const response = await axios.get(backendURL+'/api/test/getUserTable');
+        const response = await axios.get(backendURL + '/api/test/getUserTable');
         setFindFriendInfo(response.data);
-        console.log(findFriendInfo);
       } catch (e) {
-        console.log(e);
+        console.log('all User: ', e);
       }
     };
     getFriendInfo();
   }, []);
 
+  // 내 친구 리스트
+  useEffect(() => {
+    axios
+      .get(backendURL + `/api/friends/myFriends?userId=${userInfo.nickname}`)
+      .then(res => {setMyFriends(res.data)})
+      .catch(e => console.log('Friends error: ', e));
+  }, []);
+
   // 여행 계획 가져오기
   useEffect(() => {
     const getMyTravelInfo = async () => {
-      const response = await axios.get(backendURL+`/api/test/getTravelTable`);
+      const response = await axios.get(backendURL + `/api/test/getTravelTable`);
       setFriendTravleInfo(response.data);
     };
     getMyTravelInfo();
@@ -79,37 +82,44 @@ const FriendScreen = () => {
   //친구 이름 검색
   const foundFriend = findFriendInfo.filter(item => {
     if (item.usrId === friendName) {
-      // console.log(item);
       return item;
     }
   });
 
   return (
-    <SafeAreaView style={styles.allContainer}>
+    <View style={styles.allContainer}>
+
       <View style={styles.InputContainer}>
         <TextInput style={styles.InputBox} onChangeText={findFriendName} />
         <Image style={styles.searchImg} source={Glass} />
       </View>
-      {friendName.length === 0 ? (
-        <View></View>
-      ) : (
-        foundFriend.map((item, i) => (
-          <ScrollView key={i}>
-            <View style={styles.personRowContainer}>
-              <View style={styles.row}>
-                <View style={styles.personColumnContainer}>
-                  <Avatar.Image
-                    size={50}
-                    source={{uri: item.usrProfileURL}}
-                    style={styles.avatarContainer}
-                  />
-                </View>
-                <View style={styles.personColumnContainer}>
-                  <Text style={styles.textfont}>&nbsp;{item.usrId}</Text>
-                  <Text style={styles.textfont}>
-                    {countTravle} fashion items
-                  </Text>
-                </View>
+      <ScrollView>
+
+      {friendName.length === 0
+        ? myfriends.map((item, i) => (
+            <View key={i} style={styles.personRowContainer}>
+                  <View style={styles.personColumnContainer}>
+                    <Avatar size={50} rounded source={{uri: item.usrProfileURL}} />
+                  </View>
+                  <View style={{flex: 2, justifyContent: 'center', marginLeft: 10,}}>
+                    <Text style={styles.textfont}>{item.myFriend}</Text>
+                    <Text style={{fontSize: 15}}>8 recommended</Text>
+                  </View>
+                  <TouchableOpacity
+                    style={styles.plusButtonContainer}
+                    onPress={()=>console.log(123)}>
+                    {/* <Text style={styles.plusButton}>-</Text> */}
+                  </TouchableOpacity>
+            </View>
+          ))
+        : foundFriend.map((item, i) => (
+            <View key={i} style={styles.personRowContainer}>
+              <View style={styles.personColumnContainer}>
+                <Avatar size={50} rounded source={{uri: item.usrProfileURL}} />
+              </View>
+              <View style={{flex: 2, justifyContent: 'center', marginLeft: 10,}}>
+                <Text style={styles.textfont}>{item.myFriend}</Text>
+                <Text style={{fontSize: 15}}>8 recommended</Text>
               </View>
               <TouchableOpacity
                 style={styles.plusButtonContainer}
@@ -117,10 +127,11 @@ const FriendScreen = () => {
                 <Text style={styles.plusButton}>+</Text>
               </TouchableOpacity>
             </View>
-          </ScrollView>
-        ))
-      )}
-    </SafeAreaView>
+
+          ))}
+      </ScrollView>
+
+    </View>
   );
 };
 
@@ -129,61 +140,52 @@ export default FriendScreen;
 const styles = StyleSheet.create({
   allContainer: {
     height: '100%',
+    backgroundColor: 'white'
   },
-  upperPart: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+
   nickname: {
     marginTop: 20,
     marginBottom: 10,
-    fontFamily: '오뮤_다예쁨체',
     fontSize: 25,
   },
   fashionItem: {
     marginTop: 10,
-    fontFamily: '오뮤_다예쁨체',
     fontSize: 20,
   },
-  //
   plusButtonContainer: {
+    flex: 1,
     justifyContent: 'center',
+    alignItems: 'flex-end',
+    marginRight: 20,
   },
   plusButton: {
-    width: 40,
+    width: 30,
+    height: 30,
     textAlign: 'center',
-    fontSize: 25,
-    color: '#FFFFFF',
-    backgroundColor: '#9F81F7',
-    borderRadius: 60,
+    fontSize: 18,
+    color: 'white',
+    backgroundColor: '#a3a3c4',
+    borderRadius: 100,
   },
   InputContainer: {
     flexDirection: 'row',
-    width: 'auto',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderRadius: 10,
-    borderBottomWidth: 2,
-    borderColor: 'gray',
-    margin: 3,
-    backgroundColor: '#FFFFFF',
+    borderBottomWidth: 1,
+    borderColor: 'black',
+    marginHorizontal: 15,
+    marginVertical: 10,
   },
   InputBox: {
     alignItems: 'center',
-    width: '80%',
-    fontFamily: '오뮤_다예쁨체',
-    fontSize: 20,
-    color: '#000000',
-    marginLeft: 10,
+    fontSize: 17,
   },
   searchImg: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     marginRight: 5,
   },
+
   thumbnail: {
     width: '20%',
     height: '20%',
@@ -197,49 +199,33 @@ const styles = StyleSheet.create({
 
   searchName: {
     margin: 5,
-    fontFamily: '오뮤_다예쁨체',
     fontSize: 24,
     color: 'black',
   },
-  //
+
   personRowContainer: {
-    alignSelf: 'center',
-    width: '90%',
-    margin: 5,
-    padding: 4,
-    marginTop: 5,
-    borderRadius: 10,
     flexDirection: 'row',
-    borderBottomWidth: 2,
-    justifyContent: 'space-between',
-    borderColor: 'gray',
-    backgroundColor: '#F2F2F2',
+    marginHorizontal: 20,
+    marginVertical: 10,
   },
+
   personColumnContainer: {
-    margin: 9,
+    flex: 1,
+    margin: 10,
     flexDirection: 'column',
     justifyContent: 'center',
-    fontFamily: '오뮤_다예쁨체',
   },
   row: {
     flexDirection: 'row',
   },
-  avatarContainer: {
-    borderRadius: 30,
-    borderColor: 'undefined',
-  },
+
   userId: {
     textAlign: 'center',
-    fontFamily: '오뮤_다예쁨체',
     fontSize: 20,
     width: 50,
     color: 'black',
   },
-  friendDeleteButton: {
-    justifyContent: 'space-between',
-  },
   textfont: {
-    fontFamily: '오뮤_다예쁨체',
     fontSize: 22,
     color: '#000000',
     marginTop: 8,
